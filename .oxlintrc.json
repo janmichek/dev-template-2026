@@ -1,0 +1,150 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["eslint", "oxc", "typescript", "unicorn", "import", "react"],
+  "settings": {
+    "react": {
+      "version": "19.3.0"
+    }
+  },
+  "options": {
+    "typeAware": true,
+    "typeCheck": true,
+    "reportUnusedDisableDirectives": "error",
+    "denyWarnings": true
+  },
+  "categories": {
+    "correctness": "error",
+    "suspicious": "error"
+  },
+  "rules": {
+    //TYPESCRIPT
+
+    "typescript/no-explicit-any": "error",
+    "typescript/ban-ts-comment": [
+      "error",
+      {
+        "ts-expect-error": "allow-with-description",
+        "ts-ignore": true,
+        "ts-nocheck": true
+      }
+    ],
+    "typescript/consistent-type-assertions": [
+      "error",
+      {
+        "assertionStyle": "never"
+      }
+    ],
+    "typescript/no-non-null-assertion": "error",
+    // No ANY leaking through
+    "typescript/no-unsafe-assignment": "error",
+    "typescript/no-unsafe-argument": "error",
+    "typescript/no-unsafe-call": "error",
+    "typescript/no-unsafe-member-access": "error",
+    "typescript/no-unsafe-return": "error",
+    // Async and control-flow mistakes
+    "typescript/no-floating-promises": "error",
+    "typescript/no-misused-promises": "error",
+    "typescript/await-thenable": "error",
+    "typescript/switch-exhaustiveness-check": "error",
+    "typescript/no-unnecessary-condition": "error",
+    //REACT
+
+    "react/rules-of-hooks": "error",
+    "react/exhaustive-deps": "error",
+    "react/no-unstable-nested-components": "error",
+    "react/no-array-index-key": "error",
+    "react/no-multi-comp": "error",
+    "react/jsx-key": "error",
+    // One concern per file, so Vite fast refresh can update the component
+    "react/only-export-components": "error",
+    // React 19 does not need `React` in scope
+    "react/react-in-jsx-scope": "off",
+
+    //JS
+    // Anti-bloat prevention. Mainly for AI
+    "max-lines": [
+      "error",
+      {
+        "max": 250
+      }
+    ],
+    "max-lines-per-function": [
+      "error",
+      {
+        "max": 80,
+        "skipBlankLines": true,
+        "skipComments": true
+      }
+    ],
+    "complexity": [
+      "error",
+      {
+        "max": 10
+      }
+    ],
+    "max-depth": ["error", 3],
+    "max-params": ["error", 4],
+    "no-nested-ternary": "error",
+    "no-unused-vars": "error",
+    "import/no-unassigned-import": "off",
+    "import/no-cycle": [
+      "error",
+      {
+        "ignoreExternal": true
+      }
+    ]
+  },
+  // BOUNDRIES
+  "overrides": [
+    {
+      // Enforcing boundaries: app -> pages -> features -> shared. Shared imports nothing above it.
+      "files": ["src/**"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": ["**/server/**", "@server", "@server/*"],
+                "message": "Frontend must not import server code. Share types through shared/, and stub records through fixtures/."
+              },
+              {
+                "group": ["**/fixtures/**", "@fixtures", "@fixtures/*"],
+                "message": "Product code reads fixtures through the API. tests and Storybook may import fixtures/."
+              },
+              {
+                "regex": "features/[^/]+/.+",
+                "message": "Import a feature through its index.ts, not its internal files."
+              },
+              {
+                "group": ["../app/*", "**/app/*"],
+                "message": "Only the entry may import app/. Flow is app -> pages -> features -> shared."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    // TODO(next):  shared/ is the bottom layer: no product knowledge, no upward imports
+    // TODO(next): re-add no-restricted-imports override for src/features/** -
+    // ban server/, fixtures/, and (pages|app)/ imports to enforce app -> pages -> features -> shared.
+    // TODO(next): re-add no-restricted-imports override for test/** and .storybook/** -
+    // ban server/ imports, enforce feature index.ts imports (fixtures allowed here).
+
+
+    // tests can be long every **/ui/* needs to have test and story
+    {
+      "files": ["src/index.tsx"],
+      "rules": {
+        "no-restricted-imports": "off"
+      }
+    },
+    {
+      "files": ["**/*.test.ts", "**/*.test.tsx", "**/*.spec.ts", "**/*.spec.tsx"],
+      "rules": {
+        "max-lines": "off",
+        "max-lines-per-function": "off"
+      }
+    }
+  ]
+}

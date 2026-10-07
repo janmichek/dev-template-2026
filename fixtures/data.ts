@@ -1,0 +1,130 @@
+import type { Country, Currency, Transaction } from '@shared/schemas';
+
+// oxfmt-ignore
+export const transactions: Transaction[] = [
+  { id: 1, date: '2025-01-06T09:14:00Z', type: 'deposit', from: 'Bank (SEPA)', to: 'Coinbase', amount: 8000, currency: 'USDC', valueUsd: 8000 },
+  { id: 2, date: '2025-01-21T16:02:00Z', type: 'deposit', from: '0x3f5c…a91b', to: 'MetaMask', amount: 1.2, currency: 'ETH', valueUsd: 3984 },
+  { id: 3, date: '2025-02-03T11:47:00Z', type: 'deposit', from: 'bc1q9h…k7xw', to: 'Ledger', amount: 0.05, currency: 'BTC', valueUsd: 4925 },
+  { id: 4, date: '2025-02-18T08:30:00Z', type: 'transfer', from: 'Coinbase', to: 'Ledger', amount: 2000, currency: 'USDC', valueUsd: 2000 },
+  { id: 5, date: '2025-02-25T10:12:00Z', type: 'withdrawal', from: 'Coinbase', to: 'Bank (SEPA)', amount: 3500, currency: 'USDC', valueUsd: 3500 },
+  { id: 6, date: '2025-03-04T19:22:00Z', type: 'withdrawal', from: 'MetaMask', to: '0x71be…04cd', amount: 0.4, currency: 'ETH', valueUsd: 868 },
+  { id: 7, date: '2025-03-19T13:05:00Z', type: 'deposit', from: 'Bank (SEPA)', to: 'Kraken', amount: 6000, currency: 'USDT', valueUsd: 6000 },
+  { id: 8, date: '2025-04-07T07:58:00Z', type: 'deposit', from: '7xKXtg…9mPq', to: 'Phantom', amount: 25, currency: 'SOL', valueUsd: 2675 },
+  { id: 9, date: '2025-04-15T14:20:00Z', type: 'withdrawal', from: 'Kraken', to: 'Bank (SEPA)', amount: 4000, currency: 'USDT', valueUsd: 4000 },
+  { id: 10, date: '2025-04-22T21:40:00Z', type: 'withdrawal', from: 'Kraken', to: 'Bank (SEPA)', amount: 1200, currency: 'USDT', valueUsd: 1200 },
+  { id: 11, date: '2025-05-09T10:11:00Z', type: 'deposit', from: 'bc1qm4…t2ze', to: 'Ledger', amount: 0.08, currency: 'BTC', valueUsd: 8240 },
+  { id: 12, date: '2025-05-27T15:33:00Z', type: 'transfer', from: 'Kraken', to: 'MetaMask', amount: 1500, currency: 'USDT', valueUsd: 1500 },
+  { id: 13, date: '2025-06-05T09:44:00Z', type: 'withdrawal', from: 'Ledger', to: 'bc1qf2…m9xk', amount: 0.045, currency: 'BTC', valueUsd: 4500 },
+  { id: 14, date: '2025-06-12T12:26:00Z', type: 'deposit', from: 'Staking rewards', to: 'Phantom', amount: 0.9, currency: 'SOL', valueUsd: 131 },
+  { id: 15, date: '2025-06-30T18:09:00Z', type: 'withdrawal', from: 'Ledger', to: 'bc1qz8…p0la', amount: 0.03, currency: 'BTC', valueUsd: 3225 },
+  { id: 16, date: '2025-07-15T09:51:00Z', type: 'deposit', from: '0xa2d4…77fe', to: 'MetaMask', amount: 2.5, currency: 'ETH', valueUsd: 7625 },
+  { id: 17, date: '2025-07-24T16:05:00Z', type: 'withdrawal', from: 'MetaMask', to: '0x4b1c…8e9d', amount: 1.6, currency: 'ETH', valueUsd: 5000 },
+  { id: 18, date: '2025-08-01T14:17:00Z', type: 'deposit', from: 'Bank (SEPA)', to: 'Coinbase', amount: 6000, currency: 'USDC', valueUsd: 6000 },
+  { id: 19, date: '2025-08-20T22:44:00Z', type: 'withdrawal', from: 'Phantom', to: '4Nd1mB…hQ7s', amount: 10, currency: 'SOL', valueUsd: 1840 },
+  { id: 20, date: '2025-09-08T06:35:00Z', type: 'transfer', from: 'Coinbase', to: 'Ledger', amount: 0.04, currency: 'BTC', valueUsd: 4480 },
+  { id: 21, date: '2025-09-25T17:20:00Z', type: 'deposit', from: 'bc1qw7…e5nd', to: 'Ledger', amount: 0.1, currency: 'BTC', valueUsd: 11300 },
+  { id: 22, date: '2025-10-05T11:30:00Z', type: 'withdrawal', from: 'Ledger', to: 'bc1qh7…x3kp', amount: 0.05, currency: 'BTC', valueUsd: 5500 },
+  { id: 23, date: '2025-10-13T11:03:00Z', type: 'withdrawal', from: 'MetaMask', to: '0x9c0e…b3a2', amount: 1.1, currency: 'ETH', valueUsd: 4500 },
+  { id: 24, date: '2025-10-26T15:18:00Z', type: 'withdrawal', from: 'Coinbase', to: 'Bank (SEPA)', amount: 5000, currency: 'USDC', valueUsd: 5000 },
+  { id: 25, date: '2025-11-02T20:48:00Z', type: 'deposit', from: 'Staking rewards', to: 'MetaMask', amount: 0.06, currency: 'ETH', valueUsd: 228 },
+  { id: 26, date: '2025-11-24T08:12:00Z', type: 'withdrawal', from: 'Coinbase', to: 'Bank (SEPA)', amount: 5000, currency: 'USDC', valueUsd: 5000 },
+  { id: 27, date: '2025-12-16T13:59:00Z', type: 'deposit', from: '7xKXtg…9mPq', to: 'Phantom', amount: 40, currency: 'SOL', valueUsd: 5320 },
+  { id: 28, date: '2026-01-09T10:27:00Z', type: 'deposit', from: 'Bank (SEPA)', to: 'Kraken', amount: 7500, currency: 'USDT', valueUsd: 7500 },
+  { id: 29, date: '2026-01-20T13:36:00Z', type: 'withdrawal', from: 'Kraken', to: 'Bank (SEPA)', amount: 6200, currency: 'USDT', valueUsd: 6200 },
+  { id: 30, date: '2026-02-11T16:41:00Z', type: 'withdrawal', from: 'Ledger', to: 'bc1q5r…y8uv', amount: 0.06, currency: 'BTC', valueUsd: 5760 },
+  { id: 31, date: '2026-03-05T19:06:00Z', type: 'deposit', from: '0x3f5c…a91b', to: 'MetaMask', amount: 1.8, currency: 'ETH', valueUsd: 5040 },
+  { id: 32, date: '2026-03-18T10:52:00Z', type: 'withdrawal', from: 'MetaMask', to: '0xd2f7…1a64', amount: 1.0, currency: 'ETH', valueUsd: 3800 },
+];
+
+// oxfmt-ignore
+export const currencies: Currency[] = [
+  { code: 'BTC', name: 'Bitcoin', symbol: '₿', color: 'orange' },
+  { code: 'ETH', name: 'Ethereum', symbol: 'Ξ', color: 'iris' },
+  { code: 'SOL', name: 'Solana', symbol: '◎', color: 'purple' },
+  { code: 'USDT', name: 'Tether', symbol: '₮', color: 'teal' },
+  { code: 'USDC', name: 'USD Coin', symbol: '$', color: 'blue' },
+  { code: 'ADA', name: 'Cardano', symbol: '₳', color: 'indigo' },
+  { code: 'DOGE', name: 'Dogecoin', symbol: 'Ð', color: 'amber' },
+  { code: 'LTC', name: 'Litecoin', symbol: 'Ł', color: 'gray' },
+];
+
+export const countries: Country[] = [
+  {
+    code: 'US',
+    name: 'United States',
+    flag: '🇺🇸',
+    tax: { capitalGainsTax: 20, holdingPeriodMonths: 12 },
+  },
+  {
+    code: 'GB',
+    name: 'United Kingdom',
+    flag: '🇬🇧',
+    tax: { capitalGainsTax: 20, holdingPeriodMonths: null },
+  },
+  {
+    code: 'DE',
+    name: 'Germany',
+    flag: '🇩🇪',
+    tax: { capitalGainsTax: 45, holdingPeriodMonths: 12 },
+  },
+  {
+    code: 'FR',
+    name: 'France',
+    flag: '🇫🇷',
+    tax: { capitalGainsTax: 30, holdingPeriodMonths: null },
+  },
+  {
+    code: 'CZ',
+    name: 'Czechia',
+    flag: '🇨🇿',
+    tax: { capitalGainsTax: 15, holdingPeriodMonths: 36 },
+  },
+  {
+    code: 'ES',
+    name: 'Spain',
+    flag: '🇪🇸',
+    tax: { capitalGainsTax: 28, holdingPeriodMonths: null },
+  },
+  {
+    code: 'IT',
+    name: 'Italy',
+    flag: '🇮🇹',
+    tax: { capitalGainsTax: 26, holdingPeriodMonths: null },
+  },
+  {
+    code: 'NL',
+    name: 'Netherlands',
+    flag: '🇳🇱',
+    tax: { capitalGainsTax: 36, holdingPeriodMonths: null },
+  },
+  {
+    code: 'SE',
+    name: 'Sweden',
+    flag: '🇸🇪',
+    tax: { capitalGainsTax: 30, holdingPeriodMonths: null },
+  },
+  {
+    code: 'CH',
+    name: 'Switzerland',
+    flag: '🇨🇭',
+    tax: { capitalGainsTax: 0, holdingPeriodMonths: null },
+  },
+  {
+    code: 'CA',
+    name: 'Canada',
+    flag: '🇨🇦',
+    tax: { capitalGainsTax: 25, holdingPeriodMonths: null },
+  },
+  {
+    code: 'AU',
+    name: 'Australia',
+    flag: '🇦🇺',
+    tax: { capitalGainsTax: 45, holdingPeriodMonths: 12 },
+  },
+  {
+    code: 'JP',
+    name: 'Japan',
+    flag: '🇯🇵',
+    tax: { capitalGainsTax: 55, holdingPeriodMonths: null },
+  },
+];

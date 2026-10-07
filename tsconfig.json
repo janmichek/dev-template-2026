@@ -1,0 +1,36 @@
+{
+  "compilerOptions": {
+    // Maximum strictness
+    "strict": true, // Enable all strict type-checking options
+    "noUncheckedIndexedAccess": true, // Add undefined to index-signature access results
+    "exactOptionalPropertyTypes": true, // Distinguish missing vs. explicitly undefined optionals
+    "noImplicitOverride": true, // Require override keyword on overriding members
+    "noImplicitReturns": true, // Require explicit returns on all code paths
+    "noFallthroughCasesInSwitch": true, // Disallow accidental switch-case fallthrough
+    "noPropertyAccessFromIndexSignature": true, // Require bracket access for index-signature props
+
+    // Explicit, predictable modules
+    "module": "preserve", // Keep original module syntax in output
+    "moduleResolution": "bundler", // Resolve modules like a bundler (Vite)
+    "verbatimModuleSyntax": true, // Enforce explicit type-only imports/exports
+    "isolatedModules": true, // Ensure each file is safely transpilable alone
+    "noUncheckedSideEffectImports": true, // Resolve side-effect-only imports strictly
+    "erasableSyntaxOnly": true, // Allow only erasable (non-runtime) TS syntax
+
+    // Fast feedback
+    "noEmit": true, // Type-check only, emit no output files
+    "incremental": true, // Cache build info for faster re-checks
+    "skipLibCheck": true, // Skip type-checking of declaration files
+
+    // React + Vite
+    "jsx": "react-jsx", // Use automatic JSX runtime transform
+    "types": ["vite/client"], // Include Vite client type definitions
+    "paths": {
+      "@server/*": ["./server/*"], // Shorten ../../../server/* imports
+      "@shared/*": ["./shared/*"], // API schemas shared by server and frontend
+      "@fixtures/*": ["./fixtures/*"], // Stub records for the server, tests, and Storybook
+      "@test/*": ["./test/*"] // Shorten ../../../../test/* imports
+    }
+  },
+  "include": ["src", "server", "shared", "fixtures", "test", ".storybook/**/*", "*.ts"]
+}

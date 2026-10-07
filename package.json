@@ -1,0 +1,50 @@
+{
+  "name": "jan-michek-koinly",
+  "version": "0.1.0",
+  "private": true,
+  "author": "Jan Michek",
+  "type": "module",
+  "scripts": {
+    "start": "vite",
+    "dev": "docker compose up --build",
+    "build": "vite build",
+    "typecheck": "tsc -p tsconfig.json",
+    "lint": "oxlint -c .oxlintrc.json",
+    "fmt": "oxfmt -c .oxfmtrc.json",
+    "test:all": "bun run test:unit && bun run test:e2e",
+    "test:unit": "vitest run",
+    "test:e2e": "playwright test",
+    "storybook": "storybook dev -p 6006",
+    "chromatic": "chromatic --exit-zero-on-changes"
+  },
+  "dependencies": {
+    "@radix-ui/themes": "^3.3.0",
+    "@sentry/react": "^11.5.0",
+    "@tanstack/react-query": "^5.104.1",
+    "@tanstack/react-router": "^1.170.41",
+    "highcharts": "^13.1.1",
+    "highcharts-react-official": "^3.2.3",
+    "hono": "^4.13.13",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "zod": "^4.6.5"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.63.0",
+    "@storybook/react-vite": "^10.6.1",
+    "@testing-library/react": "^16.3.3",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.2",
+    "chromatic": "^18.11.0",
+    "happy-dom": "^20.14.5",
+    "oxc-transform-react": "^0.152.0",
+    "oxfmt": "^0.72.0",
+    "oxlint": "^1.87.0",
+    "oxlint-tsgolint": "^7.0.2003",
+    "storybook": "^10.6.1",
+    "typescript": "7.0.2",
+    "vite": "^8.3.3",
+    "vitest": "^5.0.3"
+  }
+}

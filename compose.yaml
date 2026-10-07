@@ -1,0 +1,12 @@
+services:
+  koinly:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: koinly
+    container_name: koinly-dev
+    init: true
+    ports:
+      - '3001:3001'
+    stdin_open: true
+    tty: true

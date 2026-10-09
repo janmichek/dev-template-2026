@@ -21,9 +21,21 @@ export function DashboardPage() {
   const visible = currency === undefined ? data : data.filter((tx) => tx.currency === currency);
 
   const options: Highcharts.Options = {
-    title: { text: 'Total value in time' },
-    xAxis: { type: 'datetime' },
-    yAxis: { title: { text: 'USD' } },
+    chart: { backgroundColor: '#111113' },
+    title: { text: 'Total value in time', style: { color: '#ededed' } },
+    xAxis: {
+      type: 'datetime',
+      labels: { style: { color: '#b4b4b4' } },
+      lineColor: '#2a2a2e',
+      tickColor: '#2a2a2e',
+      gridLineColor: '#2a2a2e',
+    },
+    yAxis: {
+      title: { text: 'USD', style: { color: '#b4b4b4' } },
+      labels: { style: { color: '#b4b4b4' } },
+      gridLineColor: '#2a2a2e',
+    },
+    legend: { itemStyle: { color: '#ededed' } },
     series: [{ type: 'area', name: 'Total value', data: totalValueSeries(visible) }],
   };
 

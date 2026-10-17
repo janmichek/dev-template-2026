@@ -1,8 +1,9 @@
 import { z } from 'zod';
 
 // wires what the API sends and frontend can trust.
-// types are derived from the schemas, so they can't drift
-export const avatarColorSchema = z.enum([
+// types are derived from the schemas, so they can't drift.
+// `bun run api:generate` turns these into shared/openapi.json and the typed client.
+const avatarColorSchema = z.enum([
   'gray',
   'amber',
   'orange',

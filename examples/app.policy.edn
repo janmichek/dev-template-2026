@@ -1,0 +1,13 @@
+{:title "dev-template"
+ :prefix "dev-template"
+ :sources [{:lang :typescript :root "src"}]
+ :foreign [react react-dom zod at.tanstack]
+ :hierarchical true
+ :out "examples/app.edn"
+ :order [shared entities features widgets pages app]
+ :levels [[shared]
+          [entities]
+          [features]
+          [widgets]
+          [pages]
+          [app]]}

@@ -1,0 +1,12 @@
+---
+description: Typecheck after every edit
+alwaysApply: true
+---
+
+# Typecheck after edits
+
+This app is React. The strict check is `bun run typecheck` (`tsc --noEmit`).
+
+After changing TypeScript or TSX, run `bun run typecheck` and fix errors before finishing.
+
+Keep these flags on in `config/tsconfig.base.json`: `strict`, `noUncheckedIndexedAccess`, `exactOptionalPropertyTypes`, `noImplicitOverride`.

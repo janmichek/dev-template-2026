@@ -1,13 +1,9 @@
-# Visual regresion check triggered by push to open Pull request
+# Visual regression on every pull request and on main
 name: Chromatic
 on:
   push:
     branches: [main]
   pull_request:
-    paths:
-      - 'src/**'
-      - '.storybook/**'
-      - 'package.json'
 
 jobs:
   chromatic:
@@ -21,4 +17,5 @@ jobs:
       - uses: chromaui/action@latest
         with:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+          storybookConfigDir: config/storybook
           exitZeroOnChanges: true

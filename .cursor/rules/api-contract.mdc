@@ -1,0 +1,14 @@
+---
+description: API shapes come from the generated OpenAPI client and Zod
+alwaysApply: true
+---
+
+# API contract
+
+`shared/schemas.ts` is the source of truth. Do not invent response fields in components or query functions.
+
+1. Change the Zod schema.
+2. Run `bun run api:generate`.
+3. Call the API through `fetchTransactions`, `fetchCurrencies`, or `fetchCountries` in `src/shared/api/client.ts`.
+
+Those functions only accept paths from `src/shared/api/schema.d.ts` and parse the body with the Zod schema. Do not hand-edit `shared/openapi.json` or `schema.d.ts`.

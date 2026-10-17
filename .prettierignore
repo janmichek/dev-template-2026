@@ -1,0 +1,7 @@
+src/shared/api/schema.d.ts
+shared/openapi.json
+.agents
+.claude
+.cursor
+agent
+examples

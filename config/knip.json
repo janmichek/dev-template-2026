@@ -1,0 +1,30 @@
+{
+  "$schema": "https://unpkg.com/knip@6/schema.json",
+  "entry": [
+    "scripts/**/*.ts",
+    "src/**/*.test.{ts,tsx}",
+    "src/**/*.spec.ts",
+    "stories/**/*.stories.tsx",
+    "src/pages/*/index.ts",
+    "src/widgets/*/index.ts",
+    "src/features/*/index.ts",
+    "src/entities/*/index.ts",
+    "src/shared/*/index.ts",
+    "config/**/*.ts",
+    "config/storybook/**/*.tsx",
+    "steiger.config.ts"
+  ],
+  "project": [
+    "src/**/*.{ts,tsx}",
+    "server/**/*.ts",
+    "shared/**/*.ts",
+    "test/**/*.{ts,tsx}",
+    "scripts/**/*.ts",
+    "stories/**/*.tsx",
+    "config/**/*.{ts,tsx}"
+  ],
+  "ignoreDependencies": ["@playwright/mcp", "@stryker-mutator/command-runner"],
+  "ignoreIssues": {
+    "src/shared/api/schema.d.ts": ["exports", "types", "nsExports", "nsTypes", "duplicates"]
+  }
+}

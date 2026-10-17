@@ -7,10 +7,13 @@
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+/.stryker-tmp
+/report
 
 # production
 /build
 /storybook-static
+/preview
 
 # misc
 .DS_Store
@@ -19,6 +22,9 @@
 !.env.example
 
 .idea
+
+# skills CLI also writes a transformed copy here; the canonical tree is .agents/skills
+/agent
 
 # typescript
 *.tsbuildinfo

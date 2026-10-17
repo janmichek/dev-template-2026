@@ -1,0 +1,251 @@
+{
+  "$schema": "../node_modules/oxlint/configuration_schema.json",
+  "plugins": ["eslint", "oxc", "typescript", "unicorn", "import", "react"],
+  "settings": {
+    "react": {
+      "version": "19.3.1"
+    }
+  },
+  "options": {
+    "typeAware": true,
+    "typeCheck": true,
+    "reportUnusedDisableDirectives": "error",
+    "denyWarnings": true
+  },
+  "categories": {
+    "correctness": "error",
+    "suspicious": "error"
+  },
+  "rules": {
+    //TYPESCRIPT
+
+    "typescript/no-explicit-any": "error",
+    "typescript/ban-ts-comment": [
+      "error",
+      {
+        "ts-expect-error": "allow-with-description",
+        "ts-ignore": true,
+        "ts-nocheck": true
+      }
+    ],
+    "typescript/consistent-type-assertions": [
+      "error",
+      {
+        "assertionStyle": "never"
+      }
+    ],
+    "typescript/no-non-null-assertion": "error",
+    // No ANY leaking through
+    "typescript/no-unsafe-assignment": "error",
+    "typescript/no-unsafe-argument": "error",
+    "typescript/no-unsafe-call": "error",
+    "typescript/no-unsafe-member-access": "error",
+    "typescript/no-unsafe-return": "error",
+    // Async and control-flow mistakes
+    "typescript/no-floating-promises": "error",
+    "typescript/no-misused-promises": "error",
+    "typescript/await-thenable": "error",
+    "typescript/switch-exhaustiveness-check": "error",
+    "typescript/no-unnecessary-condition": "error",
+    //REACT
+
+    "react/rules-of-hooks": "error",
+    "react/exhaustive-deps": "error",
+    "react/no-unstable-nested-components": "error",
+    "react/no-array-index-key": "error",
+    "react/no-multi-comp": "error",
+    "react/jsx-key": "error",
+    // One concern per file, so Vite fast refresh can update the component
+    "react/only-export-components": "error",
+    // React 19 does not need `React` in scope
+    "react/react-in-jsx-scope": "off",
+
+    //JS
+    // Anti-bloat prevention. Mainly for AI
+    "max-lines": [
+      "error",
+      {
+        "max": 250
+      }
+    ],
+    "max-lines-per-function": [
+      "error",
+      {
+        "max": 80,
+        "skipBlankLines": true,
+        "skipComments": true
+      }
+    ],
+    "complexity": [
+      "error",
+      {
+        "max": 10
+      }
+    ],
+    "max-depth": ["error", 3],
+    "max-params": ["error", 4],
+    "no-nested-ternary": "error",
+    "no-unused-vars": "error",
+    "import/no-unassigned-import": "off",
+    "import/no-cycle": [
+      "error",
+      {
+        "ignoreExternal": true
+      }
+    ]
+  },
+  // BOUNDRIES
+  "overrides": [
+    {
+      // Flow is app → pages → widgets → features → entities → shared.
+      "files": ["src/**"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": ["**/server/**", "@server", "@server/*"],
+                "message": "Frontend must not import server code. Share types through shared/. Sample records live in server/data.ts and are read through the API."
+              },
+              {
+                "group": ["**/fixtures/**", "@fixtures", "@fixtures/*"],
+                "message": "Product code reads sample records through the API."
+              },
+              {
+                "regex": "(features|widgets|entities|pages)/[^/]+/.+",
+                "message": "Import a slice through its index.ts, not its internal files."
+              },
+              {
+                "group": ["../app/*", "**/app/*"],
+                "message": "Only the entry may import app/."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": ["src/shared/**"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": [
+                  "**/server/**",
+                  "@server",
+                  "@server/*",
+                  "**/fixtures/**",
+                  "@fixtures",
+                  "@fixtures/*"
+                ],
+                "message": "shared is the bottom layer and does not import the server."
+              },
+              {
+                "regex": "(entities|features|widgets|pages|app)/",
+                "message": "shared is the bottom layer."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": ["src/entities/**"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "regex": "(features|widgets|entities|pages)/[^/]+/.+",
+                "message": "Import a slice through its index.ts, not its internal files."
+              },
+              {
+                "regex": "(entities|features|widgets|pages|app)/",
+                "message": "entities may import shared only."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": ["src/features/**"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "regex": "(features|widgets|entities|pages)/[^/]+/.+",
+                "message": "Import a slice through its index.ts, not its internal files."
+              },
+              {
+                "regex": "(features|widgets|pages|app)/",
+                "message": "features may import entities and shared only."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": ["src/widgets/**"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "regex": "(features|widgets|entities|pages)/[^/]+/.+",
+                "message": "Import a slice through its index.ts, not its internal files."
+              },
+              {
+                "regex": "(widgets|pages|app)/",
+                "message": "widgets may import features, entities, and shared only."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": ["src/pages/**"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "regex": "(features|widgets|entities|pages)/[^/]+/.+",
+                "message": "Import a slice through its index.ts, not its internal files."
+              },
+              {
+                "regex": "(pages|app)/",
+                "message": "pages may import widgets, features, entities, and shared only."
+              }
+            ]
+          }
+        ]
+      }
+    },
+
+    // tests can be long every **/ui/* needs to have test and story
+    {
+      "files": ["src/app/main.tsx"],
+      "rules": {
+        "no-restricted-imports": "off"
+      }
+    },
+    {
+      "files": ["**/*.test.ts", "**/*.test.tsx", "**/*.spec.ts", "**/*.spec.tsx"],
+      "rules": {
+        "max-lines": "off",
+        "max-lines-per-function": "off"
+      }
+    }
+  ]
+}

@@ -1,1 +1,1 @@
-export { fetchJson } from './client';
+export { fetchCountries, fetchCurrencies, fetchTransactions } from './client';

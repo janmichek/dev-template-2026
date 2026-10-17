@@ -1,0 +1,181 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Koinly stub API",
+    "version": "0.1.0"
+  },
+  "paths": {
+    "/api/transactions": {
+      "get": {
+        "operationId": "listTransactions",
+        "responses": {
+          "200": {
+            "description": "Transactions",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "number"
+                      },
+                      "date": {
+                        "type": "string",
+                        "format": "date-time",
+                        "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+                      },
+                      "type": {
+                        "type": "string",
+                        "enum": [
+                          "deposit",
+                          "withdrawal",
+                          "transfer"
+                        ]
+                      },
+                      "from": {
+                        "type": "string"
+                      },
+                      "to": {
+                        "type": "string"
+                      },
+                      "amount": {
+                        "type": "number"
+                      },
+                      "currency": {
+                        "type": "string"
+                      },
+                      "valueUsd": {
+                        "type": "number"
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "date",
+                      "type",
+                      "from",
+                      "to",
+                      "amount",
+                      "currency",
+                      "valueUsd"
+                    ],
+                    "additionalProperties": false
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/currencies": {
+      "get": {
+        "operationId": "listCurrencies",
+        "responses": {
+          "200": {
+            "description": "Currencies",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "symbol": {
+                        "type": "string"
+                      },
+                      "color": {
+                        "type": "string",
+                        "enum": [
+                          "gray",
+                          "amber",
+                          "orange",
+                          "iris",
+                          "blue",
+                          "teal",
+                          "purple",
+                          "indigo"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "code",
+                      "name",
+                      "symbol",
+                      "color"
+                    ],
+                    "additionalProperties": false
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/countries": {
+      "get": {
+        "operationId": "listCountries",
+        "responses": {
+          "200": {
+            "description": "Countries",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "flag": {
+                        "type": "string"
+                      },
+                      "tax": {
+                        "type": "object",
+                        "properties": {
+                          "capitalGainsTax": {
+                            "type": "number"
+                          },
+                          "holdingPeriodMonths": {
+                            "type": [
+                              "number",
+                              "null"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "capitalGainsTax",
+                          "holdingPeriodMonths"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "required": [
+                      "code",
+                      "name",
+                      "flag",
+                      "tax"
+                    ],
+                    "additionalProperties": false
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

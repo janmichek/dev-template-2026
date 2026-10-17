@@ -1,7 +1,7 @@
 import { createRootRoute, createRoute, createRouter } from '@tanstack/react-router';
-import { DashboardPage } from '../pages/DashboardPage';
-import { SettingsPage } from '../pages/SettingsPage';
-import { TransactionsPage } from '../pages/TransactionsPage';
+import { DashboardPage } from '../pages/dashboard';
+import { SettingsPage } from '../pages/settings';
+import { TransactionsPage } from '../pages/transactions';
 import { Layout } from './Layout';
 
 const rootRoute = createRootRoute({ component: Layout });

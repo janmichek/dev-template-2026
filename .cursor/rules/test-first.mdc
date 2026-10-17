@@ -1,0 +1,21 @@
+---
+description: Write a failing test before implementing behavior
+alwaysApply: true
+---
+
+# Test first
+
+For a behavior change:
+
+1. Add a Vitest test (`*.test.ts` next to the unit) or a Playwright test (`*.spec.ts` next to the page).
+2. Run it and confirm it fails.
+3. Implement until that test passes.
+
+```sh
+bun run test:unit
+bun run test:e2e
+```
+
+Use the Playwright MCP server to open the app, click the flow, and read console errors.
+
+A test that passes without asserting the behavior is not done. `bun run test:mutate` runs Stryker on `src/features/**/lib` and must stay at or above the break threshold.

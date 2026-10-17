@@ -1,0 +1,8 @@
+.agents
+.claude
+.cursor
+agent
+examples
+node_modules
+build
+storybook-static

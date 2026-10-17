@@ -20,6 +20,7 @@
   {:from :features.filter-currency,
    :to :features.filter-currency.api.useCurrencies,
    :kind :dependency}
+  {:from :widgets.summary.ui.Summary, :to :features.list-transactions, :kind :dependency}
   {:from :features.filter-currency.ui.CurrencySelect,
    :to :entities.currency,
    :kind :dependency}
@@ -45,6 +46,7 @@
    :kind :dependency}
   {:from :app.routes, :to :pages.settings, :kind :dependency}
   {:from :widgets.activity.ui.Activity, :to :features.plot-value, :kind :dependency}
+  {:from :widgets.summary, :to :widgets.summary.ui.Summary, :kind :dependency}
   {:from :widgets.activity.ui.Activity,
    :to :features.list-transactions,
    :kind :dependency}
@@ -83,6 +85,7 @@
    :to :features.filter-currency.ui.CurrencySelect,
    :kind :dependency}
   {:from :app.main, :to :react, :kind :dependency}
+  {:from :shared.ui, :to :shared.ui.Stat, :kind :dependency}
   {:from :pages.dashboard, :to :pages.dashboard.ui.DashboardPage, :kind :dependency}
   {:from :widgets.portfolio.ui.Portfolio, :to :shared.ui, :kind :dependency}
   {:from :features.filter-country,
@@ -113,6 +116,7 @@
    :to :features.filter-currency.api.currencyQueries,
    :kind :dependency}
   {:from :app.main, :to :app.App, :kind :dependency}
+  {:from :widgets.summary.ui.Summary, :to :shared.ui, :kind :dependency}
   {:from :pages.transactions.ui.TransactionsPage,
    :to :widgets.activity,
    :kind :dependency}
@@ -132,6 +136,7 @@
    :kind :dependency}
   {:from :pages.dashboard.ui.DashboardPage, :to :shared.ui, :kind :dependency}
   {:from :entities.country, :to :entities.country.ui.TaxFacts, :kind :dependency}
+  {:from :pages.dashboard.ui.DashboardPage, :to :widgets.summary, :kind :dependency}
   {:from :features.list-transactions,
    :to :features.list-transactions.api.useTransactions,
    :kind :dependency}
@@ -147,6 +152,9 @@
    :kind :dependency}
   {:from :widgets.portfolio.ui.Portfolio, :to :entities.transaction, :kind :dependency}
   {:from :features.filter-country.api.useCountries, :to :at.tanstack, :kind :dependency}
+  {:from :pages.transactions.ui.TransactionsPage,
+   :to :widgets.summary,
+   :kind :dependency}
   {:from :features.filter-country.api.useCountries,
    :to :features.filter-country.api.countryQueries,
    :kind :dependency}
@@ -447,13 +455,21 @@
    :level 0,
    :lang :typescript,
    :id :shared.ui.PageHeading}
+  {:ns "dev-template.shared.ui.Stat",
+   :name "Stat",
+   :file "src/shared/ui/Stat.tsx",
+   :ops [{:name "Stat", :text "Stat"}],
+   :level 0,
+   :lang :typescript,
+   :id :shared.ui.Stat}
   {:ns "dev-template.shared.ui",
    :name "Ui",
    :file "src/shared/ui/index.ts",
    :ops
    [{:name "ClearableSelect", :text "ClearableSelect"}
     {:name "LoadingState", :text "LoadingState"}
-    {:name "PageHeading", :text "PageHeading"}],
+    {:name "PageHeading", :text "PageHeading"}
+    {:name "Stat", :text "Stat"}],
    :level 0,
    :lang :typescript,
    :id :shared.ui}
@@ -485,6 +501,20 @@
    :level 3,
    :lang :typescript,
    :id :widgets.portfolio.ui.Portfolio}
+  {:ns "dev-template.widgets.summary",
+   :name "Summary",
+   :file "src/widgets/summary/index.ts",
+   :ops [{:name "Summary", :text "Summary"}],
+   :level 3,
+   :lang :typescript,
+   :id :widgets.summary}
+  {:ns "dev-template.widgets.summary.ui.Summary",
+   :name "Summary",
+   :file "src/widgets/summary/ui/Summary.tsx",
+   :ops [{:name "Summary", :text "Summary"}],
+   :level 3,
+   :lang :typescript,
+   :id :widgets.summary.ui.Summary}
   {:id :at.tanstack, :name "at.tanstack", :foreign true}
   {:id :react, :name "react", :foreign true}
   {:id :react-dom, :name "react-dom", :foreign true}

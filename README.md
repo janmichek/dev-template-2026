@@ -28,11 +28,11 @@ The UI is http://localhost:3000 and proxies `/api` to port 3001.
 
 ## The ledger
 
-| Page         | Route                                   | What it shows                                                                                                |
-| ------------ | --------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
-| Dashboard    | `/`                                     | Currency filter, value chart, latest movement, portfolio total, the three newest transactions, tax residence |
-| Transactions | `/transactions` and `/transactions/:id` | Same chart and total, the full table. The id in the URL opens that row.                                      |
-| Settings     | `/settings`                             | Tax residence and the capital-gains card for the country you pick                                            |
+| Page         | Route                                   | What it shows                                                                                                                    |
+| ------------ | --------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| Dashboard    | `/`                                     | Transaction counts, currency filter, value chart, latest movement, portfolio total, the three newest transactions, tax residence |
+| Transactions | `/transactions` and `/transactions/:id` | Same chart and total, the full table. The id in the URL opens that row.                                                          |
+| Settings     | `/settings`                             | Tax residence and the capital-gains card for the country you pick                                                                |
 
 The currency filter is shared by the chart and the table on that page. Picking a country on the dashboard shows its flag and name. Settings shows the tax rates.
 
@@ -43,7 +43,7 @@ Imports only go downward. Steiger's recommended rules are all on, including `ins
 ```text
 app        router, providers, shell
 pages      one screen each: dashboard, transactions, settings
-widgets    portfolio (filter + chart), activity (total + table)
+widgets    portfolio (filter + chart), activity (total + table), summary (counts)
 features   filter-currency, filter-country, list-transactions, plot-value
 entities   transaction, currency, country
 shared     ui kit and the API client
@@ -60,7 +60,8 @@ src/
 │   └── settings/
 ├── widgets/
 │   ├── portfolio/
-│   └── activity/
+│   ├── activity/
+│   └── summary/
 ├── features/
 │   ├── filter-currency/
 │   ├── filter-country/

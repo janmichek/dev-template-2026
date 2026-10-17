@@ -1,6 +1,7 @@
 import { Button, Table } from '@radix-ui/themes';
 import { Fragment } from 'react';
 import { TransactionFacts } from '../../../entities/transaction';
+import { WalletName } from '../../../entities/wallet';
 import type { Transaction } from '@shared/schemas';
 
 const headers = ['Date', 'Type', 'From', 'To', 'Amount', 'Currency', 'Value (USD)'];
@@ -28,8 +29,12 @@ export function TransactionsTable({ data, expandedId, onToggle }: TransactionsTa
             <Table.Row>
               <Table.Cell>{new Date(tx.date).toLocaleDateString()}</Table.Cell>
               <Table.Cell>{tx.type}</Table.Cell>
-              <Table.Cell>{tx.from}</Table.Cell>
-              <Table.Cell>{tx.to}</Table.Cell>
+              <Table.Cell>
+                <WalletName name={tx.from} />
+              </Table.Cell>
+              <Table.Cell>
+                <WalletName name={tx.to} />
+              </Table.Cell>
               <Table.Cell>{tx.amount}</Table.Cell>
               <Table.Cell>{tx.currency}</Table.Cell>
               <Table.Cell>{tx.valueUsd}</Table.Cell>

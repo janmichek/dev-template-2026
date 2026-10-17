@@ -2,7 +2,7 @@ import '@radix-ui/themes/styles.css';
 import { Theme } from '@radix-ui/themes';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import type { Preview } from '@storybook/react-vite';
-import { countries, currencies } from '@server/data';
+import { countries, currencies } from '../../server/data';
 import { countryQueries } from '../../src/features/filter-country';
 import { currencyQueries } from '../../src/features/filter-currency';
 

@@ -1,0 +1,14 @@
+{
+  "$schema": "./node_modules/oxfmt/configuration_schema.json",
+  "singleQuote": true,
+  "trailingComma": "es5",
+  "ignorePatterns": [
+    "src/shared/api/schema.d.ts",
+    "shared/openapi.json",
+    ".agents",
+    ".claude",
+    ".cursor",
+    "agent",
+    "examples"
+  ]
+}

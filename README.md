@@ -43,9 +43,9 @@ Imports only go downward. Steiger's recommended rules are all on, including `ins
 ```text
 app        router, providers, shell
 pages      one screen each: dashboard, transactions, settings
-widgets    portfolio (filter + chart), activity (total + table), summary (counts)
+widgets    portfolio (filter + chart), activity (total + table), summary (counts), wallets (names)
 features   filter-currency, filter-country, list-transactions, plot-value
-entities   transaction, currency, country
+entities   transaction, currency, country, wallet
 shared     ui kit and the API client
 ```
 
@@ -61,7 +61,8 @@ src/
 ├── widgets/
 │   ├── portfolio/
 │   ├── activity/
-│   └── summary/
+│   ├── summary/
+│   └── wallets/
 ├── features/
 │   ├── filter-currency/
 │   ├── filter-country/
@@ -70,7 +71,8 @@ src/
 ├── entities/
 │   ├── transaction/
 │   ├── currency/
-│   └── country/
+│   ├── country/
+│   └── wallet/
 └── shared/
     ├── api/
     └── ui/
@@ -98,7 +100,7 @@ bun run test:mutate   # stryker, feature lib only
 bun run storybook     # :6006
 ```
 
-Tool configs live in `config/`. Root `tsconfig.json` and `steiger.config.ts` only point there, because the editor and Steiger look at the project root.
+Tool configs live in `config/`. Root `tsconfig.json` and `steiger.config.ts` only point there, because the editor and Steiger look at the project root. `.oxfmtrc.json` stays at the root too: oxfmt `ignorePatterns` are rooted at the config file, so a config inside `config/` cannot ignore the rest of the repo.
 
 ## Agent skills
 

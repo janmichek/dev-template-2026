@@ -19,3 +19,7 @@ The chart of cumulative value over time, plus the latest movement, for the trans
 ## Activity
 
 The transaction table and the portfolio total for the same view. The dashboard shows the three newest rows. The transactions page shows every row, and the URL decides which row is open.
+
+## Wallet
+
+An account or address that sends or receives a transaction. The table prints each one. The wallets widget lists the first few names in the current view.

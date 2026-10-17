@@ -4,6 +4,7 @@ import { PageHeading } from '../../../shared/ui';
 import { Activity } from '../../../widgets/activity';
 import { Portfolio } from '../../../widgets/portfolio';
 import { Summary } from '../../../widgets/summary';
+import { Wallets } from '../../../widgets/wallets';
 
 export function TransactionsPage() {
   // URL owns which row is expanded, so '/transactions/6' opens that detail on load
@@ -23,6 +24,7 @@ export function TransactionsPage() {
     <>
       <PageHeading>Transactions</PageHeading>
       <Summary currency={currency} />
+      <Wallets currency={currency} />
       <Portfolio currency={currency} onCurrencyChange={setCurrency} />
       <Activity currency={currency} limit={undefined} expandedId={expandedId} onToggle={toggle} />
     </>

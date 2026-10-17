@@ -2,7 +2,7 @@ import { Hono } from 'hono';
 import { serveStatic } from 'hono/bun';
 import { z } from 'zod';
 import { countrySchema, currencySchema, transactionSchema } from '@shared/schemas';
-import { countries, currencies, transactions } from '@server/data';
+import { countries, currencies, transactions } from './data';
 
 const app = new Hono();
 

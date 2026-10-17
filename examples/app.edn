@@ -9,7 +9,8 @@
  :order [:shared :entities :features :widgets :pages :app],
  :omit [],
  :edges
- [{:from :features.filter-country.api.countryQueries,
+ [{:from :entities.wallet, :to :entities.wallet.ui.WalletName, :kind :dependency}
+  {:from :features.filter-country.api.countryQueries,
    :to :at.tanstack,
    :kind :dependency}
   {:from :widgets.activity.ui.Activity, :to :shared.ui, :kind :dependency}
@@ -24,6 +25,7 @@
   {:from :features.filter-currency.ui.CurrencySelect,
    :to :entities.currency,
    :kind :dependency}
+  {:from :widgets.wallets.ui.Wallets, :to :shared.ui, :kind :dependency}
   {:from :widgets.activity, :to :widgets.activity.ui.Activity, :kind :dependency}
   {:from :widgets.portfolio.ui.Portfolio, :to :features.plot-value, :kind :dependency}
   {:from :entities.transaction,
@@ -77,6 +79,9 @@
   {:from :features.list-transactions.api.transactionQueries,
    :to :shared.api,
    :kind :dependency}
+  {:from :features.list-transactions.ui.TransactionsTable,
+   :to :entities.wallet,
+   :kind :dependency}
   {:from :pages.dashboard.ui.DashboardPage, :to :widgets.portfolio, :kind :dependency}
   {:from :features.list-transactions.ui.TransactionsTable,
    :to :entities.transaction,
@@ -93,6 +98,9 @@
    :kind :dependency}
   {:from :pages.settings.ui.SettingsPage, :to :react, :kind :dependency}
   {:from :shared.ui.PageHeading, :to :react, :kind :dependency}
+  {:from :pages.transactions.ui.TransactionsPage,
+   :to :widgets.wallets,
+   :kind :dependency}
   {:from :features.filter-currency.ui.CurrencySelect,
    :to :features.filter-currency.api.useCurrencies,
    :kind :dependency}
@@ -108,6 +116,7 @@
   {:from :pages.dashboard.ui.DashboardPage, :to :at.tanstack, :kind :dependency}
   {:from :app.App, :to :at.tanstack, :kind :dependency}
   {:from :widgets.portfolio, :to :widgets.portfolio.ui.Portfolio, :kind :dependency}
+  {:from :widgets.wallets, :to :widgets.wallets.ui.Wallets, :kind :dependency}
   {:from :features.list-transactions,
    :to :features.list-transactions.api.transactionQueries,
    :kind :dependency}
@@ -128,9 +137,11 @@
    :to :features.plot-value.lib.totalValueSeries,
    :kind :dependency}
   {:from :shared.api.client, :to :zod, :kind :dependency}
+  {:from :pages.dashboard.ui.DashboardPage, :to :widgets.wallets, :kind :dependency}
   {:from :pages.transactions.ui.TransactionsPage,
    :to :widgets.portfolio,
    :kind :dependency}
+  {:from :widgets.wallets.ui.Wallets, :to :features.list-transactions, :kind :dependency}
   {:from :features.list-transactions,
    :to :features.list-transactions.ui.TransactionsTable,
    :kind :dependency}
@@ -147,6 +158,7 @@
    :kind :dependency}
   {:from :shared.ui.ClearableSelect, :to :react, :kind :dependency}
   {:from :features.filter-country.api.countryQueries, :to :shared.api, :kind :dependency}
+  {:from :widgets.wallets.ui.Wallets, :to :entities.wallet, :kind :dependency}
   {:from :features.filter-currency.api.currencyQueries,
    :to :at.tanstack,
    :kind :dependency}
@@ -256,6 +268,20 @@
    :level 1,
    :lang :typescript,
    :id :entities.transaction.ui.TransactionFacts}
+  {:ns "dev-template.entities.wallet",
+   :name "Wallet",
+   :file "src/entities/wallet/index.ts",
+   :ops [{:name "WalletName", :text "WalletName"}],
+   :level 1,
+   :lang :typescript,
+   :id :entities.wallet}
+  {:ns "dev-template.entities.wallet.ui.WalletName",
+   :name "WalletName",
+   :file "src/entities/wallet/ui/WalletName.tsx",
+   :ops [{:name "WalletName", :text "WalletName"}],
+   :level 1,
+   :lang :typescript,
+   :id :entities.wallet.ui.WalletName}
   {:ns "dev-template.features.filter-country.api.countryQueries",
    :name "CountryQueries",
    :file "src/features/filter-country/api/countryQueries.ts",
@@ -515,6 +541,20 @@
    :level 3,
    :lang :typescript,
    :id :widgets.summary.ui.Summary}
+  {:ns "dev-template.widgets.wallets",
+   :name "Wallets",
+   :file "src/widgets/wallets/index.ts",
+   :ops [{:name "Wallets", :text "Wallets"}],
+   :level 3,
+   :lang :typescript,
+   :id :widgets.wallets}
+  {:ns "dev-template.widgets.wallets.ui.Wallets",
+   :name "Wallets",
+   :file "src/widgets/wallets/ui/Wallets.tsx",
+   :ops [{:name "Wallets", :text "Wallets"}],
+   :level 3,
+   :lang :typescript,
+   :id :widgets.wallets.ui.Wallets}
   {:id :at.tanstack, :name "at.tanstack", :foreign true}
   {:id :react, :name "react", :foreign true}
   {:id :react-dom, :name "react-dom", :foreign true}

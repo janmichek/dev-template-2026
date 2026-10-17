@@ -7,6 +7,7 @@ import { PageHeading } from '../../../shared/ui';
 import { Activity } from '../../../widgets/activity';
 import { Portfolio } from '../../../widgets/portfolio';
 import { Summary } from '../../../widgets/summary';
+import { Wallets } from '../../../widgets/wallets';
 
 export function DashboardPage() {
   const [currency, setCurrency] = useState<string>();
@@ -26,6 +27,7 @@ export function DashboardPage() {
     <>
       <PageHeading>Dashboard</PageHeading>
       <Summary currency={currency} />
+      <Wallets currency={currency} />
       <Portfolio currency={currency} onCurrencyChange={setCurrency} />
       <Activity currency={currency} limit={3} expandedId={undefined} onToggle={openTransaction} />
       <Flex align="end" gap="3" mt="4">

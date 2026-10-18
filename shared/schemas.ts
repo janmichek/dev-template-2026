@@ -14,18 +14,18 @@ const avatarColorSchema = z.enum([
   'indigo',
 ]);
 
-export const transactionSchema = z.object({
+export const carSchema = z.object({
   id: z.number(),
   date: z.iso.datetime(),
-  type: z.enum(['deposit', 'withdrawal', 'transfer']),
+  type: z.enum(['acquired', 'sold', 'moved']),
   from: z.string(),
   to: z.string(),
   amount: z.number(),
-  currency: z.string(),
+  make: z.string(),
   valueUsd: z.number(),
 });
 
-export const currencySchema = z.object({
+export const makeSchema = z.object({
   code: z.string(),
   name: z.string(),
   symbol: z.string(),
@@ -42,6 +42,6 @@ export const countrySchema = z.object({
   }),
 });
 
-export type Transaction = z.infer<typeof transactionSchema>;
-export type Currency = z.infer<typeof currencySchema>;
+export type Car = z.infer<typeof carSchema>;
+export type Make = z.infer<typeof makeSchema>;
 export type Country = z.infer<typeof countrySchema>;

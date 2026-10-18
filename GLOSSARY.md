@@ -1,21 +1,25 @@
 # Glossary
 
-## Transaction
+## Car
 
-A dated movement of one currency: a deposit, a withdrawal, or a transfer. `valueUsd` is the movement's value in US dollars at that date. Transfers do not change the portfolio total.
+A dated lot movement of one car: acquired, sold, or moved between dealers. `valueUsd` is the car's price in US dollars. A move does not change the inventory total.
 
-## Currency
+## Make
 
-A coin the ledger can filter on. The code (`BTC`) is the id. The symbol and color are only for the mark in the filter and the activity total.
+A manufacturer the lot can filter on. The code (`BMW`) is the id. The symbol and color are only for the mark in the filter and the inventory total.
 
 ## Tax residence
 
-The country whose crypto-tax rules the person wants to read. It is a choice on the dashboard and on settings. It does not change the transaction list.
+The country whose car-tax rules the person wants to read. It is a choice on the dashboard and on settings. It does not change the car list.
 
 ## Portfolio
 
-The chart of cumulative value over time, plus the latest movement, for the transactions currently in view.
+The chart of cumulative inventory value over time, plus the latest car, for the cars currently in view.
 
 ## Activity
 
-The transaction table and the portfolio total for the same view. The dashboard shows the three newest rows. The transactions page shows every row, and the URL decides which row is open.
+The car table and the inventory total for the same view. The dashboard shows the three newest rows. The cars page shows every row, and the URL decides which row is open.
+
+## Dealer
+
+A lot or seller named on a car movement. The table prints each one. The dealers list shows the first few names in the current view.

@@ -1,6 +1,6 @@
 # Dev template 2026
 
-Strict Feature-Sliced React template. The sample product is a small crypto-tax ledger so the layers have real screens to hold: a portfolio chart, a transaction list, and a tax-residence card.
+Strict Feature-Sliced React template. The sample product is a small car lot so the layers have real screens to hold: an inventory chart, a car list, and a tax-residence card.
 
 Start every agent session with `/ask-matt`. It picks the skill. Do not skip it.
 
@@ -26,15 +26,15 @@ The UI is http://localhost:3000 and proxies `/api` to port 3001.
 
 `cp .env.example .env` is only for a Sentry DSN or a Chromatic token. The app runs without them.
 
-## The ledger
+## The lot
 
-| Page         | Route                                   | What it shows                                                                                                                    |
-| ------------ | --------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
-| Dashboard    | `/`                                     | Transaction counts, currency filter, value chart, latest movement, portfolio total, the three newest transactions, tax residence |
-| Transactions | `/transactions` and `/transactions/:id` | Same chart and total, the full table. The id in the URL opens that row.                                                          |
-| Settings     | `/settings`                             | Tax residence and the capital-gains card for the country you pick                                                                |
+| Page      | Route                   | What it shows                                                                                           |
+| --------- | ----------------------- | ------------------------------------------------------------------------------------------------------- |
+| Dashboard | `/`                     | Car counts, make filter, value chart, latest car, inventory total, the three newest cars, tax residence |
+| Cars      | `/cars` and `/cars/:id` | Same chart and total, the full table. The id in the URL opens that row.                                 |
+| Settings  | `/settings`             | Tax residence and the capital-gains card for the country you pick                                       |
 
-The currency filter is shared by the chart and the table on that page. Picking a country on the dashboard shows its flag and name. Settings shows the tax rates.
+The make filter is shared by the chart and the table on that page. Picking a country on the dashboard shows its flag and name. Settings shows the tax rates.
 
 ## Architecture
 
@@ -42,10 +42,10 @@ Imports only go downward. Steiger's recommended rules are all on, including `ins
 
 ```text
 app        router, providers, shell
-pages      one screen each: dashboard, transactions, settings
-widgets    portfolio (filter + chart), activity (total + table), summary (counts)
-features   filter-currency, filter-country, list-transactions, plot-value
-entities   transaction, currency, country
+pages      one screen each: dashboard, cars, settings
+widgets    portfolio (filter + chart), activity (total + table), summary (counts), dealers (names)
+features   filter-make, filter-country, list-cars, plot-value
+entities   car, make, country, dealer
 shared     ui kit and the API client
 ```
 
@@ -56,27 +56,29 @@ src/
 ├── app/
 ├── pages/
 │   ├── dashboard/
-│   ├── transactions/
+│   ├── cars/
 │   └── settings/
 ├── widgets/
 │   ├── portfolio/
 │   ├── activity/
-│   └── summary/
+│   ├── summary/
+│   └── dealers/
 ├── features/
-│   ├── filter-currency/
+│   ├── filter-make/
 │   ├── filter-country/
-│   ├── list-transactions/
+│   ├── list-cars/
 │   └── plot-value/
 ├── entities/
-│   ├── transaction/
-│   ├── currency/
-│   └── country/
+│   ├── car/
+│   ├── make/
+│   ├── country/
+│   └── dealer/
 └── shared/
     ├── api/
     └── ui/
 ```
 
-`shared/schemas.ts` is the API contract. Change the Zod schema, run `bun run api:generate`, and call the API through `fetchTransactions`, `fetchCurrencies`, or `fetchCountries`. Do not hand-edit `shared/openapi.json` or `src/shared/api/schema.d.ts`.
+`shared/schemas.ts` is the API contract. Change the Zod schema, run `bun run api:generate`, and call the API through `fetchCars`, `fetchMakes`, or `fetchCountries`. Do not hand-edit `shared/openapi.json` or `src/shared/api/schema.d.ts`.
 
 `server/data.ts` holds the sample records. The API parses them with the Zod schemas before they leave the server. The UI never imports that file.
 
@@ -98,7 +100,7 @@ bun run test:mutate   # stryker, feature lib only
 bun run storybook     # :6006
 ```
 
-Tool configs live in `config/`. Root `tsconfig.json` and `steiger.config.ts` only point there, because the editor and Steiger look at the project root.
+Tool configs live in `config/`. Root `tsconfig.json` and `steiger.config.ts` only point there, because the editor and Steiger look at the project root. `.oxfmtrc.json` stays at the root too: oxfmt `ignorePatterns` are rooted at the config file, so a config inside `config/` cannot ignore the rest of the repo.
 
 ## Agent skills
 

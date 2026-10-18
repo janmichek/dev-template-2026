@@ -33,7 +33,7 @@ export function ValueChart({ points }: { points: readonly Point[] }) {
         <rect width={width} height={height} fill="#111113" rx="8" />
         {area === null || line === null || first === undefined || last === undefined ? (
           <text x={width / 2} y={height / 2} fill="#b4b4b4" fontSize="14" textAnchor="middle">
-            No transactions
+            No cars
           </text>
         ) : (
           <>

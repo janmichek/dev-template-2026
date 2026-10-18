@@ -9,7 +9,7 @@ import { stubApi } from './stubApi';
 // registered here so every test file that renders also unmounts
 afterEach(cleanup);
 
-// Mirrors App.tsx wrappers; fetch serves mocked data (currencies, countries).
+// Mirrors App.tsx wrappers; fetch serves mocked data (makes, countries).
 export function renderInTheme(ui: ReactElement) {
   stubApi();
   const client = new QueryClient({ defaultOptions: { queries: { retry: false } } });

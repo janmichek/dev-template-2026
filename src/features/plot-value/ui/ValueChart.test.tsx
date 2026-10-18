@@ -19,5 +19,5 @@ test('draws the portfolio series', () => {
 
 test('shows an empty state when there is no series', () => {
   renderInTheme(<ValueChart points={[]} />);
-  expect(screen.getByText('No transactions')).toBeTruthy();
+  expect(screen.getByText('No cars')).toBeTruthy();
 });

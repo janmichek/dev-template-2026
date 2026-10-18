@@ -1,9 +1,9 @@
 import { vi } from 'vitest';
-import { countries, currencies, transactions } from '@server/data';
+import { cars, countries, makes } from '../server/data';
 
 const routes: Record<string, unknown> = {
-  '/api/transactions': transactions,
-  '/api/currencies': currencies,
+  '/api/cars': cars,
+  '/api/makes': makes,
   '/api/countries': countries,
 };
 

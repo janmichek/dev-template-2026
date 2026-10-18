@@ -19,11 +19,11 @@ export function Layout() {
             Dashboard
           </Link>
           <Link
-            to="/transactions/{-$txId}"
+            to="/cars/{-$carId}"
             activeProps={{ style: activeStyle }}
             inactiveProps={{ style: inactiveStyle }}
           >
-            Transactions
+            Cars
           </Link>
           <Link
             to="/settings"

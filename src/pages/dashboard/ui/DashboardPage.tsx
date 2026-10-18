@@ -5,29 +5,31 @@ import { CountryLabel } from '../../../entities/country';
 import { CountrySelect, useCountries } from '../../../features/filter-country';
 import { PageHeading } from '../../../shared/ui';
 import { Activity } from '../../../widgets/activity';
+import { Dealers } from '../../../widgets/dealers';
 import { Portfolio } from '../../../widgets/portfolio';
 import { Summary } from '../../../widgets/summary';
 
 export function DashboardPage() {
-  const [currency, setCurrency] = useState<string>();
+  const [make, setMake] = useState<string>();
   const [country, setCountry] = useState<string>();
   const { data: countries = [] } = useCountries();
   const selected = countries.find((item) => item.code === country);
   const navigate = useNavigate();
 
-  function openTransaction(id: number) {
+  function openCar(id: number) {
     void navigate({
-      to: '/transactions/{-$txId}',
-      params: { txId: String(id) },
+      to: '/cars/{-$carId}',
+      params: { carId: String(id) },
     });
   }
 
   return (
     <>
       <PageHeading>Dashboard</PageHeading>
-      <Summary currency={currency} />
-      <Portfolio currency={currency} onCurrencyChange={setCurrency} />
-      <Activity currency={currency} limit={3} expandedId={undefined} onToggle={openTransaction} />
+      <Summary make={make} />
+      <Dealers make={make} />
+      <Portfolio make={make} onMakeChange={setMake} />
+      <Activity make={make} limit={3} expandedId={undefined} onToggle={openCar} />
       <Flex align="end" gap="3" mt="4">
         <CountrySelect value={country} onChange={setCountry} />
       </Flex>

@@ -1,7 +1,7 @@
 import { createRootRoute, createRoute, createRouter } from '@tanstack/react-router';
 import { DashboardPage } from '../pages/dashboard';
 import { SettingsPage } from '../pages/settings';
-import { TransactionsPage } from '../pages/transactions';
+import { CarsPage } from '../pages/cars';
 import { Layout } from './Layout';
 
 const rootRoute = createRootRoute({ component: Layout });
@@ -12,10 +12,10 @@ const dashboardRoute = createRoute({
   component: DashboardPage,
 });
 
-const transactionsRoute = createRoute({
+const carsRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: '/transactions/{-$txId}',
-  component: TransactionsPage,
+  path: '/cars/{-$carId}',
+  component: CarsPage,
 });
 
 const settingsRoute = createRoute({
@@ -25,7 +25,7 @@ const settingsRoute = createRoute({
 });
 
 export const router = createRouter({
-  routeTree: rootRoute.addChildren([dashboardRoute, transactionsRoute, settingsRoute]),
+  routeTree: rootRoute.addChildren([dashboardRoute, carsRoute, settingsRoute]),
 });
 
 declare module '@tanstack/react-router' {

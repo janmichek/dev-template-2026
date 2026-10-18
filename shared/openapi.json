@@ -5,12 +5,12 @@
     "version": "0.1.0"
   },
   "paths": {
-    "/api/transactions": {
+    "/api/cars": {
       "get": {
-        "operationId": "listTransactions",
+        "operationId": "listCars",
         "responses": {
           "200": {
-            "description": "Transactions",
+            "description": "Cars",
             "content": {
               "application/json": {
                 "schema": {
@@ -29,9 +29,9 @@
                       "type": {
                         "type": "string",
                         "enum": [
-                          "deposit",
-                          "withdrawal",
-                          "transfer"
+                          "acquired",
+                          "sold",
+                          "moved"
                         ]
                       },
                       "from": {
@@ -43,7 +43,7 @@
                       "amount": {
                         "type": "number"
                       },
-                      "currency": {
+                      "make": {
                         "type": "string"
                       },
                       "valueUsd": {
@@ -57,7 +57,7 @@
                       "from",
                       "to",
                       "amount",
-                      "currency",
+                      "make",
                       "valueUsd"
                     ],
                     "additionalProperties": false
@@ -69,12 +69,12 @@
         }
       }
     },
-    "/api/currencies": {
+    "/api/makes": {
       "get": {
-        "operationId": "listCurrencies",
+        "operationId": "listMakes",
         "responses": {
           "200": {
-            "description": "Currencies",
+            "description": "Makes",
             "content": {
               "application/json": {
                 "schema": {

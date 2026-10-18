@@ -2,7 +2,7 @@ import { execFileSync } from 'node:child_process';
 import { writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { z } from 'zod';
-import { countrySchema, currencySchema, transactionSchema } from '../shared/schemas';
+import { carSchema, countrySchema, makeSchema } from '../shared/schemas';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
 
@@ -23,16 +23,16 @@ const document = {
   openapi: '3.1.0',
   info: { title: 'Koinly stub API', version: '0.1.0' },
   paths: {
-    '/api/transactions': {
+    '/api/cars': {
       get: {
-        operationId: 'listTransactions',
-        responses: { 200: ok('Transactions', z.array(transactionSchema)) },
+        operationId: 'listCars',
+        responses: { 200: ok('Cars', z.array(carSchema)) },
       },
     },
-    '/api/currencies': {
+    '/api/makes': {
       get: {
-        operationId: 'listCurrencies',
-        responses: { 200: ok('Currencies', z.array(currencySchema)) },
+        operationId: 'listMakes',
+        responses: { 200: ok('Makes', z.array(makeSchema)) },
       },
     },
     '/api/countries': {

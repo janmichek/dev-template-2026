@@ -5,7 +5,7 @@ export function TaxFacts({ country }: { country: Country }) {
   return (
     <Card>
       <Text as="p" size="3" weight="bold">
-        {country.flag} {country.name} - crypto tax
+        {country.flag} {country.name} - car tax
       </Text>
       <Text as="p" size="2" mt="2">
         Capital gains tax: {country.tax.capitalGainsTax}%

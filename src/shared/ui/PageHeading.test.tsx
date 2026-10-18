@@ -4,7 +4,7 @@ import { renderInTheme } from '@test/renderInTheme';
 import { PageHeading } from './PageHeading';
 
 test('renders children as a level-one heading', () => {
-  renderInTheme(<PageHeading>Transactions</PageHeading>);
-  const heading = screen.getByRole('heading', { level: 1, name: 'Transactions' });
-  expect(heading.textContent).toBe('Transactions');
+  renderInTheme(<PageHeading>Cars</PageHeading>);
+  const heading = screen.getByRole('heading', { level: 1, name: 'Cars' });
+  expect(heading.textContent).toBe('Cars');
 });

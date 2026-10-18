@@ -3,8 +3,8 @@ import { expect, test } from 'vitest';
 import { renderInTheme } from '@test/renderInTheme';
 import { Portfolio } from './Portfolio';
 
-test('shows the latest movement from the loaded transactions', async () => {
-  renderInTheme(<Portfolio currency={undefined} onCurrencyChange={() => {}} />);
-  expect(await screen.findByText('1 ETH')).toBeTruthy();
-  expect(screen.getByText(/Latest movement:/).textContent).toContain('Latest movement:');
+test('shows the latest car from the loaded lot', async () => {
+  renderInTheme(<Portfolio make={undefined} onMakeChange={() => {}} />);
+  expect(await screen.findByText('1 BMW')).toBeTruthy();
+  expect(screen.getByText(/Latest car:/).textContent).toContain('Latest car:');
 });

@@ -4,14 +4,14 @@
  */
 
 export interface paths {
-    "/api/transactions": {
+    "/api/cars": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["listTransactions"];
+        get: operations["listCars"];
         put?: never;
         post?: never;
         delete?: never;
@@ -20,14 +20,14 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/currencies": {
+    "/api/makes": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["listCurrencies"];
+        get: operations["listMakes"];
         put?: never;
         post?: never;
         delete?: never;
@@ -64,7 +64,7 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
-    listTransactions: {
+    listCars: {
         parameters: {
             query?: never;
             header?: never;
@@ -73,7 +73,7 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description Transactions */
+            /** @description Cars */
             200: {
                 headers: {
                     [name: string]: unknown;
@@ -84,18 +84,18 @@ export interface operations {
                         /** Format: date-time */
                         date: string;
                         /** @enum {string} */
-                        type: "deposit" | "withdrawal" | "transfer";
+                        type: "acquired" | "sold" | "moved";
                         from: string;
                         to: string;
                         amount: number;
-                        currency: string;
+                        make: string;
                         valueUsd: number;
                     }[];
                 };
             };
         };
     };
-    listCurrencies: {
+    listMakes: {
         parameters: {
             query?: never;
             header?: never;
@@ -104,7 +104,7 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description Currencies */
+            /** @description Makes */
             200: {
                 headers: {
                     [name: string]: unknown;

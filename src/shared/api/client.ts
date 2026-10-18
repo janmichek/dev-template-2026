@@ -1,6 +1,6 @@
 import createClient from 'openapi-fetch';
 import { z } from 'zod';
-import { countrySchema, currencySchema, transactionSchema } from '@shared/schemas';
+import { carSchema, countrySchema, makeSchema } from '@shared/schemas';
 import type { paths } from './schema';
 
 // Paths come from the generated OpenAPI types. Response bodies are still parsed
@@ -16,14 +16,14 @@ function parseBody<T>(schema: z.ZodType<T>, body: unknown, response: Response): 
   return schema.parse(body);
 }
 
-export async function fetchTransactions() {
-  const { data, response } = await client.GET('/api/transactions');
-  return parseBody(z.array(transactionSchema), data, response);
+export async function fetchCars() {
+  const { data, response } = await client.GET('/api/cars');
+  return parseBody(z.array(carSchema), data, response);
 }
 
-export async function fetchCurrencies() {
-  const { data, response } = await client.GET('/api/currencies');
-  return parseBody(z.array(currencySchema), data, response);
+export async function fetchMakes() {
+  const { data, response } = await client.GET('/api/makes');
+  return parseBody(z.array(makeSchema), data, response);
 }
 
 export async function fetchCountries() {

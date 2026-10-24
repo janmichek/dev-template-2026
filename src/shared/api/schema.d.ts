@@ -36,16 +36,16 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/countries": {
+    "/api/cars/{id}/reserve": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["listCountries"];
+        get?: never;
         put?: never;
-        post?: never;
+        post: operations["reserveCar"];
         delete?: never;
         options?: never;
         head?: never;
@@ -81,15 +81,15 @@ export interface operations {
                 content: {
                     "application/json": {
                         id: number;
-                        /** Format: date-time */
-                        date: string;
-                        /** @enum {string} */
-                        type: "acquired" | "sold" | "moved";
-                        from: string;
-                        to: string;
-                        amount: number;
                         make: string;
-                        valueUsd: number;
+                        model: string;
+                        year: number;
+                        mileageKm: number;
+                        priceUsd: number;
+                        /** @enum {string} */
+                        status: "available" | "reserved" | "sold";
+                        /** Format: date-time */
+                        listedAt: string;
                     }[];
                 };
             };
@@ -115,37 +115,56 @@ export interface operations {
                         name: string;
                         symbol: string;
                         /** @enum {string} */
-                        color: "gray" | "amber" | "orange" | "iris" | "blue" | "teal" | "purple" | "indigo";
+                        color: "gray" | "orange" | "iris" | "blue" | "teal";
                     }[];
                 };
             };
         };
     };
-    listCountries: {
+    reserveCar: {
         parameters: {
             query?: never;
             header?: never;
-            path?: never;
+            path: {
+                id: number;
+            };
             cookie?: never;
         };
         requestBody?: never;
         responses: {
-            /** @description Countries */
+            /** @description Reserved car */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
                     "application/json": {
-                        code: string;
-                        name: string;
-                        flag: string;
-                        tax: {
-                            capitalGainsTax: number;
-                            holdingPeriodMonths: number | null;
-                        };
-                    }[];
+                        id: number;
+                        make: string;
+                        model: string;
+                        year: number;
+                        mileageKm: number;
+                        priceUsd: number;
+                        /** @enum {string} */
+                        status: "available" | "reserved" | "sold";
+                        /** Format: date-time */
+                        listedAt: string;
+                    };
                 };
+            };
+            /** @description No such car */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Car is not available */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
         };
     };

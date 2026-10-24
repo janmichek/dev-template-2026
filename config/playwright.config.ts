@@ -6,6 +6,7 @@ export default defineConfig({
   testMatch: '**/*.spec.ts',
   use: {
     baseURL: 'http://127.0.0.1:3000',
+    video: process.env['PLAYWRIGHT_VIDEO'] === 'on' ? 'on' : 'off',
   },
   projects: [
     {

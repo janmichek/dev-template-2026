@@ -1,10 +1,10 @@
 services:
-  koinly:
+  dev-template-2026:
     build:
       context: .
       dockerfile: Dockerfile
-    image: koinly
-    container_name: koinly-dev
+    image: dev-template-2026
+    container_name: dev-template-2026
     init: true
     ports:
       - '3001:3001'

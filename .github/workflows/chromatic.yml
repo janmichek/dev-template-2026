@@ -8,6 +8,8 @@ on:
 jobs:
   chromatic:
     runs-on: ubuntu-latest
+    env:
+      CHROMATIC_PROJECT_TOKEN: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -15,7 +17,11 @@ jobs:
       - uses: oven-sh/setup-bun@v2
       - run: bun install --frozen-lockfile
       - uses: chromaui/action@latest
+        if: env.CHROMATIC_PROJECT_TOKEN != ''
         with:
-          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+          projectToken: ${{ env.CHROMATIC_PROJECT_TOKEN }}
           storybookConfigDir: config/storybook
           exitZeroOnChanges: true
+      - name: Explain the skip
+        if: env.CHROMATIC_PROJECT_TOKEN == ''
+        run: echo '::notice::Skipping Chromatic. Set the CHROMATIC_PROJECT_TOKEN secret to enable visual regression.'

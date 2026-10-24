@@ -1,15 +1,5 @@
-import { Hono } from 'hono';
 import { serveStatic } from 'hono/bun';
-import { z } from 'zod';
-import { carSchema, countrySchema, makeSchema } from '@shared/schemas';
-import { cars, countries, makes } from './data';
-
-const app = new Hono();
-
-// Fixtures are parsed through the shared schemas before leaving the server
-app.get('/api/cars', (c) => c.json(z.array(carSchema).parse(cars)));
-app.get('/api/makes', (c) => c.json(z.array(makeSchema).parse(makes)));
-app.get('/api/countries', (c) => c.json(z.array(countrySchema).parse(countries)));
+import { app } from './app';
 
 // Serve the production React build from this same server so
 // one Docker container handles both API and UI on :3001.

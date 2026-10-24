@@ -1,7 +1,7 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "title": "Koinly stub API",
+    "title": "Dev template 2026",
     "version": "0.1.0"
   },
   "paths": {
@@ -21,44 +21,44 @@
                       "id": {
                         "type": "number"
                       },
-                      "date": {
-                        "type": "string",
-                        "format": "date-time",
-                        "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
-                      },
-                      "type": {
-                        "type": "string",
-                        "enum": [
-                          "acquired",
-                          "sold",
-                          "moved"
-                        ]
-                      },
-                      "from": {
-                        "type": "string"
-                      },
-                      "to": {
-                        "type": "string"
-                      },
-                      "amount": {
-                        "type": "number"
-                      },
                       "make": {
                         "type": "string"
                       },
-                      "valueUsd": {
+                      "model": {
+                        "type": "string"
+                      },
+                      "year": {
                         "type": "number"
+                      },
+                      "mileageKm": {
+                        "type": "number"
+                      },
+                      "priceUsd": {
+                        "type": "number"
+                      },
+                      "status": {
+                        "type": "string",
+                        "enum": [
+                          "available",
+                          "reserved",
+                          "sold"
+                        ]
+                      },
+                      "listedAt": {
+                        "type": "string",
+                        "format": "date-time",
+                        "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
                       }
                     },
                     "required": [
                       "id",
-                      "date",
-                      "type",
-                      "from",
-                      "to",
-                      "amount",
                       "make",
-                      "valueUsd"
+                      "model",
+                      "year",
+                      "mileageKm",
+                      "priceUsd",
+                      "status",
+                      "listedAt"
                     ],
                     "additionalProperties": false
                   }
@@ -95,13 +95,10 @@
                         "type": "string",
                         "enum": [
                           "gray",
-                          "amber",
                           "orange",
                           "iris",
                           "blue",
-                          "teal",
-                          "purple",
-                          "indigo"
+                          "teal"
                         ]
                       }
                     },
@@ -120,59 +117,79 @@
         }
       }
     },
-    "/api/countries": {
-      "get": {
-        "operationId": "listCountries",
+    "/api/cars/{id}/reserve": {
+      "post": {
+        "operationId": "reserveCar",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
         "responses": {
           "200": {
-            "description": "Countries",
+            "description": "Reserved car",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "code": {
-                        "type": "string"
-                      },
-                      "name": {
-                        "type": "string"
-                      },
-                      "flag": {
-                        "type": "string"
-                      },
-                      "tax": {
-                        "type": "object",
-                        "properties": {
-                          "capitalGainsTax": {
-                            "type": "number"
-                          },
-                          "holdingPeriodMonths": {
-                            "type": [
-                              "number",
-                              "null"
-                            ]
-                          }
-                        },
-                        "required": [
-                          "capitalGainsTax",
-                          "holdingPeriodMonths"
-                        ],
-                        "additionalProperties": false
-                      }
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number"
                     },
-                    "required": [
-                      "code",
-                      "name",
-                      "flag",
-                      "tax"
-                    ],
-                    "additionalProperties": false
-                  }
+                    "make": {
+                      "type": "string"
+                    },
+                    "model": {
+                      "type": "string"
+                    },
+                    "year": {
+                      "type": "number"
+                    },
+                    "mileageKm": {
+                      "type": "number"
+                    },
+                    "priceUsd": {
+                      "type": "number"
+                    },
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "available",
+                        "reserved",
+                        "sold"
+                      ]
+                    },
+                    "listedAt": {
+                      "type": "string",
+                      "format": "date-time",
+                      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "make",
+                    "model",
+                    "year",
+                    "mileageKm",
+                    "priceUsd",
+                    "status",
+                    "listedAt"
+                  ],
+                  "additionalProperties": false
                 }
               }
             }
+          },
+          "404": {
+            "description": "No such car"
+          },
+          "409": {
+            "description": "Car is not available"
           }
         }
       }

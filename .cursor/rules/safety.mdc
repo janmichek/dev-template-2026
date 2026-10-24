@@ -1,0 +1,17 @@
+---
+description: Irreversible commands and network installs are off limits
+alwaysApply: true
+---
+
+# Safety rails
+
+Do not run these without an explicit, in-message request from the human:
+
+- `git push`, `git reset --hard`, `git clean`, `git branch -D`, force-pushes
+- `rm -rf` or any recursive delete outside `test-results/`
+- Package installs or upgrades that hit the network: `bun add`, `bun remove`, `bun update`, `bun install`, `npm install`, `pnpm add`, `yarn add`
+- Fetching code or scripts: `npx`, `bunx`, `curl`, `wget`
+- `gh pr merge` and other remote state changes
+- Reading `.env` or any file that may hold secrets
+
+If a task seems to need one of these, stop and ask the human to run it. Do not work around the rule with a script, a workflow edit, or an editor command.

@@ -1,0 +1,137 @@
+name: Preview
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+  pull-requests: write
+
+concurrency:
+  group: preview-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+env:
+  MAIN_URL: https://dev-template-2026.vercel.app
+
+jobs:
+  videos:
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    env:
+      PLAYWRIGHT_VIDEO: 'on'
+      PLAYWRIGHT_JSON_OUTPUT_NAME: ${{ github.workspace }}/test-results/report.json
+    steps:
+      - uses: actions/checkout@v5
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install --frozen-lockfile
+      - run: bunx playwright install --with-deps chromium
+      - name: Record the videos
+        run: bun run test:e2e --reporter=line,json
+      - name: Publish the videos
+        id: publish
+        run: |
+          videos="$(bun scripts/publish-videos.ts)"
+          printf '%s\n' "$videos"
+          {
+            echo 'videos<<EOF'
+            printf '%s\n' "$videos"
+            echo 'EOF'
+          } >> "$GITHUB_OUTPUT"
+    outputs:
+      videos: ${{ steps.publish.outputs.videos }}
+
+  deploy:
+    needs: videos
+    if: always() && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    outputs:
+      url: ${{ steps.deploy.outputs.url }}
+    env:
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+    steps:
+      - uses: actions/checkout@v5
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install --frozen-lockfile
+      - run: bun run vercel:build
+      - name: Deploy the preview
+        id: deploy
+        run: |
+          out="$(npx vercel@latest deploy --prebuilt --target preview --yes --no-color --token="$VERCEL_TOKEN" 2>&1)"
+          printf '%s\n' "$out"
+          url="$(printf '%s\n' "$out" | grep -oE 'https://[a-zA-Z0-9.-]+\.vercel\.app' | tail -1)"
+          test -n "$url"
+          echo "url=$url" >> "$GITHUB_OUTPUT"
+      - name: Comment the preview URL
+        uses: actions/github-script@v7
+        env:
+          PREVIEW_URL: ${{ steps.deploy.outputs.url }}
+          MAIN_URL: ${{ env.MAIN_URL }}
+          VIDEOS: ${{ needs.videos.outputs.videos }}
+        with:
+          script: |
+            const url = process.env.PREVIEW_URL
+            const main = process.env.MAIN_URL
+            const videos = (process.env.VIDEOS || '').trim()
+            const marker = '<!-- vercel-preview -->'
+            const body = [
+              marker,
+              '### Preview',
+              '',
+              `**[This branch](${url})** · **[Main deployment](${main})**`,
+              ...(videos ? ['', '### Videos', '', videos] : []),
+              '',
+              '<sub>Deployment protection may ask you to sign in to Vercel.</sub>',
+            ].join('\n')
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            })
+            const existing = comments.find((comment) => comment.body && comment.body.includes(marker))
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existing.id,
+                body,
+              })
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body,
+              })
+            }
+
+  lighthouse:
+    needs: deploy
+    if: always() && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: oven-sh/setup-bun@v2
+      - name: Check whether the preview can be audited
+        id: gate
+        env:
+          PREVIEW_URL: ${{ needs.deploy.outputs.url }}
+          BYPASS: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
+        run: |
+          if [ -n "$BYPASS" ] && [ -n "$PREVIEW_URL" ]; then
+            echo 'enabled=true' >> "$GITHUB_OUTPUT"
+          else
+            echo '::notice::Skipping Lighthouse: set VERCEL_AUTOMATION_BYPASS_SECRET so the audit can pass Vercel deployment protection.'
+          fi
+      - name: Audit the preview
+        if: steps.gate.outputs.enabled == 'true'
+        env:
+          PREVIEW_URL: ${{ needs.deploy.outputs.url }}
+          BYPASS: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
+        run: |
+          bunx @lhci/cli autorun \
+            --config=config/lighthouserc.json \
+            --collect.url="$PREVIEW_URL" \
+            --collect.settings.extraHeaders="{\"x-vercel-protection-bypass\":\"$BYPASS\"}"

@@ -26,6 +26,7 @@
         "@types/react-dom": "^19.3.0",
         "@vitejs/plugin-react": "^6.1.2",
         "chromatic": "^18.13.0",
+        "esbuild": "0.28.2",
         "happy-dom": "^21.0.3",
         "jscpd": "^5.4.1",
         "knip": "^6.41.0",

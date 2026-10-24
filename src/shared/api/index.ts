@@ -1,1 +1,1 @@
-export { fetchCars, fetchCountries, fetchMakes } from './client';
+export { fetchCars, fetchMakes, reserveCar } from './client';

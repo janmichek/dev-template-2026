@@ -12,12 +12,11 @@
   const $ = (selector, root = document) => root.querySelector(selector);
   const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
 
-  function esc(value) {
-    return String(value ?? '').replace(
-      /[&<>"']/g,
-      (char) =>
-        ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char] ?? char
-    );
+  function el(tag, className, text) {
+    const node = document.createElement(tag);
+    if (className) node.className = className;
+    if (text !== undefined) node.textContent = String(text);
+    return node;
   }
 
   function labelOf(name) {
@@ -40,38 +39,60 @@
     return left || a.name.localeCompare(b.name);
   }
 
-  function nodeHtml(item, index) {
+  function nodeCard(item, index) {
     const classes = ['node', item.change, item.stereotype === 'interface' ? 'iface' : '']
       .filter(Boolean)
       .join(' ');
+    const change = item.change === 'foreign' ? 'external' : item.change;
+    const card = el('article', classes);
+    card.style.setProperty('--i', String(index));
+    card.dataset.id = item.id;
+    card.dataset.level = String(item.level);
+    card.tabIndex = 0;
+    card.setAttribute('role', 'button');
+    card.setAttribute('aria-label', `${item.name}, ${change}`);
+
+    const top = el('div', 'node-top');
+    top.append(el('span', 'level-chip', `L${item.level}`));
+    const changeChip = el('span', 'change-chip');
+    changeChip.append(el('i'), document.createTextNode(change));
+    top.append(changeChip);
+    card.append(top);
+
+    const name = el('h3', 'node-name', item.name);
+    if (item.stereotype === 'interface') {
+      const mark = el('span', 'iface-mark', 'I');
+      mark.title = 'Interface';
+      name.append(mark);
+    }
+    card.append(name);
+
+    if (item.file) {
+      const file = el('p', 'node-file', item.file);
+      file.title = item.file;
+      card.append(file);
+    }
+
     const shown = item.ops.slice(0, 4);
     const extra = item.ops.length - shown.length;
-    const ops = shown.length
-      ? `<ul class="node-ops">${shown.map((op) => `<li>${esc(op)}</li>`).join('')}${
-          extra > 0 ? `<li>+${extra}</li>` : ''
-        }</ul>`
-      : item.note
-        ? `<p class="node-note">${esc(item.note)}</p>`
-        : '';
-    const stereo =
-      item.stereotype === 'interface' ? `<span class="iface-mark" title="Interface">I</span>` : '';
-    const change = item.change === 'foreign' ? 'external' : item.change;
-    return `<article class="${classes}" style="--i:${index}" data-id="${esc(item.id)}" data-level="${
-      item.level
-    }" tabindex="0" role="button" aria-label="${esc(item.name)}, ${esc(change)}">
-      <div class="node-top">
-        <span class="level-chip">L${item.level}</span>
-        <span class="change-chip"><i></i>${esc(change)}</span>
-      </div>
-      <h3 class="node-name">${esc(item.name)}${stereo}</h3>
-      ${item.file ? `<p class="node-file" title="${esc(item.file)}">${esc(item.file)}</p>` : ''}
-      ${ops}
-    </article>`;
+    if (shown.length) {
+      const ops = el('ul', 'node-ops');
+      shown.forEach((op) => ops.append(el('li', '', op)));
+      if (extra > 0) ops.append(el('li', '', `+${extra}`));
+      card.append(ops);
+    } else if (item.note) {
+      card.append(el('p', 'node-note', item.note));
+    }
+
+    return card;
   }
 
   function bandLabel(level, top, bottom) {
     const suffix = level === 0 ? 'inner' : level === top && top !== bottom ? 'outer' : '';
-    return `<div class="band-label"><b>L${level}</b>${suffix}</div>`;
+    const label = el('div', 'band-label');
+    label.append(el('b', '', `L${level}`));
+    if (suffix) label.append(suffix);
+    return label;
   }
 
   function mount(stage, classes) {
@@ -84,51 +105,50 @@
       .slice()
       .sort(byOrder);
     const bands = $('.bands', stage);
+    bands.replaceChildren();
     if (!project.length) {
-      bands.innerHTML = '<div class="empty">No modules on this side of the diff.</div>';
+      bands.append(el('div', 'empty', 'No modules on this side of the diff.'));
     } else {
       const levels = [...new Set(project.map((item) => item.level))].sort((a, b) => b - a);
-      bands.innerHTML = levels
-        .map((level) => {
-          const here = project.filter((item) => item.level === level);
-          const groups = new Map();
-          here.forEach((item) => {
-            if (!item.group) return;
-            const list = groups.get(item.group) ?? [];
-            list.push(item);
-            groups.set(item.group, list);
-          });
-          const packed = new Set();
-          groups.forEach((list) => {
-            if (list.length > 1) list.forEach((item) => packed.add(item.id));
-          });
-          const loose = here.filter((item) => !packed.has(item.id));
-          const packages = [...groups.entries()]
-            .filter(([, list]) => list.length > 1)
-            .map(
-              ([group, list]) =>
-                `<div class="pkg"><span>${esc(labelOf(group))}</span><div class="stack">${list
-                  .map((item, index) => nodeHtml(item, index))
-                  .join('')}</div></div>`
-            );
-          return `<div class="band" data-level="${level}">${bandLabel(
-            level,
-            levels[0],
-            levels[levels.length - 1]
-          )}<div class="row">${loose
-            .map((item, index) => nodeHtml(item, index))
-            .join('')}${packages.join('')}</div></div>`;
-        })
-        .join('');
+      levels.forEach((level) => {
+        const here = project.filter((item) => item.level === level);
+        const groups = new Map();
+        here.forEach((item) => {
+          if (!item.group) return;
+          const list = groups.get(item.group) ?? [];
+          list.push(item);
+          groups.set(item.group, list);
+        });
+        const packed = new Set();
+        groups.forEach((list) => {
+          if (list.length > 1) list.forEach((item) => packed.add(item.id));
+        });
+        const loose = here.filter((item) => !packed.has(item.id));
+        const row = el('div', 'row');
+        loose.forEach((item, index) => row.append(nodeCard(item, index)));
+        groups.forEach((list, group) => {
+          if (list.length <= 1) return;
+          const pkg = el('div', 'pkg');
+          pkg.append(el('span', '', labelOf(group)));
+          const stack = el('div', 'stack');
+          list.forEach((item, index) => stack.append(nodeCard(item, index)));
+          pkg.append(stack);
+          row.append(pkg);
+        });
+        const band = el('div', 'band');
+        band.dataset.level = String(level);
+        band.append(bandLabel(level, levels[0], levels[levels.length - 1]), row);
+        bands.append(band);
+      });
     }
-    $('.rail-items', stage).innerHTML = external
-      .map(
-        (item) =>
-          `<span class="chip" data-id="${esc(item.id)}" title="${esc(item.name)}">${esc(
-            item.name
-          )}</span>`
-      )
-      .join('');
+    const rail = $('.rail-items', stage);
+    rail.replaceChildren();
+    external.forEach((item) => {
+      const chip = el('span', 'chip', item.name);
+      chip.dataset.id = item.id;
+      chip.title = item.name;
+      rail.append(chip);
+    });
     return project.length;
   }
 
@@ -393,26 +413,29 @@
   }
 
   function edgeKindCell(edge) {
-    if (edge.violating) return '<span class="tag bad">outward</span>';
-    if (edge.kind === 'implements') return '<span class="tag impl">implements</span>';
-    return '<span class="tag same">dependency</span>';
+    if (edge.violating) return el('span', 'tag bad', 'outward');
+    if (edge.kind === 'implements') return el('span', 'tag impl', 'implements');
+    return el('span', 'tag same', 'dependency');
   }
 
   function fillTable() {
     const body = $('#edges-body');
     $('#edge-total').textContent = String(afterEdges.length);
     $('#edge-count').textContent = String(afterEdges.length);
-    body.innerHTML = afterEdges
-      .map((edge) => {
-        const change =
-          edge.change === 'added'
-            ? '<span class="tag added">added</span>'
-            : '<span class="tag same">same</span>';
-        return `<tr data-from="${esc(edge.from)}" data-to="${esc(edge.to)}"><td class="tr-change">${change}</td><td class="mono">${esc(
-          edge.from
-        )}</td><td class="mono">${esc(edge.to)}</td><td>${edgeKindCell(edge)}</td></tr>`;
-      })
-      .join('');
+    body.replaceChildren();
+    afterEdges.forEach((edge) => {
+      const row = document.createElement('tr');
+      row.dataset.from = edge.from;
+      row.dataset.to = edge.to;
+      const change = el('td', 'tr-change');
+      change.append(
+        edge.change === 'added' ? el('span', 'tag added', 'added') : el('span', 'tag same', 'same')
+      );
+      const kind = el('td');
+      kind.append(edgeKindCell(edge));
+      row.append(change, el('td', 'mono', edge.from), el('td', 'mono', edge.to), kind);
+      body.append(row);
+    });
   }
 
   function inspectorLinks(id) {
@@ -422,18 +445,22 @@
       if (edge.to === id) rows.push(['in', edge.from]);
     });
     const seen = new Set();
-    return rows
+    const links = document.createDocumentFragment();
+    rows
       .filter(([, name]) => {
         if (seen.has(name)) return false;
         seen.add(name);
         return true;
       })
       .slice(0, 12)
-      .map(
-        ([direction, name]) =>
-          `<div class="link-row"><span>${direction}</span><code title="${esc(name)}">${esc(name)}</code></div>`
-      )
-      .join('');
+      .forEach(([direction, name]) => {
+        const row = el('div', 'link-row');
+        const code = el('code', '', name);
+        code.title = name;
+        row.append(el('span', '', direction), code);
+        links.append(row);
+      });
+    return links;
   }
 
   function openInspector(id) {
@@ -445,30 +472,17 @@
     $('#ins-name').textContent = item.name;
     $('#ins-file').textContent = item.file ?? item.id;
     const change = item.change === 'foreign' ? 'external' : item.change;
-    const insTags = $('#ins-tags');
-    insTags.textContent = '';
-
-    const changeTag = document.createElement('span');
-    changeTag.classList.add('tag');
-    String(item.change ?? '')
-      .split(/\s+/)
-      .filter((token) => /^[A-Za-z0-9_-]+$/.test(token))
-      .forEach((token) => changeTag.classList.add(token));
-    changeTag.textContent = String(change ?? '');
-
-    const levelTag = document.createElement('span');
-    levelTag.classList.add('tag', 'same');
-    levelTag.textContent = `L${item.level}`;
-
-    const idTag = document.createElement('span');
-    idTag.classList.add('tag', 'same');
-    idTag.textContent = String(item.id ?? '');
-
-    insTags.append(changeTag, levelTag, idTag);
-    $('#ins-ops').innerHTML = item.ops.length
-      ? item.ops.map((op) => `<span>${esc(op)}</span>`).join('')
-      : `<span>${esc(item.note ?? 'No exports')}</span>`;
-    $('#ins-links').innerHTML = inspectorLinks(id);
+    const tags = $('#ins-tags');
+    tags.replaceChildren(
+      el('span', `tag ${item.change}`, change),
+      el('span', 'tag same', `L${item.level}`),
+      el('span', 'tag same', item.id)
+    );
+    const ops = $('#ins-ops');
+    ops.replaceChildren();
+    if (item.ops.length) item.ops.forEach((op) => ops.append(el('span', '', op)));
+    else ops.append(el('span', '', item.note ?? 'No exports'));
+    $('#ins-links').replaceChildren(inspectorLinks(id));
     inspector.dataset.open = 'true';
   }
 

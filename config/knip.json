@@ -12,7 +12,8 @@
     "src/shared/*/index.ts",
     "config/**/*.ts",
     "config/storybook/**/*.tsx",
-    "steiger.config.ts"
+    "steiger.config.ts",
+    "api/**/*.ts"
   ],
   "project": [
     "src/**/*.{ts,tsx}",
@@ -21,9 +22,10 @@
     "test/**/*.{ts,tsx}",
     "scripts/**/*.ts",
     "stories/**/*.tsx",
-    "config/**/*.{ts,tsx}"
+    "config/**/*.{ts,tsx}",
+    "api/**/*.ts"
   ],
-  "ignoreDependencies": ["@playwright/mcp"],
+  "ignoreDependencies": ["@playwright/mcp", "@stryker-mutator/command-runner"],
   "ignoreIssues": {
     "src/shared/api/schema.d.ts": ["exports", "types", "nsExports", "nsTypes", "duplicates"]
   }

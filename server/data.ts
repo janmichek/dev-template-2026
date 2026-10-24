@@ -1,4 +1,4 @@
-import type { Car, Make } from '@shared/schemas';
+import type { Car, Make } from '../shared/schemas';
 
 // oxfmt-ignore
 export const cars: Car[] = [

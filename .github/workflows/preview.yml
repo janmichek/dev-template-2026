@@ -38,7 +38,7 @@ jobs:
           PREVIEW_URL: ${{ steps.deploy.outputs.url }}
         with:
           script: |
-            const url = `https://${process.env.PREVIEW_URL}`
+            const url = process.env.PREVIEW_URL
             const marker = '<!-- vercel-preview -->'
             const body = [
               marker,

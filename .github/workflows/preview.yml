@@ -27,7 +27,9 @@ jobs:
       - name: Deploy the preview
         id: deploy
         run: |
-          url="$(npx vercel@latest deploy --prebuilt --target preview --yes --token="$VERCEL_TOKEN" --format json | jq -r '.deployment.url')"
+          out="$(npx vercel@latest deploy --prebuilt --target preview --yes --no-color --token="$VERCEL_TOKEN" 2>&1)"
+          printf '%s\n' "$out"
+          url="$(printf '%s\n' "$out" | grep -oE 'https://[a-zA-Z0-9.-]+\.vercel\.app' | tail -1)"
           test -n "$url"
           echo "url=$url" >> "$GITHUB_OUTPUT"
       - name: Comment the preview URL

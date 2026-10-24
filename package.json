@@ -10,6 +10,7 @@
     "build": "vite build --config config/vite.config.ts",
     "vercel:build": "bun run build && bun scripts/build-vercel.ts",
     "typecheck": "tsc -p tsconfig.json --noEmit",
+    "audit": "bun audit --production",
     "lint": "oxlint -c config/oxlintrc.json --ignore-pattern .agents --ignore-pattern .claude --ignore-pattern .cursor --ignore-pattern agent --ignore-pattern examples",
     "fmt": "oxfmt",
     "fmt:check": "oxfmt --check",

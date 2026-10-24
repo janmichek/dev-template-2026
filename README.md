@@ -194,9 +194,15 @@ Then in the project on GitHub:
 
 ## Pull requests
 
-Every pull request runs `.github/workflows/uml.yml`. The check regenerates `examples/app.edn` from `examples/app.policy.edn`, diffs it against the base branch, and comments a link to the paper diagram. Click a box to isolate its arrows. Level 0 (`shared`) sits at the bottom. Added modules are green, removed ones are red-brown, outward dependencies are red.
+Every pull request runs `.github/workflows/uml.yml`. The check regenerates `examples/app.edn` from `examples/app.policy.edn`, diffs it against the base branch, and comments a link to an interactive diagram. Click a module to isolate its arrows, hover to preview a neighbourhood, filter by name, switch between the changed imports and all imports, and toggle the light theme. Level 0 (`shared`) sits at the bottom. Added modules are green, removed ones are red. Outward dependencies are marked red.
 
-The comment is updated in place. The HTML is uploaded to x0.at, which is public and temporary. A later push replaces the link.
+The HTML page is rendered by `scripts/diagram-page.ts` with Bun from the two EDN files. To preview it locally:
+
+```sh
+bun scripts/diagram-page.ts examples/app.edn /tmp/before.edn /tmp/diagram.html main 1234567 feature 89abcde
+```
+
+The comment is updated in place. The HTML is uploaded to x0.at, which is public and temporary. A later push replaces the link. Only the IR generator still runs on Clojure.
 
 If the workflow says the diagram is stale, regenerate it and commit `examples/app.edn`:
 

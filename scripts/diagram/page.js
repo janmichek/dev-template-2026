@@ -445,8 +445,26 @@
     $('#ins-name').textContent = item.name;
     $('#ins-file').textContent = item.file ?? item.id;
     const change = item.change === 'foreign' ? 'external' : item.change;
-    $('#ins-tags').innerHTML =
-      `<span class="tag ${esc(item.change)}">${esc(change)}</span><span class="tag same">L${item.level}</span><span class="tag same">${esc(item.id)}</span>`;
+    const insTags = $('#ins-tags');
+    insTags.textContent = '';
+
+    const changeTag = document.createElement('span');
+    changeTag.classList.add('tag');
+    String(item.change ?? '')
+      .split(/\s+/)
+      .filter((token) => /^[A-Za-z0-9_-]+$/.test(token))
+      .forEach((token) => changeTag.classList.add(token));
+    changeTag.textContent = String(change ?? '');
+
+    const levelTag = document.createElement('span');
+    levelTag.classList.add('tag', 'same');
+    levelTag.textContent = `L${item.level}`;
+
+    const idTag = document.createElement('span');
+    idTag.classList.add('tag', 'same');
+    idTag.textContent = String(item.id ?? '');
+
+    insTags.append(changeTag, levelTag, idTag);
     $('#ins-ops').innerHTML = item.ops.length
       ? item.ops.map((op) => `<span>${esc(op)}</span>`).join('')
       : `<span>${esc(item.note ?? 'No exports')}</span>`;

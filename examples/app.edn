@@ -9,178 +9,87 @@
  :order [:shared :entities :features :widgets :pages :app],
  :omit [],
  :edges
- [{:from :entities.wallet, :to :entities.wallet.ui.WalletName, :kind :dependency}
-  {:from :features.filter-country.api.countryQueries,
-   :to :at.tanstack,
+ [{:from :features.filter-make,
+   :to :features.filter-make.ui.MakeSelect,
    :kind :dependency}
-  {:from :widgets.activity.ui.Activity, :to :shared.ui, :kind :dependency}
+  {:from :entities.car, :to :entities.car.api.useCars, :kind :dependency}
   {:from :shared.ui, :to :shared.ui.ClearableSelect, :kind :dependency}
-  {:from :features.filter-currency.api.useCurrencies,
-   :to :at.tanstack,
+  {:from :entities.make, :to :entities.make.api.makeQueries, :kind :dependency}
+  {:from :widgets.inventory.ui.Inventory, :to :entities.make, :kind :dependency}
+  {:from :entities.car.ui.CarFacts,
+   :to :entities.car.ui.CarStatusBadge,
    :kind :dependency}
-  {:from :features.filter-currency,
-   :to :features.filter-currency.api.useCurrencies,
-   :kind :dependency}
-  {:from :widgets.summary.ui.Summary, :to :features.list-transactions, :kind :dependency}
-  {:from :features.filter-currency.ui.CurrencySelect,
-   :to :entities.currency,
-   :kind :dependency}
-  {:from :widgets.wallets.ui.Wallets, :to :shared.ui, :kind :dependency}
-  {:from :widgets.activity, :to :widgets.activity.ui.Activity, :kind :dependency}
-  {:from :widgets.portfolio.ui.Portfolio, :to :features.plot-value, :kind :dependency}
-  {:from :entities.transaction,
-   :to :entities.transaction.ui.TransactionFacts,
-   :kind :dependency}
+  {:from :entities.car, :to :entities.car.api.carQueries, :kind :dependency}
+  {:from :entities.make.api.useMakes, :to :at.tanstack, :kind :dependency}
   {:from :shared.ui, :to :shared.ui.LoadingState, :kind :dependency}
-  {:from :widgets.portfolio.ui.Portfolio,
-   :to :features.filter-currency,
+  {:from :features.filter-make.ui.MakeSelect, :to :shared.ui, :kind :dependency}
+  {:from :features.reserve-car,
+   :to :features.reserve-car.ui.ReserveButton,
    :kind :dependency}
-  {:from :pages.transactions,
-   :to :pages.transactions.ui.TransactionsPage,
-   :kind :dependency}
-  {:from :pages.settings, :to :pages.settings.ui.SettingsPage, :kind :dependency}
-  {:from :pages.transactions.ui.TransactionsPage, :to :shared.ui, :kind :dependency}
-  {:from :widgets.portfolio.ui.Portfolio,
-   :to :features.list-transactions,
-   :kind :dependency}
-  {:from :features.list-transactions.api.transactionQueries,
-   :to :at.tanstack,
-   :kind :dependency}
-  {:from :app.routes, :to :pages.settings, :kind :dependency}
-  {:from :widgets.activity.ui.Activity, :to :features.plot-value, :kind :dependency}
+  {:from :pages.dashboard.ui.DashboardPage, :to :widgets.inventory, :kind :dependency}
+  {:from :pages.cars.ui.CarsPage, :to :shared.ui, :kind :dependency}
+  {:from :entities.car, :to :entities.car.ui.CarStatusBadge, :kind :dependency}
   {:from :widgets.summary, :to :widgets.summary.ui.Summary, :kind :dependency}
-  {:from :widgets.activity.ui.Activity,
-   :to :features.list-transactions,
-   :kind :dependency}
   {:from :shared.ui, :to :shared.ui.PageHeading, :kind :dependency}
-  {:from :pages.dashboard.ui.DashboardPage, :to :entities.country, :kind :dependency}
-  {:from :entities.currency, :to :entities.currency.ui.CurrencyMark, :kind :dependency}
+  {:from :entities.car.api.carQueries, :to :shared.api, :kind :dependency}
   {:from :pages.dashboard.ui.DashboardPage, :to :react, :kind :dependency}
-  {:from :features.filter-country,
-   :to :features.filter-country.ui.CountrySelect,
-   :kind :dependency}
-  {:from :features.filter-currency.api.currencyQueries,
-   :to :shared.api,
-   :kind :dependency}
   {:from :app.Layout, :to :at.tanstack, :kind :dependency}
   {:from :app.routes, :to :at.tanstack, :kind :dependency}
-  {:from :features.filter-country.ui.CountrySelect,
-   :to :features.filter-country.api.useCountries,
-   :kind :dependency}
-  {:from :features.list-transactions.api.useTransactions,
-   :to :features.list-transactions.api.transactionQueries,
-   :kind :dependency}
+  {:from :widgets.summary.ui.Summary, :to :entities.car, :kind :dependency}
+  {:from :pages.cars.ui.CarsPage, :to :widgets.summary, :kind :dependency}
   {:from :shared.api, :to :shared.api.client, :kind :dependency}
-  {:from :entities.transaction,
-   :to :entities.transaction.ui.TransactionAmount,
-   :kind :dependency}
-  {:from :features.plot-value, :to :features.plot-value.ui.ValueChart, :kind :dependency}
+  {:from :pages.cars.ui.CarsPage, :to :features.reserve-car, :kind :dependency}
   {:from :app.routes, :to :app.Layout, :kind :dependency}
-  {:from :features.list-transactions.api.transactionQueries,
-   :to :shared.api,
-   :kind :dependency}
-  {:from :features.list-transactions.ui.TransactionsTable,
-   :to :entities.wallet,
-   :kind :dependency}
-  {:from :pages.dashboard.ui.DashboardPage, :to :widgets.portfolio, :kind :dependency}
-  {:from :features.list-transactions.ui.TransactionsTable,
-   :to :entities.transaction,
-   :kind :dependency}
-  {:from :features.filter-currency,
-   :to :features.filter-currency.ui.CurrencySelect,
-   :kind :dependency}
+  {:from :pages.cars.ui.CarsPage, :to :features.filter-make, :kind :dependency}
+  {:from :shared.lib, :to :shared.lib.formatUsd, :kind :dependency}
+  {:from :widgets.inventory.ui.Inventory, :to :shared.ui, :kind :dependency}
+  {:from :pages.cars.ui.CarsPage, :to :react, :kind :dependency}
+  {:from :entities.car, :to :entities.car.ui.CarFacts, :kind :dependency}
+  {:from :widgets.inventory.ui.Inventory, :to :shared.lib, :kind :dependency}
   {:from :app.main, :to :react, :kind :dependency}
   {:from :shared.ui, :to :shared.ui.Stat, :kind :dependency}
+  {:from :entities.make.api.makeQueries, :to :shared.api, :kind :dependency}
   {:from :pages.dashboard, :to :pages.dashboard.ui.DashboardPage, :kind :dependency}
-  {:from :widgets.portfolio.ui.Portfolio, :to :shared.ui, :kind :dependency}
-  {:from :features.filter-country,
-   :to :features.filter-country.api.countryQueries,
-   :kind :dependency}
-  {:from :pages.settings.ui.SettingsPage, :to :react, :kind :dependency}
+  {:from :widgets.inventory, :to :widgets.inventory.ui.Inventory, :kind :dependency}
+  {:from :features.reserve-car.api.useReserveCar, :to :at.tanstack, :kind :dependency}
   {:from :shared.ui.PageHeading, :to :react, :kind :dependency}
-  {:from :pages.transactions.ui.TransactionsPage,
-   :to :widgets.wallets,
-   :kind :dependency}
-  {:from :features.filter-currency.ui.CurrencySelect,
-   :to :features.filter-currency.api.useCurrencies,
-   :kind :dependency}
+  {:from :entities.make.api.makeQueries, :to :at.tanstack, :kind :dependency}
+  {:from :pages.dashboard.ui.DashboardPage, :to :features.reserve-car, :kind :dependency}
   {:from :app.App, :to :app.routes, :kind :dependency}
-  {:from :app.routes, :to :pages.transactions, :kind :dependency}
-  {:from :pages.settings.ui.SettingsPage,
-   :to :features.filter-country,
-   :kind :dependency}
-  {:from :pages.dashboard.ui.DashboardPage, :to :widgets.activity, :kind :dependency}
+  {:from :entities.make, :to :entities.make.api.useMakes, :kind :dependency}
   {:from :app.routes, :to :pages.dashboard, :kind :dependency}
-  {:from :pages.settings.ui.SettingsPage, :to :shared.ui, :kind :dependency}
-  {:from :entities.country, :to :entities.country.ui.CountryLabel, :kind :dependency}
+  {:from :entities.make.api.useMakes,
+   :to :entities.make.api.makeQueries,
+   :kind :dependency}
+  {:from :pages.cars, :to :pages.cars.ui.CarsPage, :kind :dependency}
+  {:from :features.reserve-car.ui.ReserveButton,
+   :to :features.reserve-car.api.useReserveCar,
+   :kind :dependency}
   {:from :pages.dashboard.ui.DashboardPage, :to :at.tanstack, :kind :dependency}
+  {:from :features.reserve-car.api.useReserveCar, :to :shared.api, :kind :dependency}
   {:from :app.App, :to :at.tanstack, :kind :dependency}
-  {:from :widgets.portfolio, :to :widgets.portfolio.ui.Portfolio, :kind :dependency}
-  {:from :widgets.wallets, :to :widgets.wallets.ui.Wallets, :kind :dependency}
-  {:from :features.list-transactions,
-   :to :features.list-transactions.api.transactionQueries,
-   :kind :dependency}
-  {:from :features.filter-currency.ui.CurrencySelect, :to :shared.ui, :kind :dependency}
-  {:from :features.filter-currency,
-   :to :features.filter-currency.api.currencyQueries,
-   :kind :dependency}
+  {:from :pages.cars.ui.CarsPage, :to :at.tanstack, :kind :dependency}
+  {:from :pages.dashboard.ui.DashboardPage, :to :features.filter-make, :kind :dependency}
+  {:from :entities.make, :to :entities.make.ui.MakeMark, :kind :dependency}
   {:from :app.main, :to :app.App, :kind :dependency}
   {:from :widgets.summary.ui.Summary, :to :shared.ui, :kind :dependency}
-  {:from :pages.transactions.ui.TransactionsPage,
-   :to :widgets.activity,
-   :kind :dependency}
-  {:from :widgets.activity.ui.Activity, :to :entities.currency, :kind :dependency}
-  {:from :features.filter-country,
-   :to :features.filter-country.api.useCountries,
-   :kind :dependency}
-  {:from :features.plot-value,
-   :to :features.plot-value.lib.totalValueSeries,
-   :kind :dependency}
   {:from :shared.api.client, :to :zod, :kind :dependency}
-  {:from :pages.dashboard.ui.DashboardPage, :to :widgets.wallets, :kind :dependency}
-  {:from :pages.transactions.ui.TransactionsPage,
-   :to :widgets.portfolio,
-   :kind :dependency}
-  {:from :widgets.wallets.ui.Wallets, :to :features.list-transactions, :kind :dependency}
-  {:from :features.list-transactions,
-   :to :features.list-transactions.ui.TransactionsTable,
-   :kind :dependency}
+  {:from :entities.car.api.useCars, :to :at.tanstack, :kind :dependency}
+  {:from :widgets.inventory.ui.Inventory, :to :react, :kind :dependency}
+  {:from :entities.car, :to :entities.car.model.stock, :kind :dependency}
+  {:from :widgets.inventory.ui.Inventory, :to :entities.car, :kind :dependency}
   {:from :pages.dashboard.ui.DashboardPage, :to :shared.ui, :kind :dependency}
-  {:from :entities.country, :to :entities.country.ui.TaxFacts, :kind :dependency}
   {:from :pages.dashboard.ui.DashboardPage, :to :widgets.summary, :kind :dependency}
-  {:from :features.list-transactions,
-   :to :features.list-transactions.api.useTransactions,
-   :kind :dependency}
-  {:from :widgets.activity.ui.Activity, :to :features.filter-currency, :kind :dependency}
-  {:from :features.filter-country.ui.CountrySelect, :to :shared.ui, :kind :dependency}
-  {:from :pages.dashboard.ui.DashboardPage,
-   :to :features.filter-country,
-   :kind :dependency}
+  {:from :entities.car.ui.CarFacts, :to :shared.lib, :kind :dependency}
+  {:from :pages.cars.ui.CarsPage, :to :widgets.inventory, :kind :dependency}
   {:from :shared.ui.ClearableSelect, :to :react, :kind :dependency}
-  {:from :features.filter-country.api.countryQueries, :to :shared.api, :kind :dependency}
-  {:from :widgets.wallets.ui.Wallets, :to :entities.wallet, :kind :dependency}
-  {:from :features.filter-currency.api.currencyQueries,
-   :to :at.tanstack,
-   :kind :dependency}
-  {:from :widgets.portfolio.ui.Portfolio, :to :entities.transaction, :kind :dependency}
-  {:from :features.filter-country.api.useCountries, :to :at.tanstack, :kind :dependency}
-  {:from :pages.transactions.ui.TransactionsPage,
-   :to :widgets.summary,
-   :kind :dependency}
-  {:from :features.filter-country.api.useCountries,
-   :to :features.filter-country.api.countryQueries,
-   :kind :dependency}
-  {:from :pages.transactions.ui.TransactionsPage, :to :react, :kind :dependency}
-  {:from :pages.transactions.ui.TransactionsPage, :to :at.tanstack, :kind :dependency}
+  {:from :features.reserve-car.api.useReserveCar, :to :entities.car, :kind :dependency}
+  {:from :features.filter-make.ui.MakeSelect, :to :entities.make, :kind :dependency}
+  {:from :entities.car.api.carQueries, :to :at.tanstack, :kind :dependency}
+  {:from :app.routes, :to :pages.cars, :kind :dependency}
   {:from :app.main, :to :react-dom, :kind :dependency}
-  {:from :features.list-transactions.ui.TransactionsTable, :to :react, :kind :dependency}
-  {:from :features.filter-currency.api.useCurrencies,
-   :to :features.filter-currency.api.currencyQueries,
-   :kind :dependency}
-  {:from :features.list-transactions.api.useTransactions,
-   :to :at.tanstack,
-   :kind :dependency}
-  {:from :pages.settings.ui.SettingsPage, :to :entities.country, :kind :dependency}],
+  {:from :entities.car.api.useCars, :to :entities.car.api.carQueries, :kind :dependency}
+  {:from :widgets.summary.ui.Summary, :to :shared.lib, :kind :dependency}],
  :classes
  [{:ns "dev-template.app.App",
    :name "App",
@@ -209,195 +118,138 @@
    :level 5,
    :lang :typescript,
    :id :app.routes}
-  {:ns "dev-template.entities.country",
-   :name "Country",
-   :file "src/entities/country/index.ts",
+  {:ns "dev-template.entities.car.api.carQueries",
+   :name "CarQueries",
+   :file "src/entities/car/api/carQueries.ts",
+   :ops [{:name "carQueries", :text "carQueries"}],
+   :level 1,
+   :lang :typescript,
+   :id :entities.car.api.carQueries}
+  {:ns "dev-template.entities.car.api.useCars",
+   :name "UseCars",
+   :file "src/entities/car/api/useCars.ts",
+   :ops [{:name "useCars", :text "useCars"}],
+   :level 1,
+   :lang :typescript,
+   :id :entities.car.api.useCars}
+  {:ns "dev-template.entities.car",
+   :name "Car",
+   :file "src/entities/car/index.ts",
    :ops
-   [{:name "CountryLabel", :text "CountryLabel"} {:name "TaxFacts", :text "TaxFacts"}],
+   [{:name "carQueries", :text "carQueries"}
+    {:name "useCars", :text "useCars"}
+    {:name "byMake", :text "byMake"}
+    {:name "countByStatus", :text "countByStatus"}
+    {:name "stockValue", :text "stockValue"}
+    {:name "CarFacts", :text "CarFacts"}
+    {:name "CarStatusBadge", :text "CarStatusBadge"}],
    :level 1,
    :lang :typescript,
-   :id :entities.country}
-  {:ns "dev-template.entities.country.ui.CountryLabel",
-   :name "CountryLabel",
-   :file "src/entities/country/ui/CountryLabel.tsx",
-   :ops [{:name "CountryLabel", :text "CountryLabel"}],
-   :level 1,
-   :lang :typescript,
-   :id :entities.country.ui.CountryLabel}
-  {:ns "dev-template.entities.country.ui.TaxFacts",
-   :name "TaxFacts",
-   :file "src/entities/country/ui/TaxFacts.tsx",
-   :ops [{:name "TaxFacts", :text "TaxFacts"}],
-   :level 1,
-   :lang :typescript,
-   :id :entities.country.ui.TaxFacts}
-  {:ns "dev-template.entities.currency",
-   :name "Currency",
-   :file "src/entities/currency/index.ts",
-   :ops [{:name "CurrencyMark", :text "CurrencyMark"}],
-   :level 1,
-   :lang :typescript,
-   :id :entities.currency}
-  {:ns "dev-template.entities.currency.ui.CurrencyMark",
-   :name "CurrencyMark",
-   :file "src/entities/currency/ui/CurrencyMark.tsx",
-   :ops [{:name "CurrencyMark", :text "CurrencyMark"}],
-   :level 1,
-   :lang :typescript,
-   :id :entities.currency.ui.CurrencyMark}
-  {:ns "dev-template.entities.transaction",
-   :name "Transaction",
-   :file "src/entities/transaction/index.ts",
+   :id :entities.car}
+  {:ns "dev-template.entities.car.model.stock",
+   :name "Stock",
+   :file "src/entities/car/model/stock.ts",
    :ops
-   [{:name "TransactionAmount", :text "TransactionAmount"}
-    {:name "TransactionFacts", :text "TransactionFacts"}],
+   [{:name "byMake", :text "byMake"}
+    {:name "countByStatus", :text "countByStatus"}
+    {:name "stockValue", :text "stockValue"}],
    :level 1,
    :lang :typescript,
-   :id :entities.transaction}
-  {:ns "dev-template.entities.transaction.ui.TransactionAmount",
-   :name "TransactionAmount",
-   :file "src/entities/transaction/ui/TransactionAmount.tsx",
-   :ops [{:name "TransactionAmount", :text "TransactionAmount"}],
+   :id :entities.car.model.stock}
+  {:ns "dev-template.entities.car.ui.CarFacts",
+   :name "CarFacts",
+   :file "src/entities/car/ui/CarFacts.tsx",
+   :ops [{:name "CarFacts", :text "CarFacts"}],
    :level 1,
    :lang :typescript,
-   :id :entities.transaction.ui.TransactionAmount}
-  {:ns "dev-template.entities.transaction.ui.TransactionFacts",
-   :name "TransactionFacts",
-   :file "src/entities/transaction/ui/TransactionFacts.tsx",
-   :ops [{:name "TransactionFacts", :text "TransactionFacts"}],
+   :id :entities.car.ui.CarFacts}
+  {:ns "dev-template.entities.car.ui.CarStatusBadge",
+   :name "CarStatusBadge",
+   :file "src/entities/car/ui/CarStatusBadge.tsx",
+   :ops [{:name "CarStatusBadge", :text "CarStatusBadge"}],
    :level 1,
    :lang :typescript,
-   :id :entities.transaction.ui.TransactionFacts}
-  {:ns "dev-template.entities.wallet",
-   :name "Wallet",
-   :file "src/entities/wallet/index.ts",
-   :ops [{:name "WalletName", :text "WalletName"}],
+   :id :entities.car.ui.CarStatusBadge}
+  {:ns "dev-template.entities.make.api.makeQueries",
+   :name "MakeQueries",
+   :file "src/entities/make/api/makeQueries.ts",
+   :ops [{:name "makeQueries", :text "makeQueries"}],
    :level 1,
    :lang :typescript,
-   :id :entities.wallet}
-  {:ns "dev-template.entities.wallet.ui.WalletName",
-   :name "WalletName",
-   :file "src/entities/wallet/ui/WalletName.tsx",
-   :ops [{:name "WalletName", :text "WalletName"}],
+   :id :entities.make.api.makeQueries}
+  {:ns "dev-template.entities.make.api.useMakes",
+   :name "UseMakes",
+   :file "src/entities/make/api/useMakes.ts",
+   :ops [{:name "useMakes", :text "useMakes"}],
    :level 1,
    :lang :typescript,
-   :id :entities.wallet.ui.WalletName}
-  {:ns "dev-template.features.filter-country.api.countryQueries",
-   :name "CountryQueries",
-   :file "src/features/filter-country/api/countryQueries.ts",
-   :ops [{:name "countryQueries", :text "countryQueries"}],
-   :level 2,
-   :lang :typescript,
-   :id :features.filter-country.api.countryQueries}
-  {:ns "dev-template.features.filter-country.api.useCountries",
-   :name "UseCountries",
-   :file "src/features/filter-country/api/useCountries.ts",
-   :ops [{:name "useCountries", :text "useCountries"}],
-   :level 2,
-   :lang :typescript,
-   :id :features.filter-country.api.useCountries}
-  {:ns "dev-template.features.filter-country",
-   :name "FilterCountry",
-   :file "src/features/filter-country/index.ts",
+   :id :entities.make.api.useMakes}
+  {:ns "dev-template.entities.make",
+   :name "Make",
+   :file "src/entities/make/index.ts",
    :ops
-   [{:name "countryQueries", :text "countryQueries"}
-    {:name "useCountries", :text "useCountries"}
-    {:name "CountrySelect", :text "CountrySelect"}],
+   [{:name "makeQueries", :text "makeQueries"}
+    {:name "useMakes", :text "useMakes"}
+    {:name "MakeMark", :text "MakeMark"}],
+   :level 1,
+   :lang :typescript,
+   :id :entities.make}
+  {:ns "dev-template.entities.make.ui.MakeMark",
+   :name "MakeMark",
+   :file "src/entities/make/ui/MakeMark.tsx",
+   :ops [{:name "MakeMark", :text "MakeMark"}],
+   :level 1,
+   :lang :typescript,
+   :id :entities.make.ui.MakeMark}
+  {:ns "dev-template.features.filter-make",
+   :name "FilterMake",
+   :file "src/features/filter-make/index.ts",
+   :ops [{:name "MakeSelect", :text "MakeSelect"}],
    :level 2,
    :lang :typescript,
-   :id :features.filter-country}
-  {:ns "dev-template.features.filter-country.ui.CountrySelect",
-   :name "CountrySelect",
-   :file "src/features/filter-country/ui/CountrySelect.tsx",
-   :ops [{:name "CountrySelect", :text "CountrySelect"}],
+   :id :features.filter-make}
+  {:ns "dev-template.features.filter-make.ui.MakeSelect",
+   :name "MakeSelect",
+   :file "src/features/filter-make/ui/MakeSelect.tsx",
+   :ops [{:name "MakeSelect", :text "MakeSelect"}],
    :level 2,
    :lang :typescript,
-   :id :features.filter-country.ui.CountrySelect}
-  {:ns "dev-template.features.filter-currency.api.currencyQueries",
-   :name "CurrencyQueries",
-   :file "src/features/filter-currency/api/currencyQueries.ts",
-   :ops [{:name "currencyQueries", :text "currencyQueries"}],
+   :id :features.filter-make.ui.MakeSelect}
+  {:ns "dev-template.features.reserve-car.api.useReserveCar",
+   :name "UseReserveCar",
+   :file "src/features/reserve-car/api/useReserveCar.ts",
+   :ops [{:name "useReserveCar", :text "useReserveCar"}],
    :level 2,
    :lang :typescript,
-   :id :features.filter-currency.api.currencyQueries}
-  {:ns "dev-template.features.filter-currency.api.useCurrencies",
-   :name "UseCurrencies",
-   :file "src/features/filter-currency/api/useCurrencies.ts",
-   :ops [{:name "useCurrencies", :text "useCurrencies"}],
+   :id :features.reserve-car.api.useReserveCar}
+  {:ns "dev-template.features.reserve-car",
+   :name "ReserveCar",
+   :file "src/features/reserve-car/index.ts",
+   :ops [{:name "ReserveButton", :text "ReserveButton"}],
    :level 2,
    :lang :typescript,
-   :id :features.filter-currency.api.useCurrencies}
-  {:ns "dev-template.features.filter-currency",
-   :name "FilterCurrency",
-   :file "src/features/filter-currency/index.ts",
-   :ops
-   [{:name "currencyQueries", :text "currencyQueries"}
-    {:name "useCurrencies", :text "useCurrencies"}
-    {:name "CurrencySelect", :text "CurrencySelect"}],
+   :id :features.reserve-car}
+  {:ns "dev-template.features.reserve-car.ui.ReserveButton",
+   :name "ReserveButton",
+   :file "src/features/reserve-car/ui/ReserveButton.tsx",
+   :ops [{:name "ReserveButton", :text "ReserveButton"}],
    :level 2,
    :lang :typescript,
-   :id :features.filter-currency}
-  {:ns "dev-template.features.filter-currency.ui.CurrencySelect",
-   :name "CurrencySelect",
-   :file "src/features/filter-currency/ui/CurrencySelect.tsx",
-   :ops [{:name "CurrencySelect", :text "CurrencySelect"}],
-   :level 2,
+   :id :features.reserve-car.ui.ReserveButton}
+  {:ns "dev-template.pages.cars",
+   :name "Cars",
+   :file "src/pages/cars/index.ts",
+   :ops [{:name "CarsPage", :text "CarsPage"}],
+   :level 4,
    :lang :typescript,
-   :id :features.filter-currency.ui.CurrencySelect}
-  {:ns "dev-template.features.list-transactions.api.transactionQueries",
-   :name "TransactionQueries",
-   :file "src/features/list-transactions/api/transactionQueries.ts",
-   :ops [{:name "transactionQueries", :text "transactionQueries"}],
-   :level 2,
+   :id :pages.cars}
+  {:ns "dev-template.pages.cars.ui.CarsPage",
+   :name "CarsPage",
+   :file "src/pages/cars/ui/CarsPage.tsx",
+   :ops [{:name "CarsPage", :text "CarsPage"}],
+   :level 4,
    :lang :typescript,
-   :id :features.list-transactions.api.transactionQueries}
-  {:ns "dev-template.features.list-transactions.api.useTransactions",
-   :name "UseTransactions",
-   :file "src/features/list-transactions/api/useTransactions.ts",
-   :ops [{:name "useTransactions", :text "useTransactions"}],
-   :level 2,
-   :lang :typescript,
-   :id :features.list-transactions.api.useTransactions}
-  {:ns "dev-template.features.list-transactions",
-   :name "ListTransactions",
-   :file "src/features/list-transactions/index.ts",
-   :ops
-   [{:name "transactionQueries", :text "transactionQueries"}
-    {:name "useTransactions", :text "useTransactions"}
-    {:name "TransactionsTable", :text "TransactionsTable"}],
-   :level 2,
-   :lang :typescript,
-   :id :features.list-transactions}
-  {:ns "dev-template.features.list-transactions.ui.TransactionsTable",
-   :name "TransactionsTable",
-   :file "src/features/list-transactions/ui/TransactionsTable.tsx",
-   :ops [{:name "TransactionsTable", :text "TransactionsTable"}],
-   :level 2,
-   :lang :typescript,
-   :id :features.list-transactions.ui.TransactionsTable}
-  {:ns "dev-template.features.plot-value",
-   :name "PlotValue",
-   :file "src/features/plot-value/index.ts",
-   :ops
-   [{:name "totalValueSeries", :text "totalValueSeries"}
-    {:name "ValueChart", :text "ValueChart"}],
-   :level 2,
-   :lang :typescript,
-   :id :features.plot-value}
-  {:ns "dev-template.features.plot-value.lib.totalValueSeries",
-   :name "TotalValueSeries",
-   :file "src/features/plot-value/lib/totalValueSeries.ts",
-   :ops [{:name "totalValueSeries", :text "totalValueSeries"}],
-   :level 2,
-   :lang :typescript,
-   :id :features.plot-value.lib.totalValueSeries}
-  {:ns "dev-template.features.plot-value.ui.ValueChart",
-   :name "ValueChart",
-   :file "src/features/plot-value/ui/ValueChart.tsx",
-   :ops [{:name "ValueChart", :text "ValueChart"}],
-   :level 2,
-   :lang :typescript,
-   :id :features.plot-value.ui.ValueChart}
+   :id :pages.cars.ui.CarsPage}
   {:ns "dev-template.pages.dashboard",
    :name "Dashboard",
    :file "src/pages/dashboard/index.ts",
@@ -412,41 +264,13 @@
    :level 4,
    :lang :typescript,
    :id :pages.dashboard.ui.DashboardPage}
-  {:ns "dev-template.pages.settings",
-   :name "Settings",
-   :file "src/pages/settings/index.ts",
-   :ops [{:name "SettingsPage", :text "SettingsPage"}],
-   :level 4,
-   :lang :typescript,
-   :id :pages.settings}
-  {:ns "dev-template.pages.settings.ui.SettingsPage",
-   :name "SettingsPage",
-   :file "src/pages/settings/ui/SettingsPage.tsx",
-   :ops [{:name "SettingsPage", :text "SettingsPage"}],
-   :level 4,
-   :lang :typescript,
-   :id :pages.settings.ui.SettingsPage}
-  {:ns "dev-template.pages.transactions",
-   :name "Transactions",
-   :file "src/pages/transactions/index.ts",
-   :ops [{:name "TransactionsPage", :text "TransactionsPage"}],
-   :level 4,
-   :lang :typescript,
-   :id :pages.transactions}
-  {:ns "dev-template.pages.transactions.ui.TransactionsPage",
-   :name "TransactionsPage",
-   :file "src/pages/transactions/ui/TransactionsPage.tsx",
-   :ops [{:name "TransactionsPage", :text "TransactionsPage"}],
-   :level 4,
-   :lang :typescript,
-   :id :pages.transactions.ui.TransactionsPage}
   {:ns "dev-template.shared.api.client",
    :name "Client",
    :file "src/shared/api/client.ts",
    :ops
-   [{:name "fetchTransactions", :text "fetchTransactions"}
-    {:name "fetchCurrencies", :text "fetchCurrencies"}
-    {:name "fetchCountries", :text "fetchCountries"}],
+   [{:name "fetchCars", :text "fetchCars"}
+    {:name "fetchMakes", :text "fetchMakes"}
+    {:name "reserveCar", :text "reserveCar"}],
    :level 0,
    :lang :typescript,
    :id :shared.api.client}
@@ -454,12 +278,26 @@
    :name "Api",
    :file "src/shared/api/index.ts",
    :ops
-   [{:name "fetchCountries", :text "fetchCountries"}
-    {:name "fetchCurrencies", :text "fetchCurrencies"}
-    {:name "fetchTransactions", :text "fetchTransactions"}],
+   [{:name "fetchCars", :text "fetchCars"}
+    {:name "fetchMakes", :text "fetchMakes"}
+    {:name "reserveCar", :text "reserveCar"}],
    :level 0,
    :lang :typescript,
    :id :shared.api}
+  {:ns "dev-template.shared.lib.formatUsd",
+   :name "FormatUsd",
+   :file "src/shared/lib/formatUsd.ts",
+   :ops [{:name "formatUsd", :text "formatUsd"}],
+   :level 0,
+   :lang :typescript,
+   :id :shared.lib.formatUsd}
+  {:ns "dev-template.shared.lib",
+   :name "Lib",
+   :file "src/shared/lib/index.ts",
+   :ops [{:name "formatUsd", :text "formatUsd"}],
+   :level 0,
+   :lang :typescript,
+   :id :shared.lib}
   {:ns "dev-template.shared.ui.ClearableSelect",
    :name "ClearableSelect",
    :file "src/shared/ui/ClearableSelect.tsx",
@@ -499,34 +337,20 @@
    :level 0,
    :lang :typescript,
    :id :shared.ui}
-  {:ns "dev-template.widgets.activity",
-   :name "Activity",
-   :file "src/widgets/activity/index.ts",
-   :ops [{:name "Activity", :text "Activity"}],
+  {:ns "dev-template.widgets.inventory",
+   :name "Inventory",
+   :file "src/widgets/inventory/index.ts",
+   :ops [{:name "Inventory", :text "Inventory"}],
    :level 3,
    :lang :typescript,
-   :id :widgets.activity}
-  {:ns "dev-template.widgets.activity.ui.Activity",
-   :name "Activity",
-   :file "src/widgets/activity/ui/Activity.tsx",
-   :ops [{:name "Activity", :text "Activity"}],
+   :id :widgets.inventory}
+  {:ns "dev-template.widgets.inventory.ui.Inventory",
+   :name "Inventory",
+   :file "src/widgets/inventory/ui/Inventory.tsx",
+   :ops [{:name "Inventory", :text "Inventory"}],
    :level 3,
    :lang :typescript,
-   :id :widgets.activity.ui.Activity}
-  {:ns "dev-template.widgets.portfolio",
-   :name "Portfolio",
-   :file "src/widgets/portfolio/index.ts",
-   :ops [{:name "Portfolio", :text "Portfolio"}],
-   :level 3,
-   :lang :typescript,
-   :id :widgets.portfolio}
-  {:ns "dev-template.widgets.portfolio.ui.Portfolio",
-   :name "Portfolio",
-   :file "src/widgets/portfolio/ui/Portfolio.tsx",
-   :ops [{:name "Portfolio", :text "Portfolio"}],
-   :level 3,
-   :lang :typescript,
-   :id :widgets.portfolio.ui.Portfolio}
+   :id :widgets.inventory.ui.Inventory}
   {:ns "dev-template.widgets.summary",
    :name "Summary",
    :file "src/widgets/summary/index.ts",
@@ -541,20 +365,6 @@
    :level 3,
    :lang :typescript,
    :id :widgets.summary.ui.Summary}
-  {:ns "dev-template.widgets.wallets",
-   :name "Wallets",
-   :file "src/widgets/wallets/index.ts",
-   :ops [{:name "Wallets", :text "Wallets"}],
-   :level 3,
-   :lang :typescript,
-   :id :widgets.wallets}
-  {:ns "dev-template.widgets.wallets.ui.Wallets",
-   :name "Wallets",
-   :file "src/widgets/wallets/ui/Wallets.tsx",
-   :ops [{:name "Wallets", :text "Wallets"}],
-   :level 3,
-   :lang :typescript,
-   :id :widgets.wallets.ui.Wallets}
   {:id :at.tanstack, :name "at.tanstack", :foreign true}
   {:id :react, :name "react", :foreign true}
   {:id :react-dom, :name "react-dom", :foreign true}

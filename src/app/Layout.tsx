@@ -25,13 +25,6 @@ export function Layout() {
           >
             Cars
           </Link>
-          <Link
-            to="/settings"
-            activeProps={{ style: activeStyle }}
-            inactiveProps={{ style: inactiveStyle }}
-          >
-            Settings
-          </Link>
         </nav>
       </Flex>
       <Outlet />

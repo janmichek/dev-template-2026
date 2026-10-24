@@ -23,7 +23,7 @@
     "stories/**/*.tsx",
     "config/**/*.{ts,tsx}"
   ],
-  "ignoreDependencies": ["@playwright/mcp", "@stryker-mutator/command-runner"],
+  "ignoreDependencies": ["@playwright/mcp"],
   "ignoreIssues": {
     "src/shared/api/schema.d.ts": ["exports", "types", "nsExports", "nsTypes", "duplicates"]
   }

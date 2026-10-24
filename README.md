@@ -1,6 +1,6 @@
 # Dev template 2026
 
-Strict Feature-Sliced React template. The sample product is a small car lot so the layers have real screens to hold: an inventory chart, a car list, and a tax-residence card.
+Strict Feature-Sliced React template. The sample product is a small car lot so every layer and segment has real code to hold: a stock summary, a car table, a make filter, and a reserve action.
 
 Start every agent session with `/ask-matt`. It picks the skill. Do not skip it.
 
@@ -28,13 +28,12 @@ The UI is http://localhost:3000 and proxies `/api` to port 3001.
 
 ## The lot
 
-| Page      | Route                   | What it shows                                                                                           |
-| --------- | ----------------------- | ------------------------------------------------------------------------------------------------------- |
-| Dashboard | `/`                     | Car counts, make filter, value chart, latest car, inventory total, the three newest cars, tax residence |
-| Cars      | `/cars` and `/cars/:id` | Same chart and total, the full table. The id in the URL opens that row.                                 |
-| Settings  | `/settings`             | Tax residence and the capital-gains card for the country you pick                                       |
+| Page      | Route                   | What it shows                                                           |
+| --------- | ----------------------- | ----------------------------------------------------------------------- |
+| Dashboard | `/`                     | Make filter, status counts, stock value, the three newest cars          |
+| Cars      | `/cars` and `/cars/:id` | Same filter and summary, the full table. The id in the URL opens a row. |
 
-The make filter is shared by the chart and the table on that page. Picking a country on the dashboard shows its flag and name. Settings shows the tax rates.
+The make filter drives both the summary and the table on that page. Reserve holds an available car; the server keeps that in memory until it restarts.
 
 ## Architecture
 
@@ -42,43 +41,48 @@ Imports only go downward. Steiger's recommended rules are all on, including `ins
 
 ```text
 app        router, providers, shell
-pages      one screen each: dashboard, cars, settings
-widgets    portfolio (filter + chart), activity (total + table), summary (counts), dealers (names)
-features   filter-make, filter-country, list-cars, plot-value
-entities   car, make, country, dealer
-shared     ui kit and the API client
+pages      one screen each: dashboard, cars
+widgets    summary (counts + stock value), inventory (car table)
+features   filter-make (pick a make), reserve-car (POST + cache refresh)
+entities   car, make
+shared     api client, lib helpers, ui kit
 ```
 
 A slice is imported through its `index.ts`. Cross-slice imports are relative on purpose: the pull-request diagram reads relative imports and draws those arrows. `bun run fsd` fails the build on a warning.
+
+Each segment shows up at least once:
+
+| Segment | Where                                                      | Holds                                                    |
+| ------- | ---------------------------------------------------------- | -------------------------------------------------------- |
+| `api`   | `shared/api`, `entities/*/api`, `features/reserve-car/api` | fetchers, queries, the reserve mutation                  |
+| `model` | `entities/car/model`                                       | business rules (by make, counts, value); Stryker example |
+| `lib`   | `shared/lib`                                               | domain-free helpers (`formatUsd`); Stryker example       |
+| `ui`    | every slice                                                | components                                               |
+
+Reads live with the entity (`useCars`, `useMakes`). A feature is a user action (`filter-make`, `reserve-car`). The page owns the make filter because two widgets read it, and hands `ReserveButton` to `Inventory` through its `action` slot, so the widget never imports a feature.
 
 ```text
 src/
 ├── app/
 ├── pages/
 │   ├── dashboard/
-│   ├── cars/
-│   └── settings/
+│   └── cars/
 ├── widgets/
-│   ├── portfolio/
-│   ├── activity/
 │   ├── summary/
-│   └── dealers/
+│   └── inventory/
 ├── features/
 │   ├── filter-make/
-│   ├── filter-country/
-│   ├── list-cars/
-│   └── plot-value/
+│   └── reserve-car/
 ├── entities/
 │   ├── car/
-│   ├── make/
-│   ├── country/
-│   └── dealer/
+│   └── make/
 └── shared/
     ├── api/
+    ├── lib/
     └── ui/
 ```
 
-`shared/schemas.ts` is the API contract. Change the Zod schema, run `bun run api:generate`, and call the API through `fetchCars`, `fetchMakes`, or `fetchCountries`. Do not hand-edit `shared/openapi.json` or `src/shared/api/schema.d.ts`.
+`shared/schemas.ts` is the API contract. Change the Zod schema, run `bun run api:generate`, and call the API through `fetchCars`, `fetchMakes`, or `reserveCar`. Do not hand-edit `shared/openapi.json` or `src/shared/api/schema.d.ts`.
 
 `server/data.ts` holds the sample records. The API parses them with the Zod schemas before they leave the server. The UI never imports that file.
 
@@ -96,7 +100,7 @@ bun run duplicates    # jscpd, threshold 0
 bun run api:generate  # openapi.json + schema.d.ts from Zod
 bun run test:unit     # vitest
 bun run test:e2e      # playwright
-bun run test:mutate   # stryker, feature lib only
+bun run test:mutate   # stryker on model/lib (stock, formatUsd examples)
 bun run storybook     # :6006
 ```
 

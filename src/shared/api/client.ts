@@ -1,6 +1,6 @@
 import createClient from 'openapi-fetch';
 import { z } from 'zod';
-import { carSchema, countrySchema, makeSchema } from '@shared/schemas';
+import { carSchema, makeSchema } from '@shared/schemas';
 import type { paths } from './schema';
 
 // Paths come from the generated OpenAPI types. Response bodies are still parsed
@@ -26,7 +26,9 @@ export async function fetchMakes() {
   return parseBody(z.array(makeSchema), data, response);
 }
 
-export async function fetchCountries() {
-  const { data, response } = await client.GET('/api/countries');
-  return parseBody(z.array(countrySchema), data, response);
+export async function reserveCar(id: number) {
+  const { data, response } = await client.POST('/api/cars/{id}/reserve', {
+    params: { path: { id } },
+  });
+  return parseBody(carSchema, data, response);
 }

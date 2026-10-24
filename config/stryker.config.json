@@ -4,7 +4,10 @@
   "commandRunner": {
     "command": "bun run test:unit"
   },
-  "mutate": ["src/features/**/lib/**/*.ts", "!src/features/**/lib/**/*.test.ts"],
+  "mutate": ["src/**/model/**/*.ts", "src/**/lib/**/*.ts", "!src/**/*.test.ts"],
+  "ignorePatterns": [".agents", ".claude", ".cursor", ".github", "docs", "examples", "agent"],
+  "concurrency": 4,
+  "timeoutMS": 10000,
   "thresholds": {
     "high": 80,
     "low": 70,

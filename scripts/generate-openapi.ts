@@ -2,7 +2,7 @@ import { execFileSync } from 'node:child_process';
 import { writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { z } from 'zod';
-import { carSchema, countrySchema, makeSchema } from '../shared/schemas';
+import { carSchema, makeSchema } from '../shared/schemas';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
 
@@ -21,7 +21,7 @@ function ok(description: string, schema: z.ZodType) {
 
 const document = {
   openapi: '3.1.0',
-  info: { title: 'Koinly stub API', version: '0.1.0' },
+  info: { title: 'Dev template 2026', version: '0.1.0' },
   paths: {
     '/api/cars': {
       get: {
@@ -35,10 +35,15 @@ const document = {
         responses: { 200: ok('Makes', z.array(makeSchema)) },
       },
     },
-    '/api/countries': {
-      get: {
-        operationId: 'listCountries',
-        responses: { 200: ok('Countries', z.array(countrySchema)) },
+    '/api/cars/{id}/reserve': {
+      post: {
+        operationId: 'reserveCar',
+        parameters: [{ name: 'id', in: 'path', required: true, schema: { type: 'integer' } }],
+        responses: {
+          200: ok('Reserved car', carSchema),
+          404: { description: 'No such car' },
+          409: { description: 'Car is not available' },
+        },
       },
     },
   },

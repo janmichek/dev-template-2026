@@ -1,5 +1,6 @@
 import { Flex } from '@radix-ui/themes';
-import { useCars } from '../../../features/list-cars';
+import { byMake, countByStatus, stockValue, useCars } from '../../../entities/car';
+import { formatUsd } from '../../../shared/lib';
 import { LoadingState, Stat } from '../../../shared/ui';
 
 export function Summary({ make }: { make: string | undefined }) {
@@ -7,15 +8,15 @@ export function Summary({ make }: { make: string | undefined }) {
   if (query.isPending) return <LoadingState label="Counting..." />;
   if (query.error !== null) return query.error.message;
 
-  const rows = query.data.filter((car) => make === undefined || car.make === make);
-  const acquired = rows.filter((car) => car.type === 'acquired').length;
-  const sold = rows.filter((car) => car.type === 'sold').length;
+  const rows = byMake(query.data, make);
+  const counts = countByStatus(rows);
 
   return (
-    <Flex gap="4" mb="4">
-      <Stat label="Cars" value={String(rows.length)} />
-      <Stat label="Acquired" value={String(acquired)} />
-      <Stat label="Sold" value={String(sold)} />
+    <Flex gap="4" my="4" wrap="wrap">
+      <Stat label="Available" value={String(counts.available)} />
+      <Stat label="Reserved" value={String(counts.reserved)} />
+      <Stat label="Sold" value={String(counts.sold)} />
+      <Stat label="Stock value" value={formatUsd(stockValue(rows))} />
     </Flex>
   );
 }

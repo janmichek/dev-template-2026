@@ -1,39 +1,32 @@
-import { Flex } from '@radix-ui/themes';
 import { useNavigate } from '@tanstack/react-router';
 import { useState } from 'react';
-import { CountryLabel } from '../../../entities/country';
-import { CountrySelect, useCountries } from '../../../features/filter-country';
+import { MakeSelect } from '../../../features/filter-make';
+import { ReserveButton } from '../../../features/reserve-car';
 import { PageHeading } from '../../../shared/ui';
-import { Activity } from '../../../widgets/activity';
-import { Dealers } from '../../../widgets/dealers';
-import { Portfolio } from '../../../widgets/portfolio';
+import { Inventory } from '../../../widgets/inventory';
 import { Summary } from '../../../widgets/summary';
 
+// The page owns the make filter because two widgets read it.
 export function DashboardPage() {
   const [make, setMake] = useState<string>();
-  const [country, setCountry] = useState<string>();
-  const { data: countries = [] } = useCountries();
-  const selected = countries.find((item) => item.code === country);
   const navigate = useNavigate();
 
   function openCar(id: number) {
-    void navigate({
-      to: '/cars/{-$carId}',
-      params: { carId: String(id) },
-    });
+    void navigate({ to: '/cars/{-$carId}', params: { carId: String(id) } });
   }
 
   return (
     <>
       <PageHeading>Dashboard</PageHeading>
+      <MakeSelect value={make} onChange={setMake} />
       <Summary make={make} />
-      <Dealers make={make} />
-      <Portfolio make={make} onMakeChange={setMake} />
-      <Activity make={make} limit={3} expandedId={undefined} onToggle={openCar} />
-      <Flex align="end" gap="3" mt="4">
-        <CountrySelect value={country} onChange={setCountry} />
-      </Flex>
-      {selected !== undefined && <CountryLabel flag={selected.flag} name={selected.name} />}
+      <Inventory
+        make={make}
+        limit={3}
+        expandedId={undefined}
+        onToggle={openCar}
+        action={ReserveButton}
+      />
     </>
   );
 }

@@ -1,7 +1,6 @@
 import { Flex, Select } from '@radix-ui/themes';
-import { MakeMark } from '../../../entities/make';
+import { MakeMark, useMakes } from '../../../entities/make';
 import { ClearableSelect } from '../../../shared/ui';
-import { useMakes } from '../api/useMakes';
 
 type MakeSelectProps = {
   value: string | undefined;

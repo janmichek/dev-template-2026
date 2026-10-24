@@ -2,24 +2,28 @@
 
 ## Car
 
-A dated lot movement of one car: acquired, sold, or moved between dealers. `valueUsd` is the car's price in US dollars. A move does not change the inventory total.
+One vehicle on the lot: make, model, year, mileage, asking price in US dollars, and a status. The id is the lot number.
+
+## Status
+
+Where a car is in the sale. `available` is for sale, `reserved` is held for a buyer, `sold` has left the lot. Only an available car can be reserved.
 
 ## Make
 
-A manufacturer the lot can filter on. The code (`BMW`) is the id. The symbol and color are only for the mark in the filter and the inventory total.
+A manufacturer the lot can filter on. The code (`BMW`) is the id. The symbol and color are only for the mark next to the name.
 
-## Tax residence
+## Stock value
 
-The country whose car-tax rules the person wants to read. It is a choice on the dashboard and on settings. It does not change the car list.
+The sum of asking prices of available cars in the current view. Reserved and sold cars do not count.
 
-## Portfolio
+## Summary
 
-The chart of cumulative inventory value over time, plus the latest car, for the cars currently in view.
+The status counts and the stock value for the cars in view.
 
-## Activity
+## Inventory
 
-The car table and the inventory total for the same view. The dashboard shows the three newest rows. The cars page shows every row, and the URL decides which row is open.
+The car table for the same view, newest listing first. The dashboard shows the three newest rows. The cars page shows every row, and the URL decides which row is open.
 
-## Dealer
+## Reserve
 
-A lot or seller named on a car movement. The table prints each one. The dealers list shows the first few names in the current view.
+The action that moves an available car to reserved. The server refuses a car that is not available.

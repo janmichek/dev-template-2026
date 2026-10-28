@@ -15,10 +15,7 @@
     "steiger.config.ts",
     "api/**/*.ts"
   ],
-  "dynamicallyLoaded": [
-    "scripts/diagram/page.js",
-    "scripts/diagram/page.css"
-  ],
+  "dynamicallyLoaded": ["scripts/diagram/page.js", "scripts/diagram/page.css"],
   "ignoreDependencies": ["typescript5"],
   "ignorePatterns": [".agents/**", ".claude/**", ".cursor/**"],
   "rules": {

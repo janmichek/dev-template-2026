@@ -1,0 +1,44 @@
+{
+  "$schema": "../node_modules/fallow/schema.json",
+  "entry": [
+    "scripts/**/*.ts",
+    "src/**/*.test.{ts,tsx}",
+    "src/**/*.spec.ts",
+    "stories/**/*.stories.tsx",
+    "src/pages/*/index.ts",
+    "src/widgets/*/index.ts",
+    "src/features/*/index.ts",
+    "src/entities/*/index.ts",
+    "src/shared/*/index.ts",
+    "config/**/*.ts",
+    "config/storybook/**/*.tsx",
+    "steiger.config.ts",
+    "api/**/*.ts"
+  ],
+  "dynamicallyLoaded": [
+    "scripts/diagram/page.js",
+    "scripts/diagram/page.css"
+  ],
+  "ignoreDependencies": ["typescript5"],
+  "ignorePatterns": [".agents/**", ".claude/**", ".cursor/**"],
+  "rules": {
+    "dev-dependencies-in-production": "off"
+  },
+  "duplicates": {
+    "mode": "strict",
+    "minTokens": 50,
+    "minLines": 5,
+    "ignore": [
+      "**/build/**",
+      "**/storybook-static/**",
+      "**/.stryker-tmp/**",
+      "**/schema.d.ts",
+      "**/openapi.json",
+      ".agents/**",
+      ".claude/**",
+      ".cursor/**",
+      "agent/**",
+      "examples/**"
+    ]
+  }
+}

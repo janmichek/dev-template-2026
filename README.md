@@ -95,8 +95,8 @@ bun run typecheck     # tsc --noEmit
 bun run lint          # oxlint
 bun run fmt           # oxfmt
 bun run fsd           # steiger, strict recommended rules
-bun run knip          # unused files, exports, dependencies
-bun run duplicates    # jscpd, threshold 0
+bun run dead-code     # fallow: unused files, exports, dependencies
+bun run duplicates    # fallow dupes, strict, fail on any clone
 bun run api:generate  # openapi.json + schema.d.ts from Zod
 bun run test:unit     # vitest
 bun run test:e2e      # playwright

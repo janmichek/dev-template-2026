@@ -17,7 +17,7 @@ jobs:
       - run: bun run lint
       - run: bun run fmt:check
       - run: bun run fsd
-      - run: bun run knip
+      - run: bun run dead-code
       - run: bun run duplicates
       - run: bun run build
       - run: bun run test:unit

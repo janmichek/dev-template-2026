@@ -1,0 +1,10 @@
+#!/usr/bin/env sh
+# Block commits that contain secrets. Scans only staged content.
+set -e
+
+if ! command -v gitleaks >/dev/null 2>&1; then
+  echo "pre-commit: gitleaks not installed. Install with: brew install gitleaks" >&2
+  exit 1
+fi
+
+gitleaks protect --staged --redact --verbose

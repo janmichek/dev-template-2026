@@ -24,7 +24,24 @@
       "Bash(wget:*)",
       "Bash(gh pr merge:*)",
       "Read(./.env)",
-      "Read(./.env.*)"
+      "Read(./.env.*)",
+      "Read(**/.env)",
+      "Read(**/.env.*)",
+      "Bash(cat .env*)",
+      "Bash(cat ./.env*)",
+      "Bash(cat **/.env*)",
+      "Bash(head .env*)",
+      "Bash(head ./.env*)",
+      "Bash(tail .env*)",
+      "Bash(tail ./.env*)",
+      "Bash(less .env*)",
+      "Bash(more .env*)",
+      "Bash(grep * .env*)",
+      "Bash(grep * ./.env*)",
+      "Bash(sed * .env*)",
+      "Bash(awk * .env*)",
+      "Bash(cp .env*)",
+      "Bash(printenv*)"
     ]
   }
 }

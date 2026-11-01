@@ -2,6 +2,7 @@
   "$schema": "../node_modules/fallow/schema.json",
   "entry": [
     "scripts/**/*.ts",
+    ".sandcastle/main.ts",
     "src/**/*.test.{ts,tsx}",
     "src/**/*.spec.ts",
     "stories/**/*.stories.tsx",

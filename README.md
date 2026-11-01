@@ -192,6 +192,116 @@ Then in the project on GitHub:
 
 `/triage` reads `docs/agents/triage-labels.md` and applies the labels. The board is the view of those states. A ticket from `/to-tickets` is already agent-ready, so it does not go through triage.
 
+## Sandcastle
+
+[Sandcastle](https://github.com/janmichek/sandcastle) (our fork) runs coding agents in Docker sandboxes. Label an issue `Sandcastle` and a loop plans it, implements it, reviews it, and opens a pull request. You label the PR `ready-for-agent` and the loop merges it. The agent is Claude Code pointed at DeepSeek (`.sandcastle/agent.ts`).
+
+```text
+issue + Sandcastle ─▶ planner ─▶ implementer ─▶ reviewer ─▶ PR (sandcastle-in-review)
+                                                                │ you read it
+PR merged, issue closed ◀── merger ◀── ready-for-agent ◀────────┘
+```
+
+State lives in labels, so there is no project board to wire up:
+
+| Label                  | On    | Set by    | Meaning                                                   |
+| ---------------------- | ----- | --------- | --------------------------------------------------------- |
+| `Sandcastle`           | issue | you       | Queue it                                                  |
+| `sandcastle-wip`       | issue | the loop  | Picked up. Stays on failure; remove it to retry           |
+| `sandcastle-in-review` | issue | the loop  | PR is open, waiting for you                               |
+| `ready-for-agent`      | PR    | you       | Approved. Only PRs from `sandcastle/issue-*` are merged   |
+
+### Set it up once
+
+You need Docker, Node 22, Bun, and the `gh` CLI logged in (`gh auth login`).
+
+1. Install the fork and `tsx`, then build the fork. It ships no `dist/`, so `sandcastle:build` fetches the commit locked in `bun.lock` and builds it into `node_modules`. Run it again after any `bun install` that changes that commit.
+
+   ```sh
+   bun add -d github:janmichek/sandcastle tsx
+   bun run sandcastle:build
+   ```
+
+2. Get a [DeepSeek API key](https://platform.deepseek.com/api_keys). Model and endpoint default to `deepseek-chat` at `https://api.deepseek.com/anthropic`; set `SANDCASTLE_MODEL` or `SANDCASTLE_BASE_URL` to change them.
+
+3. Create a GitHub token for `GH_TOKEN`. Use a personal access token, not the built-in `GITHUB_TOKEN`: pushes and PRs made with the built-in token do not trigger other workflows (CI would never run on agent PRs).
+
+   - GitHub > Settings > Developer settings > Personal access tokens > Fine-grained tokens > Generate new token.
+   - Resource owner: you. Repository access: **Only select repositories** > `dev-template-2026`.
+   - Repository permissions, all **Read and write**: Contents, Issues, Pull requests. Metadata stays Read-only.
+   - Set an expiry and copy the token. GitHub shows it once.
+
+4. Put both values in `.sandcastle/.env` (git-ignored). Copy the example, then edit it:
+
+   ```sh
+   cp .sandcastle/.env.example .sandcastle/.env
+   ```
+
+   ```text
+   DEEPSEEK_API_KEY=sk-...
+   GH_TOKEN=github_pat_...
+   ```
+
+5. Create the labels and push the two values to GitHub as Actions secrets (`DEEPSEEK_API_KEY` and `SANDCASTLE_GH_TOKEN`). The script reads `.sandcastle/.env` and pipes each value to `gh secret set`; nothing is printed.
+
+   ```sh
+   bun run sandcastle:setup            # labels + secrets
+   bun run sandcastle:setup -- labels  # labels only
+   bun run sandcastle:setup -- secrets # secrets only
+   ```
+
+   By hand: `gh secret set DEEPSEEK_API_KEY` and `gh secret set SANDCASTLE_GH_TOKEN`, pasting the value when `gh` asks.
+
+6. Build the sandbox image. It has Node, Bun, `gh`, and Claude Code.
+
+   ```sh
+   bun run sandcastle:image
+   ```
+
+### Run it locally
+
+```sh
+bun run sandcastle                    # the loop, forever, until Ctrl-C
+bun run sandcastle:cli -- --help      # the sandcastle CLI
+npx sandcastle docker build-image     # same CLI through npx, once node_modules/.bin links it
+```
+
+The loop refuses to start on a dirty working tree, because the merger may reset it. Commit or stash first (`SANDCASTLE_ALLOW_DIRTY=1` overrides). Logs land in `.sandcastle/logs/`.
+
+| Command                    | What it does                                           |
+| -------------------------- | ------------------------------------------------------ |
+| `bun run sandcastle`       | Start the plan / implement / review / merge loop       |
+| `bun run sandcastle:build` | Build the locked fork into `node_modules`              |
+| `bun run sandcastle:image` | Build the Docker sandbox image                         |
+| `bun run sandcastle:cli`   | Run the sandcastle CLI directly                        |
+| `bun run sandcastle:setup` | Create labels and Actions secrets with `gh`            |
+
+### Run it in GitHub Actions
+
+`.github/workflows/sandcastle.yml` runs the same loop on `ubuntu-latest`. It starts when:
+
+- you label an issue `Sandcastle`,
+- you label a `sandcastle/issue-*` PR `ready-for-agent` (`pull_request_target`, so it always runs the workflow from `main`, never from the agent's branch),
+- you run it by hand: Actions > sandcastle > Run workflow, or `gh workflow run sandcastle.yml`.
+
+### How the loop keeps running
+
+The loop never exits on its own. Each pass is: merge approved PRs, plan, then implement and review the planned issues in parallel, then open PRs.
+
+**Every 1 minute.** When a pass finds nothing to merge and nothing to plan, the loop does not burn agent tokens. It sleeps 60 seconds (`IDLE_POLL_MS` in `.sandcastle/main.ts`), then runs two cheap `gh` queries: PRs labelled `ready-for-agent`, and issues labelled `Sandcastle` without `sandcastle-wip` or `sandcastle-in-review`. Only when one of them finds something does it wake an agent. A failed `gh` call counts as "something found", so a flaky network never hides work.
+
+**Every ~6 hours.** GitHub kills a job at 360 minutes and loses anything not pushed. In Actions (`SANDCASTLE_SELF_RESTART=1`) the loop therefore watches its own clock:
+
+- At 285 minutes (`SANDCASTLE_RUN_BUDGET_MINUTES`) it stops at the next gap between phases, never in the middle of an agent run, and runs `gh workflow run sandcastle.yml` to queue a successor.
+- The job has `concurrency: sandcastle`, so the successor waits until this run exits. Two loops never overlap.
+- If a plan is ready but under 60 minutes of budget remain, it hands off before starting the implementers. The next run plans the same issues again.
+- The 55 minutes between the 285-minute budget and the 340-minute job timeout let a phase that is already running finish.
+- The successor is dispatched with the built-in `GITHUB_TOKEN` (`actions: write`), because the PAT does not carry that permission.
+
+Locally there is no budget: the loop polls until you stop it.
+
+An issue that fails stays `sandcastle-wip` with a comment explaining why, so the loop does not retry it forever. Remove the label to try again.
+
 ## Pull requests
 
 Every pull request runs `.github/workflows/uml.yml`. The check regenerates `examples/app.edn` from `examples/app.policy.edn`, diffs it against the base branch, and comments a link to an interactive diagram. Click a module to isolate its arrows, hover to preview a neighbourhood, filter by name, switch between the changed imports and all imports, and toggle the light theme. Level 0 (`shared`) sits at the bottom. Added modules are green, removed ones are red. Outward dependencies are marked red.

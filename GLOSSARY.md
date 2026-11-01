@@ -27,3 +27,15 @@ The car table for the same view, newest listing first. The dashboard shows the t
 ## Reserve
 
 The action that moves an available car to reserved. The server refuses a car that is not available.
+
+## Sandcastle
+
+The agent loop that works issues in Docker sandboxes: plan, implement, review, open a pull request, merge. Queued by labelling an issue `Sandcastle`. See `docs/adr/0002-sandcastle-agent-loop.md`.
+
+## Idle poll
+
+The 60 second sleep between scans when the Sandcastle loop has nothing to merge or plan. A scan is two `gh` queries, no agent.
+
+## Hand-off
+
+The Sandcastle loop queuing a fresh workflow run at 285 minutes, before GitHub's 6 hour job cap kills it. The new run starts when the old one exits.

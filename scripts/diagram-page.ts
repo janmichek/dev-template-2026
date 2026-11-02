@@ -6,6 +6,7 @@ import { buildDiff, languageOf, readDoc, type Doc } from './diagram/model';
 
 function shortSha(value: string | undefined): string {
   const sha = value ?? '';
+
   return sha.length > 7 ? sha.slice(0, 7) : sha;
 }
 
@@ -16,15 +17,18 @@ async function readDiagram(path: string): Promise<Doc> {
 async function main(): Promise<void> {
   const [afterPath, beforePath, outPath, afterRef, afterSha, beforeRef, beforeSha] =
     process.argv.slice(2);
+
   if (!afterPath || !beforePath || !outPath) {
     console.error(
       'Usage: bun scripts/diagram-page.ts <after.edn> <before.edn|-> <out.html> [after-ref] [after-sha] [before-ref] [before-sha]'
     );
     process.exitCode = 1;
+
     return;
   }
 
   const after = await readDiagram(afterPath);
+
   const before =
     beforePath === '-'
       ? { title: '', order: [], levels: [], classes: [], edges: [] }

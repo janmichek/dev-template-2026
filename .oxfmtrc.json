@@ -9,6 +9,7 @@
     ".claude",
     ".cursor",
     "agent",
-    "examples"
+    "examples",
+    "tools/oxlint/anti-slop"
   ]
 }

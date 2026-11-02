@@ -14,6 +14,7 @@ test('reserves an available car through the API', async () => {
 
   await waitFor(() => {
     const [request] = vi.mocked(fetch).mock.lastCall ?? [];
+
     if (!(request instanceof Request)) throw new Error('expected a Request');
     expect(request.method).toBe('POST');
     expect(request.url).toContain(`/api/cars/${available.id}/reserve`);

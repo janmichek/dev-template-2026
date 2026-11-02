@@ -106,6 +106,8 @@ bun run storybook     # :6006
 
 Tool configs live in `config/`. Root `tsconfig.json` and `steiger.config.ts` only point there, because the editor and Steiger look at the project root. `.oxfmtrc.json` stays at the root too: oxfmt `ignorePatterns` are rooted at the config file, so a config inside `config/` cannot ignore the rest of the repo.
 
+Oxlint also loads a vendored plugin from `tools/oxlint/anti-slop` (rules from `dmmulroy/anti-slop`; see its `UPSTREAM.md` and `docs/adr/0003-vendored-anti-slop-lint-rules.md`). Lint, oxfmt, and fallow ignore that directory; a generated `src/shared/api/schema.d.ts` is skipped by lint too.
+
 ## Agent skills
 
 The engineering skills are installed from `mattpocock/skills` into `.agents/skills`, and linked for Claude (`.claude/skills`) and Cursor (`.cursor/skills`). `skills-lock.json` records the versions.
@@ -204,12 +206,12 @@ PR merged, issue closed ◀── merger ◀── ready-for-agent ◀───�
 
 State lives in labels, so there is no project board to wire up:
 
-| Label                  | On    | Set by    | Meaning                                                   |
-| ---------------------- | ----- | --------- | --------------------------------------------------------- |
-| `Sandcastle`           | issue | you       | Queue it                                                  |
-| `sandcastle-wip`       | issue | the loop  | Picked up. Stays on failure; remove it to retry           |
-| `sandcastle-in-review` | issue | the loop  | PR is open, waiting for you                               |
-| `ready-for-agent`      | PR    | you       | Approved. Only PRs from `sandcastle/issue-*` are merged   |
+| Label                  | On    | Set by   | Meaning                                                 |
+| ---------------------- | ----- | -------- | ------------------------------------------------------- |
+| `Sandcastle`           | issue | you      | Queue it                                                |
+| `sandcastle-wip`       | issue | the loop | Picked up. Stays on failure; remove it to retry         |
+| `sandcastle-in-review` | issue | the loop | PR is open, waiting for you                             |
+| `ready-for-agent`      | PR    | you      | Approved. Only PRs from `sandcastle/issue-*` are merged |
 
 ### Set it up once
 
@@ -268,13 +270,13 @@ npx sandcastle docker build-image     # same CLI through npx, once node_modules/
 
 The loop refuses to start on a dirty working tree, because the merger may reset it. Commit or stash first (`SANDCASTLE_ALLOW_DIRTY=1` overrides). Logs land in `.sandcastle/logs/`.
 
-| Command                    | What it does                                           |
-| -------------------------- | ------------------------------------------------------ |
-| `bun run sandcastle`       | Start the plan / implement / review / merge loop       |
-| `bun run sandcastle:build` | Build the locked fork into `node_modules`              |
-| `bun run sandcastle:image` | Build the Docker sandbox image                         |
-| `bun run sandcastle:cli`   | Run the sandcastle CLI directly                        |
-| `bun run sandcastle:setup` | Create labels and Actions secrets with `gh`            |
+| Command                    | What it does                                     |
+| -------------------------- | ------------------------------------------------ |
+| `bun run sandcastle`       | Start the plan / implement / review / merge loop |
+| `bun run sandcastle:build` | Build the locked fork into `node_modules`        |
+| `bun run sandcastle:image` | Build the Docker sandbox image                   |
+| `bun run sandcastle:cli`   | Run the sandcastle CLI directly                  |
+| `bun run sandcastle:setup` | Create labels and Actions secrets with `gh`      |
 
 ### Run it in GitHub Actions
 

@@ -24,4 +24,5 @@ export const makeSchema = z.object({
 });
 
 export type Car = z.infer<typeof carSchema>;
+
 export type Make = z.infer<typeof makeSchema>;

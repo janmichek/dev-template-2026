@@ -23,6 +23,7 @@ export function Inventory({ make, limit, expandedId, onToggle, action: Action }:
   const { data: makes = [] } = useMakes();
 
   if (isPending) return <LoadingState label="Loading..." />;
+
   if (error) return error.message;
 
   const newestFirst = byMake(data, make).toReversed();
@@ -42,6 +43,7 @@ export function Inventory({ make, limit, expandedId, onToggle, action: Action }:
         {rows.map((car) => {
           const carMake = makes.find((item) => item.code === car.make);
           const expanded = car.id === expandedId;
+
           return (
             <Fragment key={car.id}>
               <Table.Row align="center">

@@ -1,16 +1,19 @@
 import { vi } from 'vitest';
 import { cars, makes } from '../server/data';
+import type { Car, Make } from '../shared/schemas';
 
-const routes: Record<string, unknown> = {
-  'GET /api/cars': cars,
-  'GET /api/makes': makes,
-};
+const routes = new Map<string, Car[] | Make[]>([
+  ['GET /api/cars', cars],
+  ['GET /api/makes', makes],
+]);
 
 // Mirrors the server: reserving an available car returns it as reserved.
 function reserve(path: string): Response {
   const id = Number(/^\/api\/cars\/(\d+)\/reserve$/.exec(path)?.[1]);
   const car = cars.find((item) => item.id === id);
+
   if (car === undefined) return new Response(null, { status: 404 });
+
   return Response.json({ ...car, status: 'reserved' });
 }
 
@@ -22,8 +25,10 @@ export function stubApi() {
     'fetch',
     vi.fn(async (request: Request) => {
       const path = new URL(request.url).pathname;
+
       if (request.method === 'POST') return reserve(path);
-      const body = routes[`${request.method} ${path}`];
+      const body = routes.get(`${request.method} ${path}`);
+
       return body === undefined ? new Response(null, { status: 404 }) : Response.json(body);
     })
   );

@@ -110,6 +110,7 @@ function toolbar(): string {
 
 function pane(kind: 'before' | 'after', ref: string, sha: string): string {
   const title = kind === 'before' ? 'Base branch' : 'Head branch';
+
   return `<article class="pane pane-${kind}">
     <header class="pane-head">
       <div><span class="pane-kicker">${title}</span><h2>${esc(ref)}</h2></div>
@@ -162,6 +163,7 @@ function inspector(): string {
 
 export function renderPage(data: PageData): string {
   const json = JSON.stringify(data).replace(/</g, '\\u003c');
+
   return `<!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>

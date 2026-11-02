@@ -7,8 +7,9 @@ import { carSchema, makeSchema } from '../shared/schemas';
 const root = fileURLToPath(new URL('..', import.meta.url));
 
 function responseSchema(schema: z.ZodType) {
-  const generated: Record<string, unknown> = { ...z.toJSONSchema(schema) };
+  const generated = z.toJSONSchema(schema);
   delete generated['$schema'];
+
   return generated;
 }
 

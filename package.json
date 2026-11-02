@@ -12,7 +12,7 @@
     "vercel:build": "bun run build && bun scripts/build-vercel.ts",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "audit": "bun audit --production",
-    "lint": "oxlint -c config/oxlintrc.json --ignore-pattern .agents --ignore-pattern .claude --ignore-pattern .cursor --ignore-pattern agent --ignore-pattern examples --ignore-pattern scripts/diagram/page.js",
+    "lint": "oxlint -c config/oxlintrc.json --ignore-pattern .agents --ignore-pattern .claude --ignore-pattern .cursor --ignore-pattern agent --ignore-pattern examples --ignore-pattern scripts/diagram/page.js --ignore-pattern tools/oxlint/anti-slop --ignore-pattern src/shared/api/schema.d.ts",
     "fmt": "oxfmt",
     "fmt:check": "oxfmt --check",
     "fsd": "steiger src --fail-on-warnings",
@@ -46,6 +46,7 @@
   },
   "devDependencies": {
     "@feature-sliced/steiger-plugin": "^0.8.0",
+    "@oxlint/plugins": "1.88.0",
     "@playwright/mcp": "^0.0.83",
     "@playwright/test": "^1.64.1",
     "@storybook/react-vite": "^10.6.2",

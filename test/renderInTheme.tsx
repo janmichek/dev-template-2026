@@ -13,6 +13,7 @@ afterEach(cleanup);
 export function renderInTheme(ui: ReactElement) {
   stubApi();
   const client = new QueryClient({ defaultOptions: { queries: { retry: false } } });
+
   return render(
     <Theme>
       <QueryClientProvider client={client}>{ui}</QueryClientProvider>

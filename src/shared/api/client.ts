@@ -11,24 +11,32 @@ const client = createClient<paths>({
   fetch: (input: Request) => globalThis.fetch(input),
 });
 
-function parseBody<T>(schema: z.ZodType<T>, body: unknown, response: Response): T {
-  if (!response.ok) throw new Error(`Request failed: ${response.status}`);
-  return schema.parse(body);
+function requestFailed(response: Response): Error {
+  return new Error(`Request failed: ${response.status}`);
 }
 
 export async function fetchCars() {
   const { data, response } = await client.GET('/api/cars');
-  return parseBody(z.array(carSchema), data, response);
+
+  if (!response.ok) throw requestFailed(response);
+
+  return z.array(carSchema).parse(data);
 }
 
 export async function fetchMakes() {
   const { data, response } = await client.GET('/api/makes');
-  return parseBody(z.array(makeSchema), data, response);
+
+  if (!response.ok) throw requestFailed(response);
+
+  return z.array(makeSchema).parse(data);
 }
 
 export async function reserveCar(id: number) {
   const { data, response } = await client.POST('/api/cars/{id}/reserve', {
     params: { path: { id } },
   });
-  return parseBody(carSchema, data, response);
+
+  if (!response.ok) throw requestFailed(response);
+
+  return carSchema.parse(data);
 }

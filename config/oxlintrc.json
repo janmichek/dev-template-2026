@@ -1,6 +1,7 @@
 {
   "$schema": "../node_modules/oxlint/configuration_schema.json",
   "plugins": ["eslint", "oxc", "typescript", "unicorn", "import", "react"],
+  "jsPlugins": [{ "name": "anti-slop", "specifier": "../tools/oxlint/anti-slop/index.ts" }],
   "settings": {
     "react": {
       "version": "19.3.1"
@@ -92,7 +93,29 @@
       {
         "ignoreExternal": true
       }
-    ]
+    ],
+
+    //ANTI-SLOP (vendored in tools/oxlint/anti-slop)
+    //Native companion for no-reduce-accumulator-copy
+    "oxc/no-accumulating-spread": "error",
+    "anti-slop/no-array-filter-map": "error",
+    "anti-slop/no-reduce-accumulator-copy": "error",
+    "anti-slop/no-chained-type-assertions": "error",
+    "anti-slop/no-conditional-empty-object-spread": "error",
+    "anti-slop/no-known-value-widening": "error",
+    "anti-slop/no-module-mocking": "error",
+    "anti-slop/no-object-parameters": "error",
+    "anti-slop/no-reflect-apply": "error",
+    "anti-slop/no-reflect-get": "error",
+    "anti-slop/no-runtime-typeof": "error",
+    "anti-slop/no-shape-in-symbol-names": "error",
+    "anti-slop/no-unknown-parameters": "error",
+    "anti-slop/no-unknown-returns": "error",
+    "anti-slop/no-unknown-type-aliases": "error",
+    "anti-slop/no-unsafe-dictionary-type": "error",
+    "anti-slop/no-widen-then-assert": "error",
+    "anti-slop/require-readable-spacing": "error",
+    "anti-slop/require-safety-comment-for-type-assertion": "error"
   },
   // BOUNDRIES
   "overrides": [
@@ -245,6 +268,14 @@
       "rules": {
         "max-lines": "off",
         "max-lines-per-function": "off"
+      }
+    },
+    // The EDN reader is a hand-written parser: its accessors are the boundary, so
+    // typeof narrowing is allowed inside them and nowhere else.
+    {
+      "files": ["**/scripts/diagram/edn.ts"],
+      "rules": {
+        "anti-slop/no-runtime-typeof": ["error", { "allowInTypeGuards": true }]
       }
     }
   ]

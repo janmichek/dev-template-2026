@@ -8,11 +8,13 @@ const meta = {
   // the select is controlled, so the story holds the picked value
   render: function Render(args) {
     const [value, setValue] = useState(args.value);
+
     return <MakeSelect {...args} value={value} onChange={setValue} />;
   },
 } satisfies Meta<typeof MakeSelect>;
 
 export default meta;
+
 type Story = StoryObj<typeof meta>;
 
 export const Empty: Story = {};

@@ -5,7 +5,9 @@ import { LoadingState, Stat } from '../../../shared/ui';
 
 export function Summary({ make }: { make: string | undefined }) {
   const query = useCars();
+
   if (query.isPending) return <LoadingState label="Counting..." />;
+
   if (query.error !== null) return query.error.message;
 
   const rows = byMake(query.data, make);

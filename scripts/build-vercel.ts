@@ -7,6 +7,7 @@ const output = '.vercel/output';
 const fn = `${output}/functions/api.func`;
 
 await rm(output, { recursive: true, force: true });
+
 await mkdir(fn, { recursive: true });
 
 await build({

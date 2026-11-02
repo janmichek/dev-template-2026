@@ -8,6 +8,7 @@ type Equal<Left, Right> =
 /* oxlint-enable typescript/no-unnecessary-type-parameters */
 
 type Expect<T extends true> = T;
+
 type ExpectFalse<T extends false> = T;
 
 type Json200<Operation> = Operation extends {

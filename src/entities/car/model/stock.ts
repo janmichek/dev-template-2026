@@ -7,7 +7,9 @@ export function byMake(cars: Car[], make: string | undefined): Car[] {
 
 export function countByStatus(cars: Car[]): Record<Car['status'], number> {
   const counts = { available: 0, reserved: 0, sold: 0 };
+
   for (const car of cars) counts[car.status] += 1;
+
   return counts;
 }
 

@@ -18,7 +18,7 @@
   ],
   "dynamicallyLoaded": ["scripts/diagram/page.js", "scripts/diagram/page.css"],
   "ignoreDependencies": ["typescript5"],
-  "ignorePatterns": [".agents/**", ".claude/**", ".cursor/**"],
+  "ignorePatterns": [".agents/**", ".claude/**", ".cursor/**", "tools/**"],
   "rules": {
     "dev-dependencies-in-production": "off"
   },
@@ -36,7 +36,8 @@
       ".claude/**",
       ".cursor/**",
       "agent/**",
-      "examples/**"
+      "examples/**",
+      "tools/**"
     ]
   }
 }

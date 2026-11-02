@@ -7,6 +7,7 @@ import { makeQueries } from '../../src/entities/make';
 
 // no API in a static Storybook build (Chromatic), so the cache is seeded and never refetched
 const queryClient = new QueryClient({ defaultOptions: { queries: { staleTime: Infinity } } });
+
 queryClient.setQueryData(makeQueries.list().queryKey, makes);
 
 // same wrapper as App.tsx, so a story looks like the component does in the app

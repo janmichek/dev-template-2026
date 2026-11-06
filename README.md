@@ -309,22 +309,3 @@ An issue that fails stays `sandcastle-wip` with a comment explaining why, so the
 Every pull request runs `.github/workflows/uml.yml`. The check regenerates `examples/app.edn` from `examples/app.policy.edn`, diffs it against the base branch, and comments a link to an interactive diagram. Click a module to isolate its arrows, hover to preview a neighbourhood, filter by name, switch between the changed imports and all imports, and toggle the light theme. Level 0 (`shared`) sits at the bottom. Added modules are green, removed ones are red. Outward dependencies are marked red.
 
 The HTML page is rendered by `scripts/diagram-page.ts` with Bun from the two EDN files. To preview it locally:
-
-```sh
-bun scripts/diagram-page.ts examples/app.edn /tmp/before.edn /tmp/diagram.html main 1234567 feature 89abcde
-```
-
-The comment is updated in place. The HTML is uploaded to x0.at, which is public and temporary. A later push replaces the link. Only the IR generator still runs on Clojure.
-
-If the workflow says the diagram is stale, regenerate it and commit `examples/app.edn`:
-
-```sh
-export JAVA_HOME=/opt/homebrew/opt/openjdk@17/libexec/openjdk.jdk/Contents/Home
-export PATH="/opt/homebrew/bin:/usr/bin:/bin:$JAVA_HOME/bin"
-clojure -Sdeps '{:deps {io.github.unclebob/uml-viewer {:git/url "https://github.com/unclebob/uml-viewer.git" :git/sha "f65dafe93b3cb1b4e6bb02dbe41503ed05bd9ebf"}}}' \
-  -M -m uml-viewer.main.ir-generator examples/app.policy.edn examples/app.edn
-```
-
-The viewer is pinned to `f65dafe93b3cb1b4e6bb02dbe41503ed05bd9ebf`. Do not push to `unclebob/uml-viewer`.
-
-Write the pull-request body with `/pr`: a small diagram of the change, before/after evidence, and whether the merge is a one-way or two-way door. The template in `.github/pull_request_template.md` is that shape.

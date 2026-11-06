@@ -17,7 +17,7 @@
     "api/**/*.ts"
   ],
   "dynamicallyLoaded": ["scripts/diagram/page.js", "scripts/diagram/page.css"],
-  "ignoreDependencies": ["typescript5"],
+  "ignoreDependencies": ["typescript5", "@ai-hero/sandcastle", "@oxlint/plugins"],
   "ignorePatterns": [".agents/**", ".claude/**", ".cursor/**", "tools/**"],
   "rules": {
     "dev-dependencies-in-production": "off"

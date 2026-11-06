@@ -24,7 +24,7 @@
 
     // React + Vite
     "jsx": "react-jsx", // Use automatic JSX runtime transform
-    "types": ["vite/client"] // Include Vite client type definitions
+    "types": ["vite/client", "bun"] // Include Vite client and Bun runtime type definitions
   },
   "include": [
     "../src",

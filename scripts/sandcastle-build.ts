@@ -33,7 +33,12 @@ if (await Bun.file(`${target}/dist/main.js`).exists()) {
 }
 
 async function run(cmd: string[], cwd?: string): Promise<void> {
-  const proc = Bun.spawn(cmd, { cwd, stdout: 'inherit', stderr: 'inherit' });
+  const proc = Bun.spawn(
+    cmd,
+    cwd === undefined
+      ? { stdout: 'inherit', stderr: 'inherit' }
+      : { cwd, stdout: 'inherit', stderr: 'inherit' }
+  );
 
   if ((await proc.exited) !== 0) throw new Error(`failed: ${cmd.join(' ')}`);
 }

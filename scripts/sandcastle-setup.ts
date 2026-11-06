@@ -6,6 +6,8 @@
 //   bun run sandcastle:setup -- labels  labels only
 //   bun run sandcastle:setup -- secrets secrets only
 
+import process from 'node:process';
+
 const LABELS: [name: string, description: string, color: string][] = [
   ['Sandcastle', 'Queue this issue for the Sandcastle agent loop', '1d76db'],
   ['sandcastle-wip', 'Sandcastle picked this up', 'fbca04'],
@@ -33,10 +35,10 @@ function parseEnv(text: string): Map<string, string> {
   const out = new Map<string, string>();
 
   for (const line of text.split('\n')) {
-    const m = line.match(/^([A-Z0-9_]+)=(.*)$/);
+    const [, key, rawValue] = line.match(/^([A-Z0-9_]+)=(.*)$/) ?? [];
 
-    if (!m) continue;
-    out.set(m[1]!, m[2]!.trim().replace(/^(['"])(.*)\1$/, '$2'));
+    if (key === undefined || rawValue === undefined) continue;
+    out.set(key, rawValue.trim().replace(/^(['"])(.*)\1$/, '$2'));
   }
 
   return out;
@@ -45,8 +47,14 @@ function parseEnv(text: string): Map<string, string> {
 async function labels(): Promise<void> {
   for (const [name, description, color] of LABELS) {
     const ok = await gh([
-      ...['label', 'create', name, '--description', description],
-      ...['--color', color, '--force'],
+      'label',
+      'create',
+      name,
+      '--description',
+      description,
+      '--color',
+      color,
+      '--force',
     ]);
 
     console.log(`${ok ? '✓' : '✗'} label ${name}`);

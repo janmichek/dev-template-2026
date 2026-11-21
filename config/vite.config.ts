@@ -1,6 +1,7 @@
 import { fileURLToPath } from 'node:url';
 import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vitest/config';
+import coverageFloors from './coverage-floors.json' with { type: 'json' };
 
 const root = fileURLToPath(new URL('..', import.meta.url));
 
@@ -30,5 +31,18 @@ export default defineConfig({
     unstubGlobals: true,
     // Vitest uses virtual browser so React component tests can render and query the page
     environment: 'happy-dom',
+    coverage: {
+      provider: 'v8',
+      reporter: ['text', 'json-summary'],
+      include: ['src/**/*.{ts,tsx}'],
+      exclude: [
+        'src/**/*.test.{ts,tsx}',
+        'src/**/*.spec.ts',
+        'src/**/*.d.ts',
+        'src/shared/api/schema.d.ts',
+      ],
+      // Upward-only. Raise with `bun run coverage:ratchet`; never lower by hand.
+      thresholds: coverageFloors,
+    },
   },
 });

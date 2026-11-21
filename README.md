@@ -2,7 +2,7 @@
 
 Strict Feature-Sliced React template. The sample product is a small car lot so every layer and segment has real code to hold: a stock summary, a car table, a make filter, and a reserve action.
 
-Start every agent session with `/ask-matt`. It picks the skill. Do not skip it.
+Start non-trivial changes with the `template-workflow` skill in `.agents/skills/`.
 
 ## Start
 
@@ -91,6 +91,8 @@ Stories live in `stories/` so they stay out of the architecture diagram. Tests l
 ## Scripts
 
 ```sh
+bun run validate       # the agent finish line: static gate + api:check + build + coverage
+bun run check:static   # typecheck, lint, fmt:check, fsd, dead-code, duplicates
 bun run typecheck     # tsc --noEmit
 bun run lint          # oxlint
 bun run fmt           # oxfmt
@@ -99,10 +101,14 @@ bun run dead-code     # fallow: unused files, exports, dependencies
 bun run duplicates    # fallow dupes, strict, fail on any clone
 bun run api:generate  # openapi.json + schema.d.ts from Zod
 bun run test:unit     # vitest
+bun run test:coverage # vitest with coverage floors
+bun run coverage:ratchet # raise coverage floors to the measured values
 bun run test:e2e      # playwright
 bun run test:mutate   # stryker on model/lib (stock, formatUsd examples)
 bun run storybook     # :6006
 ```
+
+Coverage floors live in `config/coverage-floors.json` and only move up. Commits follow Conventional Commits (commitlint); pre-commit runs gitleaks plus the static gate.
 
 Tool configs live in `config/`. Root `tsconfig.json` and `steiger.config.ts` only point there, because the editor and Steiger look at the project root. `.oxfmtrc.json` stays at the root too: oxfmt `ignorePatterns` are rooted at the config file, so a config inside `config/` cannot ignore the rest of the repo.
 
@@ -110,57 +116,22 @@ Oxlint also loads a vendored plugin from `tools/oxlint/anti-slop` (rules from `d
 
 ## Agent skills
 
-The engineering skills are installed from `mattpocock/skills` into `.agents/skills`, and linked for Claude (`.claude/skills`) and Cursor (`.cursor/skills`). `skills-lock.json` records the versions.
+`.agents/skills/` is the canonical skill tree. `template-workflow` is the example: it encodes the test-first delivery loop (context, failing test, implementation, verification, docs). Claude and Cursor reach it through symlinks in `.claude/skills/` and `.cursor/skills/`; opencode reads `.agents/skills/` via `opencode.jsonc`.
+
+The Playwright MCP server is declared per client: `.mcp.json` (Claude), `.cursor/mcp.json`, and `opencode.jsonc`.
+
+Create a skill as `.agents/skills/<name>/SKILL.md` with `name` and `description` frontmatter, then link it for the vendors that need it:
 
 ```sh
-npx skills@latest add mattpocock/skills --all
+ln -s ../../.agents/skills/<name> .claude/skills/<name>
+ln -s ../../.agents/skills/<name> .cursor/skills/<name>
 ```
 
-Issue tracker, triage labels, and domain docs are in `docs/agents/`. `AGENTS.md` points at them. Domain words live in `GLOSSARY.md`. Decisions live in `docs/adr/`.
-
-### `/ask-matt` always
-
-First message of a session, before any other skill. `/ask-matt` reads the situation and names the skill or flow that fits. The list below is the map. If you are unsure, ask Matt instead of guessing.
-
-### Classic flow
-
-The path most work travels. One idea, then ship it.
-
-1. `/grill-with-docs` sharpens the idea and writes the result into `GLOSSARY.md` and `docs/adr/`.
-2. If a question needs a running answer, `/handoff` out, `/prototype` in a fresh session, `/handoff` back.
-3. If the build will take more than one session, `/to-spec` then `/to-tickets`. Work the tickets with `/implement` (fresh context each ticket) or `/implement-spec` (one integration branch).
-4. If it fits in this session, `/implement` here.
-5. Implementation drives `/tdd`. Close with `/code-review`, then `/pr` for the pull-request body.
-6. `/retro` after the build, in the same session, and adjust the agent's environment rather than only the code.
-
-Keep grilling, the spec, and the tickets in one context window. Start each `/implement` fresh.
-
-On-ramps onto that flow:
-
-- A pile of bugs or requests you did not write: `/triage`.
-- Something broken that a first look cannot explain: `/diagnosing-bugs`, then `/retro`.
-- A foggy effort that is too big for one session: `/wayfinder`, and when the map is clear, `/to-spec`. Do not jump from the map straight into `/implement`.
-
-### `/wayfinder`
-
-For a destination you cannot see the path to yet. It opens one GitHub issue labelled `wayfinder:map` and child issues for the decisions still open. Each session resolves one ticket, records the answer on the issue, and only then charts what that answer made visible.
-
-Ticket labels are `wayfinder:research`, `wayfinder:prototype`, `wayfinder:grilling`, and `wayfinder:task`. Research can run in the background. Prototype and grilling need a person in the loop. The map is done when nothing is left to decide, and someone else builds it through the classic flow.
-
-Blocking is a GitHub issue dependency, so the project board shows what is takeable.
-
-### `/prototype`
-
-A throwaway program that answers one question.
-
-- "Does this state model feel right?" becomes one HTML file you can click through.
-- "What should this look like?" becomes a few UI variants on one route.
-
-Put it next to the code it is about, mark it as a prototype, skip tests and polish, and keep the validated decision on main. The prototype itself stays on a `prototype/<name>` branch, linked from the implementation issue.
+Published skills install with `npx skills add <owner/repo> --skill <name> -y` at project scope. `AGENTS.md` is the always-on context and points at `docs/agents/`; domain words live in `GLOSSARY.md`; decisions live in `docs/adr/`.
 
 ### GitHub board
 
-Issues are the tracker. The board is a GitHub Project grouped by status, with the same five states `/triage` uses.
+Issues are the tracker. The board is a GitHub Project grouped by status, with the same five states as the triage labels.
 
 Create the labels once:
 
@@ -192,7 +163,7 @@ Then in the project on GitHub:
 2. Set the layout to **Board**, grouped by **Status**.
 3. Under workflows, turn on **Auto-add to project** for this repository, and set the default status to **Needs triage**.
 
-`/triage` reads `docs/agents/triage-labels.md` and applies the labels. The board is the view of those states. A ticket from `/to-tickets` is already agent-ready, so it does not go through triage.
+The triage vocabulary lives in `docs/agents/triage-labels.md`; the board is the view of those states.
 
 ## Pull requests
 

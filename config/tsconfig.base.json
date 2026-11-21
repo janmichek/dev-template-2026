@@ -12,6 +12,7 @@
     // Explicit, predictable modules
     "module": "preserve", // Keep original module syntax in output
     "moduleResolution": "bundler", // Resolve modules like a bundler (Vite)
+    "resolveJsonModule": true, // Type the coverage floors imported by vite.config.ts
     "verbatimModuleSyntax": true, // Enforce explicit type-only imports/exports
     "isolatedModules": true, // Ensure each file is safely transpilable alone
     "noUncheckedSideEffectImports": true, // Resolve side-effect-only imports strictly

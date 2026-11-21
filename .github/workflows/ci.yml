@@ -14,9 +14,12 @@ jobs:
       - run: bun run validate
       - name: Coverage floors did not decrease
         if: github.event_name == 'pull_request'
+        env:
+          BASE_REF: ${{ github.base_ref }}
         run: |
-          git fetch --depth=1 origin "${{ github.base_ref }}"
-          bun scripts/ratchet-coverage.ts "origin/${{ github.base_ref }}"
+          # Update the remote-tracking ref the checker reads, not just FETCH_HEAD.
+          git fetch --depth=1 origin "refs/heads/$BASE_REF:refs/remotes/origin/$BASE_REF"
+          bun scripts/ratchet-coverage.ts "origin/$BASE_REF"
       - run: bun run audit
       - run: bun run test:mutate
       - run: bunx playwright install --with-deps chromium

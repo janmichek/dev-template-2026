@@ -108,7 +108,9 @@ bun run test:mutate   # stryker on model/lib (stock, formatUsd examples)
 bun run storybook     # :6006
 ```
 
-Coverage floors live in `config/coverage-floors.json` and only move up. Commits follow Conventional Commits (commitlint); pre-commit runs gitleaks plus the static gate.
+Coverage floors live in `config/coverage-floors.json` and only move up. `bun run coverage:ratchet` raises them to the measured values, and CI runs `scripts/ratchet-coverage.ts origin/<base>` on pull requests so a branch cannot lower a floor to get green. The gate instruments `src`, `server`, `api`, and `shared`, so backend changes have to bring tests too. Commits follow Conventional Commits (commitlint); pre-commit runs gitleaks plus `bun run validate`.
+
+Because two pull requests can each pass the floor check against an older base, a floor raised by one PR is only rechecked by the next if `main` requires branches to be up to date before merging (or a merge queue is enabled). Keep that branch protection on: otherwise a merge can restore a lower floor.
 
 Tool configs live in `config/`. Root `tsconfig.json` and `steiger.config.ts` only point there, because the editor and Steiger look at the project root. `.oxfmtrc.json` stays at the root too: oxfmt `ignorePatterns` are rooted at the config file, so a config inside `config/` cannot ignore the rest of the repo.
 

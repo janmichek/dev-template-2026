@@ -27,19 +27,22 @@ export default defineConfig({
   },
   test: {
     // *.spec.ts next to a page belongs to Playwright
-    include: ['src/**/*.test.{ts,tsx}'],
+    include: ['src/**/*.test.{ts,tsx}', '{scripts,server,api,shared}/**/*.test.ts'],
     unstubGlobals: true,
     // Vitest uses virtual browser so React component tests can render and query the page
     environment: 'happy-dom',
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json-summary'],
-      include: ['src/**/*.{ts,tsx}'],
+      // The gate covers the API and the shared contract, not just the React app.
+      include: ['src/**/*.{ts,tsx}', 'server/**/*.ts', 'api/**/*.ts', 'shared/**/*.ts'],
       exclude: [
-        'src/**/*.test.{ts,tsx}',
-        'src/**/*.spec.ts',
-        'src/**/*.d.ts',
+        '**/*.test.{ts,tsx}',
+        '**/*.spec.ts',
+        '**/*.d.ts',
         'src/shared/api/schema.d.ts',
+        // The Bun process entrypoint is exercised by Playwright, not Vitest.
+        'server/index.ts',
       ],
       // Upward-only. Raise with `bun run coverage:ratchet`; never lower by hand.
       thresholds: coverageFloors,

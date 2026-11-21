@@ -9,5 +9,5 @@ fi
 
 gitleaks protect --staged --redact --verbose
 
-# Same static gate as CI, minus the slow browser and mutation runs.
-bun run check:static
+# Same finish line as CI, minus the slow browser and mutation runs.
+bun run validate

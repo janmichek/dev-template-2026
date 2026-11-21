@@ -1,7 +1,6 @@
 import { useNavigate } from '@tanstack/react-router';
 import { useState } from 'react';
 import { MakeSelect } from '../../../features/filter-make';
-import { ReserveButton } from '../../../features/reserve-car';
 import { PageHeading } from '../../../shared/ui';
 import { Inventory } from '../../../widgets/inventory';
 import { Summary } from '../../../widgets/summary';
@@ -20,13 +19,7 @@ export function DashboardPage() {
       <PageHeading>Dashboard</PageHeading>
       <MakeSelect value={make} onChange={setMake} />
       <Summary make={make} />
-      <Inventory
-        make={make}
-        limit={3}
-        expandedId={undefined}
-        onToggle={openCar}
-        action={ReserveButton}
-      />
+      <Inventory make={make} limit={3} expandedId={undefined} onToggle={openCar} />
     </>
   );
 }

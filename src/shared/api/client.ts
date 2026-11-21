@@ -30,13 +30,3 @@ export async function fetchMakes() {
 
   return z.array(makeSchema).parse(data);
 }
-
-export async function reserveCar(id: number) {
-  const { data, response } = await client.POST('/api/cars/{id}/reserve', {
-    params: { path: { id } },
-  });
-
-  if (!response.ok) throw requestFailed(response);
-
-  return carSchema.parse(data);
-}

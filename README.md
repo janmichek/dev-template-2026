@@ -1,6 +1,6 @@
 # Dev template 2026
 
-Strict Feature-Sliced React template. The sample product is a small car lot so every layer and segment has real code to hold: a stock summary, a car table, a make filter, and a reserve action.
+Strict Feature-Sliced React template. The sample product is a small car lot so every layer and segment has real code to hold: a stock summary, a car table, and a make filter.
 
 Start non-trivial changes with the `template-workflow` skill in `.agents/skills/`.
 
@@ -33,7 +33,7 @@ The UI is http://localhost:3000 and proxies `/api` to port 3001.
 | Dashboard | `/`                     | Make filter, status counts, stock value, the three newest cars          |
 | Cars      | `/cars` and `/cars/:id` | Same filter and summary, the full table. The id in the URL opens a row. |
 
-The make filter drives both the summary and the table on that page. Reserve holds an available car; the server keeps that in memory until it restarts.
+The make filter drives both the summary and the table on that page.
 
 ## Architecture
 
@@ -43,7 +43,7 @@ Imports only go downward. Steiger's recommended rules are all on, including `ins
 app        router, providers, shell
 pages      one screen each: dashboard, cars
 widgets    summary (counts + stock value), inventory (car table)
-features   filter-make (pick a make), reserve-car (POST + cache refresh)
+features   filter-make (pick a make)
 entities   car, make
 shared     api client, lib helpers, ui kit
 ```
@@ -52,14 +52,14 @@ A slice is imported through its `index.ts`. Cross-slice imports are relative on 
 
 Each segment shows up at least once:
 
-| Segment | Where                                                      | Holds                                                    |
-| ------- | ---------------------------------------------------------- | -------------------------------------------------------- |
-| `api`   | `shared/api`, `entities/*/api`, `features/reserve-car/api` | fetchers, queries, the reserve mutation                  |
-| `model` | `entities/car/model`                                       | business rules (by make, counts, value); Stryker example |
-| `lib`   | `shared/lib`                                               | domain-free helpers (`formatUsd`); Stryker example       |
-| `ui`    | every slice                                                | components                                               |
+| Segment | Where                          | Holds                                                    |
+| ------- | ------------------------------ | -------------------------------------------------------- |
+| `api`   | `shared/api`, `entities/*/api` | fetchers and queries                                     |
+| `model` | `entities/car/model`           | business rules (by make, counts, value); Stryker example |
+| `lib`   | `shared/lib`                   | domain-free helpers (`formatUsd`); Stryker example       |
+| `ui`    | every slice                    | components                                               |
 
-Reads live with the entity (`useCars`, `useMakes`). A feature is a user action (`filter-make`, `reserve-car`). The page owns the make filter because two widgets read it, and hands `ReserveButton` to `Inventory` through its `action` slot, so the widget never imports a feature.
+Reads live with the entity (`useCars`, `useMakes`). A feature is a user action (`filter-make`). The page owns the make filter because two widgets read it.
 
 ```text
 src/
@@ -71,8 +71,7 @@ src/
 │   ├── summary/
 │   └── inventory/
 ├── features/
-│   ├── filter-make/
-│   └── reserve-car/
+│   └── filter-make/
 ├── entities/
 │   ├── car/
 │   └── make/
@@ -82,7 +81,7 @@ src/
     └── ui/
 ```
 
-`shared/schemas.ts` is the API contract. Change the Zod schema, run `bun run api:generate`, and call the API through `fetchCars`, `fetchMakes`, or `reserveCar`. Do not hand-edit `shared/openapi.json` or `src/shared/api/schema.d.ts`.
+`shared/schemas.ts` is the API contract. Change the Zod schema, run `bun run api:generate`, and call the API through `fetchCars` or `fetchMakes`. Do not hand-edit `shared/openapi.json` or `src/shared/api/schema.d.ts`.
 
 `server/data.ts` holds the sample records. The API parses them with the Zod schemas before they leave the server. The UI never imports that file.
 
@@ -116,6 +115,12 @@ Tool configs live in `config/`. Root `tsconfig.json` and `steiger.config.ts` onl
 
 Oxlint also loads a vendored plugin from `tools/oxlint/anti-slop` (rules from `dmmulroy/anti-slop`; see its `UPSTREAM.md` and `docs/adr/0003-vendored-anti-slop-lint-rules.md`). Lint, oxfmt, and fallow ignore that directory; a generated `src/shared/api/schema.d.ts` is skipped by lint too.
 
+## Dependency updates
+
+Dependabot replaced Renovate. `.github/dependabot.yml` checks Bun packages, GitHub Actions, and the Docker base image weekly (Monday, 05:00 UTC); minor and patch updates are grouped, majors get their own PR.
+
+Dependabot security updates do not support Bun yet, and the dependency graph does not read `bun.lock`, so `bun audit --production` in CI remains the vulnerability gate. Dependabot PRs also skip the Vercel preview jobs because GitHub does not expose Actions secrets to them; add the Vercel secrets as Dependabot secrets and drop the `github.actor` guards in `.github/workflows/preview.yml` if you want previews for bot PRs.
+
 ## Agent skills
 
 `.agents/skills/` is the canonical skill tree. `template-workflow` is the example: it encodes the test-first delivery loop (context, failing test, implementation, verification, docs). Claude and Cursor reach it through symlinks in `.claude/skills/` and `.cursor/skills/`; opencode reads `.agents/skills/` via `opencode.jsonc`.
@@ -129,7 +134,7 @@ ln -s ../../.agents/skills/<name> .claude/skills/<name>
 ln -s ../../.agents/skills/<name> .cursor/skills/<name>
 ```
 
-Published skills install with `npx skills add <owner/repo> --skill <name> -y` at project scope. `AGENTS.md` is the always-on context and points at `docs/agents/`; domain words live in `GLOSSARY.md`; decisions live in `docs/adr/`.
+Published skills install with `npx skills add <owner/repo> --skill <name> -y` at project scope and are pinned to a commit in `skills-lock.json`; restore the tree on a fresh checkout with `npx skills experimental_install`. `AGENTS.md` is the always-on context and points at `docs/agents/`; domain words live in `GLOSSARY.md`; decisions live in `docs/adr/`.
 
 ### GitHub board
 

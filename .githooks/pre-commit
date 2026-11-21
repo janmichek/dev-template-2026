@@ -8,3 +8,6 @@ if ! command -v gitleaks >/dev/null 2>&1; then
 fi
 
 gitleaks protect --staged --redact --verbose
+
+# Same finish line as CI, minus the slow browser and mutation runs.
+bun run validate

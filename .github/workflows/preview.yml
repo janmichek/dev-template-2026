@@ -16,7 +16,8 @@ env:
 
 jobs:
   videos:
-    if: github.event.pull_request.head.repo.full_name == github.repository
+    # Dependabot PRs cannot read the Vercel secrets, so skip the preview jobs.
+    if: github.actor != 'dependabot[bot]' && github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     env:
       PLAYWRIGHT_VIDEO: 'on'
@@ -43,7 +44,7 @@ jobs:
 
   deploy:
     needs: videos
-    if: always() && github.event.pull_request.head.repo.full_name == github.repository
+    if: always() && github.actor != 'dependabot[bot]' && github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     outputs:
       url: ${{ steps.deploy.outputs.url }}
@@ -82,8 +83,6 @@ jobs:
               '',
               `**[This branch](${url})** · **[Main deployment](${main})**`,
               ...(videos ? ['', '### Videos', '', videos] : []),
-              '',
-              '<sub>Deployment protection may ask you to sign in to Vercel.</sub>',
             ].join('\n')
             const { data: comments } = await github.rest.issues.listComments({
               owner: context.repo.owner,
@@ -109,7 +108,7 @@ jobs:
 
   lighthouse:
     needs: deploy
-    if: always() && github.event.pull_request.head.repo.full_name == github.repository
+    if: always() && github.actor != 'dependabot[bot]' && github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5

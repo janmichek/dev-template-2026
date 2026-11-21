@@ -1,0 +1,5 @@
+#!/usr/bin/env sh
+# Conventional Commits only.
+set -e
+
+bunx commitlint --config config/commitlint.config.mjs --edit "$1"

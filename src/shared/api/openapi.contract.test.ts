@@ -19,13 +19,11 @@ type Json200<Operation> = Operation extends {
 
 const carsMatch: Expect<Equal<Json200<operations['listCars']>, Car[]>> = true;
 const makesMatch: Expect<Equal<Json200<operations['listMakes']>, Make[]>> = true;
-const reserveMatch: Expect<Equal<Json200<operations['reserveCar']>, Car>> = true;
 
 const stringIsNotNumber: ExpectFalse<Equal<string, number>> = false;
 
 test('generated OpenAPI types match the Zod schemas', () => {
   expect(carsMatch).toBe(true);
   expect(makesMatch).toBe(true);
-  expect(reserveMatch).toBe(true);
   expect(stringIsNotNumber).toBe(false);
 });

@@ -11,6 +11,8 @@
     "build": "vite build --config config/vite.config.ts",
     "vercel:build": "bun run build && bun scripts/build-vercel.ts",
     "typecheck": "tsc -p tsconfig.json --noEmit",
+    "check:static": "bun run typecheck && bun run lint && bun run fmt:check && bun run fsd && bun run dead-code && bun run duplicates",
+    "validate": "bun run check:static && bun run api:check && bun run build && bun run test:coverage",
     "audit": "bun audit --production",
     "lint": "oxlint -c config/oxlintrc.json --ignore-pattern .agents --ignore-pattern .claude --ignore-pattern .cursor --ignore-pattern agent --ignore-pattern examples --ignore-pattern scripts/diagram/page.js --ignore-pattern tools/oxlint/anti-slop --ignore-pattern src/shared/api/schema.d.ts",
     "fmt": "oxfmt",
@@ -23,13 +25,14 @@
     "api:check": "bun run api:generate && git diff --exit-code -- shared/openapi.json src/shared/api/schema.d.ts",
     "test:all": "bun run test:unit && bun run test:e2e",
     "test:unit": "vitest run --config config/vite.config.ts",
+    "test:coverage": "vitest run --config config/vite.config.ts --coverage",
+    "coverage:ratchet": "bun run test:coverage && bun scripts/ratchet-coverage.ts",
     "test:e2e": "playwright test --config config/playwright.config.ts",
     "test:mutate": "bun scripts/link-typescript5.ts && stryker run config/stryker.config.json",
     "storybook": "storybook dev -p 6006 -c config/storybook",
     "chromatic": "chromatic --exit-zero-on-changes"
   },
   "dependencies": {
-    "@radix-ui/themes": "^3.3.0",
     "@sentry/react": "^11.8.0",
     "@tanstack/react-query": "^5.104.4",
     "@tanstack/react-router": "^1.170.45",
@@ -40,6 +43,8 @@
     "zod": "^4.6.7"
   },
   "devDependencies": {
+    "@commitlint/cli": "^21.2.4",
+    "@commitlint/config-conventional": "^21.2.4",
     "@feature-sliced/steiger-plugin": "^0.8.0",
     "@oxlint/plugins": "1.94.0",
     "@playwright/mcp": "^0.0.83",
@@ -50,6 +55,7 @@
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
     "@vitejs/plugin-react": "^6.1.2",
+    "@vitest/coverage-v8": "5.0.5",
     "chromatic": "^18.13.0",
     "esbuild": "0.28.2",
     "fallow": "^3.37.0",

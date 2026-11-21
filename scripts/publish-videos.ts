@@ -4,28 +4,84 @@ import { z } from 'zod';
 
 type Video = { title: string; path: string };
 
+type Host = { name: string; endpoint: string };
+
+// x0.at is the primary host; temp.sh takes over when it is down or refuses a runner.
+const hosts: Host[] = [
+  { name: 'x0.at', endpoint: 'https://x0.at' },
+  { name: 'temp.sh', endpoint: 'https://temp.sh/upload' },
+];
+
+const attemptsPerHost = 2;
+const retryDelayMs = 2000;
+
 const reportPath = process.env['PLAYWRIGHT_JSON_OUTPUT_NAME'] ?? 'test-results/report.json';
 
-async function upload(path: string): Promise<string> {
-  const bytes = await readFile(path);
+async function send(
+  host: Host,
+  bytes: Uint8Array<ArrayBuffer>,
+  filename: string
+): Promise<string | undefined> {
+  const payload = new FormData();
+  payload.append('file', new Blob([bytes], { type: 'video/webm' }), filename);
 
-  for (let attempt = 0; attempt < 3; attempt++) {
-    const body = new FormData();
-    body.append('file', new Blob([bytes], { type: 'video/webm' }), basename(path));
+  const response = await fetch(host.endpoint, { method: 'POST', body: payload });
+  const answer = (await response.text()).trim();
 
-    try {
-      const response = await fetch('https://x0.at', { method: 'POST', body });
-      const url = (await response.text()).trim();
+  if (response.ok && answer.startsWith('https://')) return answer;
 
-      if (response.ok && url.startsWith('https://')) return url;
-    } catch {
-      // retry
+  console.error(
+    `${host.name} rejected ${filename}: HTTP ${response.status} ${answer.slice(0, 200)}`
+  );
+
+  return undefined;
+}
+
+async function tryHost(
+  host: Host,
+  bytes: Uint8Array<ArrayBuffer>,
+  filename: string
+): Promise<string | undefined> {
+  try {
+    return await send(host, bytes, filename);
+  } catch (error) {
+    console.error(`${host.name} failed ${filename}: ${String(error)}`);
+
+    return undefined;
+  }
+}
+
+async function uploadTo(
+  host: Host,
+  bytes: Uint8Array<ArrayBuffer>,
+  filename: string
+): Promise<string | undefined> {
+  for (let attempt = 1; attempt <= attemptsPerHost; attempt++) {
+    const url = await tryHost(host, bytes, filename);
+
+    if (url !== undefined) return url;
+
+    if (attempt < attemptsPerHost) {
+      await new Promise((resolve) => setTimeout(resolve, retryDelayMs * attempt));
     }
-
-    await new Promise((resolve) => setTimeout(resolve, 2000));
   }
 
-  throw new Error(`Could not publish ${path}`);
+  return undefined;
+}
+
+// Videos are evidence for the preview comment, not a gate: a host outage costs
+// the links, never the job. Every miss is logged so the failure stays visible.
+async function upload(path: string): Promise<string | undefined> {
+  const bytes = new Uint8Array(await readFile(path));
+  const filename = basename(path);
+
+  for (const host of hosts) {
+    const url = await uploadTo(host, bytes, filename);
+
+    if (url !== undefined) return url;
+  }
+
+  return undefined;
 }
 
 // The Playwright JSON report is an external contract, so it is parsed before use.
@@ -80,7 +136,21 @@ const videos: Video[] = [];
 
 report.suites.forEach((suite) => collectSuite(suite, videos));
 
+const unpublished: string[] = [];
+
 for (const video of new Map(videos.map((item) => [item.title, item])).values()) {
   const url = await upload(video.path);
+
+  if (url === undefined) {
+    unpublished.push(video.title);
+    continue;
+  }
+
   console.log(`- [${video.title}](${url})`);
+}
+
+if (unpublished.length > 0) {
+  console.error(
+    `::warning::Could not publish ${unpublished.length} video(s): ${unpublished.join(', ')}`
+  );
 }

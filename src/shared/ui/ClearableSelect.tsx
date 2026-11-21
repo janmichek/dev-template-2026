@@ -1,5 +1,4 @@
-import { Button, Flex, Select } from '@radix-ui/themes';
-import type { ReactNode } from 'react';
+import { type ChangeEvent, type ReactNode, useId } from 'react';
 
 type ClearableSelectProps = {
   label: string;
@@ -18,17 +17,41 @@ export function ClearableSelect({
   disabled = false,
   children,
 }: ClearableSelectProps) {
+  const id = useId();
+
+  function handleChange(event: ChangeEvent<HTMLSelectElement>) {
+    const next = event.target.value;
+    onChange(next === '' ? undefined : next);
+  }
+
   return (
-    <Flex align="center" gap="3">
-      <Select.Root value={value ?? ''} onValueChange={onChange} disabled={disabled}>
-        <Select.Trigger aria-label={label} placeholder={placeholder} />
-        <Select.Content>{children}</Select.Content>
-      </Select.Root>
+    <div className="select-row">
+      <label className="field-label" htmlFor={id}>
+        {label}
+      </label>
+      <select
+        id={id}
+        className="select"
+        aria-label={label}
+        value={value ?? ''}
+        onChange={handleChange}
+        disabled={disabled}
+      >
+        <option value="" disabled>
+          {placeholder}
+        </option>
+        {children}
+      </select>
       {value !== undefined && (
-        <Button variant="soft" color="gray" disabled={disabled} onClick={() => onChange(undefined)}>
+        <button
+          type="button"
+          className="button"
+          disabled={disabled}
+          onClick={() => onChange(undefined)}
+        >
           Clear
-        </Button>
+        </button>
       )}
-    </Flex>
+    </div>
   );
 }

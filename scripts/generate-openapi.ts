@@ -36,17 +36,6 @@ const document = {
         responses: { 200: ok('Makes', z.array(makeSchema)) },
       },
     },
-    '/api/cars/{id}/reserve': {
-      post: {
-        operationId: 'reserveCar',
-        parameters: [{ name: 'id', in: 'path', required: true, schema: { type: 'integer' } }],
-        responses: {
-          200: ok('Reserved car', carSchema),
-          404: { description: 'No such car' },
-          409: { description: 'Car is not available' },
-        },
-      },
-    },
   },
 };
 

@@ -2,7 +2,6 @@ import * as Sentry from '@sentry/react';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import type { RootOptions } from 'react-dom/client';
-import '@radix-ui/themes/styles.css';
 import '../index.css';
 import { App } from './App';
 

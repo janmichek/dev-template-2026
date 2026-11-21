@@ -23,9 +23,6 @@
   {:from :entities.make.api.useMakes, :to :at.tanstack, :kind :dependency}
   {:from :shared.ui, :to :shared.ui.LoadingState, :kind :dependency}
   {:from :features.filter-make.ui.MakeSelect, :to :shared.ui, :kind :dependency}
-  {:from :features.reserve-car,
-   :to :features.reserve-car.ui.ReserveButton,
-   :kind :dependency}
   {:from :pages.dashboard.ui.DashboardPage, :to :widgets.inventory, :kind :dependency}
   {:from :pages.cars.ui.CarsPage, :to :shared.ui, :kind :dependency}
   {:from :entities.car, :to :entities.car.ui.CarStatusBadge, :kind :dependency}
@@ -38,7 +35,6 @@
   {:from :widgets.summary.ui.Summary, :to :entities.car, :kind :dependency}
   {:from :pages.cars.ui.CarsPage, :to :widgets.summary, :kind :dependency}
   {:from :shared.api, :to :shared.api.client, :kind :dependency}
-  {:from :pages.cars.ui.CarsPage, :to :features.reserve-car, :kind :dependency}
   {:from :app.routes, :to :app.Layout, :kind :dependency}
   {:from :pages.cars.ui.CarsPage, :to :features.filter-make, :kind :dependency}
   {:from :shared.lib, :to :shared.lib.formatUsd, :kind :dependency}
@@ -51,10 +47,8 @@
   {:from :entities.make.api.makeQueries, :to :shared.api, :kind :dependency}
   {:from :pages.dashboard, :to :pages.dashboard.ui.DashboardPage, :kind :dependency}
   {:from :widgets.inventory, :to :widgets.inventory.ui.Inventory, :kind :dependency}
-  {:from :features.reserve-car.api.useReserveCar, :to :at.tanstack, :kind :dependency}
   {:from :shared.ui.PageHeading, :to :react, :kind :dependency}
   {:from :entities.make.api.makeQueries, :to :at.tanstack, :kind :dependency}
-  {:from :pages.dashboard.ui.DashboardPage, :to :features.reserve-car, :kind :dependency}
   {:from :app.App, :to :app.routes, :kind :dependency}
   {:from :entities.make, :to :entities.make.api.useMakes, :kind :dependency}
   {:from :app.routes, :to :pages.dashboard, :kind :dependency}
@@ -62,11 +56,7 @@
    :to :entities.make.api.makeQueries,
    :kind :dependency}
   {:from :pages.cars, :to :pages.cars.ui.CarsPage, :kind :dependency}
-  {:from :features.reserve-car.ui.ReserveButton,
-   :to :features.reserve-car.api.useReserveCar,
-   :kind :dependency}
   {:from :pages.dashboard.ui.DashboardPage, :to :at.tanstack, :kind :dependency}
-  {:from :features.reserve-car.api.useReserveCar, :to :shared.api, :kind :dependency}
   {:from :app.App, :to :at.tanstack, :kind :dependency}
   {:from :pages.cars.ui.CarsPage, :to :at.tanstack, :kind :dependency}
   {:from :pages.dashboard.ui.DashboardPage, :to :features.filter-make, :kind :dependency}
@@ -83,7 +73,6 @@
   {:from :entities.car.ui.CarFacts, :to :shared.lib, :kind :dependency}
   {:from :pages.cars.ui.CarsPage, :to :widgets.inventory, :kind :dependency}
   {:from :shared.ui.ClearableSelect, :to :react, :kind :dependency}
-  {:from :features.reserve-car.api.useReserveCar, :to :entities.car, :kind :dependency}
   {:from :features.filter-make.ui.MakeSelect, :to :entities.make, :kind :dependency}
   {:from :entities.car.api.carQueries, :to :at.tanstack, :kind :dependency}
   {:from :app.routes, :to :pages.cars, :kind :dependency}
@@ -215,27 +204,6 @@
    :level 2,
    :lang :typescript,
    :id :features.filter-make.ui.MakeSelect}
-  {:ns "dev-template.features.reserve-car.api.useReserveCar",
-   :name "UseReserveCar",
-   :file "src/features/reserve-car/api/useReserveCar.ts",
-   :ops [{:name "useReserveCar", :text "useReserveCar"}],
-   :level 2,
-   :lang :typescript,
-   :id :features.reserve-car.api.useReserveCar}
-  {:ns "dev-template.features.reserve-car",
-   :name "ReserveCar",
-   :file "src/features/reserve-car/index.ts",
-   :ops [{:name "ReserveButton", :text "ReserveButton"}],
-   :level 2,
-   :lang :typescript,
-   :id :features.reserve-car}
-  {:ns "dev-template.features.reserve-car.ui.ReserveButton",
-   :name "ReserveButton",
-   :file "src/features/reserve-car/ui/ReserveButton.tsx",
-   :ops [{:name "ReserveButton", :text "ReserveButton"}],
-   :level 2,
-   :lang :typescript,
-   :id :features.reserve-car.ui.ReserveButton}
   {:ns "dev-template.pages.cars",
    :name "Cars",
    :file "src/pages/cars/index.ts",
@@ -269,8 +237,7 @@
    :file "src/shared/api/client.ts",
    :ops
    [{:name "fetchCars", :text "fetchCars"}
-    {:name "fetchMakes", :text "fetchMakes"}
-    {:name "reserveCar", :text "reserveCar"}],
+    {:name "fetchMakes", :text "fetchMakes"}],
    :level 0,
    :lang :typescript,
    :id :shared.api.client}
@@ -279,8 +246,7 @@
    :file "src/shared/api/index.ts",
    :ops
    [{:name "fetchCars", :text "fetchCars"}
-    {:name "fetchMakes", :text "fetchMakes"}
-    {:name "reserveCar", :text "reserveCar"}],
+    {:name "fetchMakes", :text "fetchMakes"}],
    :level 0,
    :lang :typescript,
    :id :shared.api}

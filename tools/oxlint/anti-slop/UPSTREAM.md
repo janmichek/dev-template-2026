@@ -7,8 +7,8 @@
   - `tools/oxlint/anti-slop/index.ts` — generic plugin, registered as `anti-slop`.
   - `tools/oxlint/anti-slop/effect/index.ts` — Effect plugin, vendored but **not**
     registered. This repository does not depend on Effect.
-- Dependency: `@oxlint/plugins` pinned to `1.88.0`, the exact `oxlint` version in
-  `package.json`. Upgrade both together.
+- Dependency: `@oxlint/plugins` pinned to `1.94.0`, matching the resolved `oxlint`
+  version. Upgrade both together.
 - Rule code is unmodified. Local policy lives in this repository instead:
   - `config/oxlintrc.json` enables every generic rule, plus the native
     `oxc/no-accumulating-spread` companion.

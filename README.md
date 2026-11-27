@@ -113,7 +113,7 @@ Because two pull requests can each pass the floor check against an older base, a
 
 Tool configs live in `config/`. Root `tsconfig.json` and `steiger.config.ts` only point there, because the editor and Steiger look at the project root. `.oxfmtrc.json` stays at the root too: oxfmt `ignorePatterns` are rooted at the config file, so a config inside `config/` cannot ignore the rest of the repo.
 
-Oxlint also loads a vendored plugin from `tools/oxlint/anti-slop` (rules from `dmmulroy/anti-slop`; see its `UPSTREAM.md` and `docs/adr/0003-vendored-anti-slop-lint-rules.md`). Lint, oxfmt, and fallow ignore that directory; a generated `src/shared/api/schema.d.ts` is skipped by lint too.
+Oxlint also loads a vendored plugin from `tools/oxlint/anti-slop` (rules from `dmmulroy/anti-slop`; see its `UPSTREAM.md` and `docs/adr/0002-vendored-anti-slop-lint-rules.md`). Lint, oxfmt, and fallow ignore that directory; a generated `src/shared/api/schema.d.ts` is skipped by lint too.
 
 ## Dependency updates
 
@@ -134,7 +134,7 @@ ln -s ../../.agents/skills/<name> .claude/skills/<name>
 ln -s ../../.agents/skills/<name> .cursor/skills/<name>
 ```
 
-Published skills install with `npx skills add <owner/repo> --skill <name> -y` at project scope and are pinned to a commit in `skills-lock.json`; restore the tree on a fresh checkout with `npx skills experimental_install`. `AGENTS.md` is the always-on context and points at `docs/agents/`; domain words live in `GLOSSARY.md`; decisions live in `docs/adr/`.
+Published skills install globally with `npx skills add <owner/repo> --skill <name> -g -y`; the CLI records them in `~/.agents/.skill-lock.json`, so they do not bloat the repo. Reserve project scope for a skill this repo must ship with: those are pinned in `skills-lock.json` and restored on a fresh checkout with `npx skills experimental_install`. `AGENTS.md` is the always-on context and points at `docs/agents/`; domain words live in `GLOSSARY.md`; decisions live in `docs/adr/`.
 
 ### GitHub board
 
@@ -169,8 +169,6 @@ Then in the project on GitHub:
 1. Open the **Status** field and replace the options with **Needs triage**, **Needs info**, **Ready for agent**, **Ready for human**, **Won't fix**.
 2. Set the layout to **Board**, grouped by **Status**.
 3. Under workflows, turn on **Auto-add to project** for this repository, and set the default status to **Needs triage**.
-
-The triage vocabulary lives in `docs/agents/triage-labels.md`; the board is the view of those states.
 
 ## Pull requests
 

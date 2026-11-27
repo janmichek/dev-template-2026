@@ -7,8 +7,6 @@ alwaysApply: true
 
 Read `AGENTS.md` first. Then follow its pointers:
 
-- `docs/agents/issue-tracker.md` for GitHub Issues and `gh` conventions
-- `docs/agents/triage-labels.md` for the label vocabulary
 - `docs/agents/domain.md` before exploring domain code
 
 `.agents/skills/template-workflow/` holds the delivery workflow.

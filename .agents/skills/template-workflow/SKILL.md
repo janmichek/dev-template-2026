@@ -11,11 +11,12 @@ This repo is a React + Hono template with Feature-Sliced Design and generated Op
 
 - Read `AGENTS.md`, `GLOSSARY.md`, and any ADR in `docs/adr/` that touches the area.
 - Use the vocabulary from `GLOSSARY.md` in issue titles, tests, and code.
+- For UI work, read `docs/experience-patterns.md` and keep its pattern IDs in the test names.
 
 ## 2. Start with a failing test
 
 - Unit behavior: add a Vitest case next to the code under test and run `bun run test:unit`.
-- Browser behavior: add a Playwright spec under `src/pages/` and run `bun run test:e2e`.
+- Browser behavior: add a Playwright spec under `src/pages/` and run `bun run test:e2e`. UI specs cover the pending, error, and undo paths that apply.
 
 ## 3. Implement the smallest change
 

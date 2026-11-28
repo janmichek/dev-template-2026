@@ -59,6 +59,7 @@
     "chromatic": "^18.15.0",
     "esbuild": "0.28.2",
     "fallow": "^3.43.2",
+    "fast-check": "^4.11.0",
     "happy-dom": "^21.0.3",
     "openapi-typescript": "^7.13.0",
     "oxc-transform-react": "^0.158.0",

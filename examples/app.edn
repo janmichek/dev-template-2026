@@ -235,14 +235,16 @@
   {:ns "dev-template.shared.api.client",
    :name "Client",
    :file "src/shared/api/client.ts",
-   :ops [{:name "fetchCars", :text "fetchCars"} {:name "fetchMakes", :text "fetchMakes"}],
+   :ops
+   [{:name "fetchCars", :text "fetchCars"} {:name "fetchMakes", :text "fetchMakes"}],
    :level 0,
    :lang :typescript,
    :id :shared.api.client}
   {:ns "dev-template.shared.api",
    :name "Api",
    :file "src/shared/api/index.ts",
-   :ops [{:name "fetchCars", :text "fetchCars"} {:name "fetchMakes", :text "fetchMakes"}],
+   :ops
+   [{:name "fetchCars", :text "fetchCars"} {:name "fetchMakes", :text "fetchMakes"}],
    :level 0,
    :lang :typescript,
    :id :shared.api}

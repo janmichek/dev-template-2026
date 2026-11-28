@@ -1,6 +1,6 @@
 ## Finish line
 
-Before calling a task complete, run `bun run validate`. It must pass. Fix the cause of a failure instead of weakening a gate: do not lower `config/coverage-floors.json`, add lint-disable directives, or skip tests. Raise coverage floors with `bun run coverage:ratchet` after adding tests. For UI changes also run `bun run test:e2e`.
+Before calling a task complete, run `bun run validate`. It must pass. Fix the cause of a failure instead of weakening a gate: do not lower `config/coverage-floors.json`, add lint-disable directives, skip tests, or drop a deny from `.claude/settings.json` or `.cursor/hooks.json`. A pull request that does that fails `scripts/guardrail-diff.ts` unless it carries the `guardrail-change` label. Raise coverage floors with `bun run coverage:ratchet` after adding tests. For UI changes also run `bun run test:e2e`. Browser specs import `test/browser.ts`, which fails on a page error, a console error, or an axe violation.
 
 ## Architecture
 

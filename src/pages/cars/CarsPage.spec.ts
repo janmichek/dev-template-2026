@@ -1,13 +1,17 @@
-import { expect, test } from '@playwright/test';
+import { expect, expectAccessible, test } from '../../../test/browser';
 
 test('opens and closes car details through the URL', async ({ page }) => {
   await page.goto('/');
 
   await page.getByRole('link', { name: 'Cars' }).click();
+  await expect(page.getByRole('button', { name: 'Show detail 1', exact: true })).toBeVisible();
+  await expectAccessible(page);
+
   await page.getByRole('button', { name: 'Show detail 1', exact: true }).click();
 
   await expect(page.getByText('ID', { exact: true })).toBeVisible();
   await expect(page).toHaveURL(/\/cars\/1$/);
+  await expectAccessible(page);
 
   await page.getByRole('button', { name: 'Hide 1', exact: true }).click();
   await expect(page.getByText('ID', { exact: true })).toBeHidden();

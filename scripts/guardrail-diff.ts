@@ -33,7 +33,7 @@ process.exit(1);
 
 function snapshot(ref: string): GuardrailSnapshot {
   return {
-    diff: git(['diff', '--unified=0', `${ref}...HEAD`]),
+    diff: git(['diff', '--unified=0', ref, 'HEAD']),
     stryker: pair(ref, 'config/stryker.config.json'),
     tsconfig: pair(ref, 'config/tsconfig.base.json'),
     oxlint: pair(ref, 'config/oxlintrc.json'),

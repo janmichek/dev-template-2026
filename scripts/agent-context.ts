@@ -1,5 +1,6 @@
-import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync, type Dirent } from 'node:fs';
 import { join } from 'node:path';
+import { z } from 'zod';
 
 const repoRoot = process.cwd();
 
@@ -149,20 +150,42 @@ export function exportedNames(source: string): ReadonlySet<string> {
   return names;
 }
 
-function collectDocs(absolute: string, relative: string, documents: AgentDocument[]): void {
-  if (!existsSync(absolute)) return;
-  const stat = statSync(absolute);
+const absentError = z.object({ code: z.literal('ENOENT') });
 
-  if (stat.isFile()) {
-    if (isDoc(relative)) documents.push({ path: relative, text: readFileSync(absolute, 'utf8') });
+function collectDocs(absolute: string, relative: string, documents: AgentDocument[]): void {
+  if (isDoc(relative)) {
+    readDoc(absolute, relative, documents);
 
     return;
   }
 
-  if (!stat.isDirectory()) return;
+  for (const entry of directoryEntries(absolute)) {
+    const path = join(relative, entry.name);
+    const full = join(absolute, entry.name);
 
-  for (const entry of readdirSync(absolute, { withFileTypes: true })) {
-    collectDocs(join(absolute, entry.name), join(relative, entry.name), documents);
+    if (entry.isDirectory()) collectDocs(full, path, documents);
+
+    if (entry.isFile() && isDoc(path)) readDoc(full, path, documents);
+  }
+}
+
+function readDoc(absolute: string, relative: string, documents: AgentDocument[]): void {
+  try {
+    documents.push({ path: relative, text: readFileSync(absolute, 'utf8') });
+  } catch (error) {
+    if (absentError.safeParse(error).success) return;
+
+    throw error;
+  }
+}
+
+function directoryEntries(absolute: string): Dirent[] {
+  try {
+    return readdirSync(absolute, { withFileTypes: true });
+  } catch (error) {
+    if (absentError.safeParse(error).success) return [];
+
+    throw error;
   }
 }
 

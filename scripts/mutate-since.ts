@@ -20,7 +20,7 @@ const patterns = z
 
 const changed = execFileSync(
   'git',
-  ['diff', '--name-only', '--diff-filter=ACMR', `${baseRef}...HEAD`],
+  ['diff', '--name-only', '--diff-filter=ACMR', baseRef, 'HEAD'],
   { encoding: 'utf8' }
 )
   .split('\n')

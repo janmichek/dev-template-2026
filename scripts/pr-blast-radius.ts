@@ -8,7 +8,7 @@ if (baseRef === undefined) {
   process.exit(1);
 }
 
-const diff = execFileSync('git', ['diff', '--unified=0', `${baseRef}...HEAD`], {
+const diff = execFileSync('git', ['diff', '--unified=0', baseRef, 'HEAD'], {
   encoding: 'utf8',
 });
 

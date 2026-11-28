@@ -1,6 +1,6 @@
 {
   "$schema": "../node_modules/oxlint/configuration_schema.json",
-  "plugins": ["eslint", "oxc", "typescript", "unicorn", "import", "react"],
+  "plugins": ["eslint", "oxc", "typescript", "unicorn", "import", "react", "vitest"],
   "jsPlugins": [{ "name": "anti-slop", "specifier": "../tools/oxlint/anti-slop/index.ts" }],
   "settings": {
     "react": {
@@ -115,7 +115,9 @@
     "anti-slop/no-unsafe-dictionary-type": "error",
     "anti-slop/no-widen-then-assert": "error",
     "anti-slop/require-readable-spacing": "error",
-    "anti-slop/require-safety-comment-for-type-assertion": "error"
+    "anti-slop/require-safety-comment-for-type-assertion": "error",
+    "vitest/expect-expect": "off",
+    "vitest/require-mock-type-parameters": "off"
   },
   // BOUNDRIES
   "overrides": [
@@ -267,7 +269,11 @@
       "files": ["**/*.test.ts", "**/*.test.tsx", "**/*.spec.ts", "**/*.spec.tsx"],
       "rules": {
         "max-lines": "off",
-        "max-lines-per-function": "off"
+        "max-lines-per-function": "off",
+        "vitest/no-disabled-tests": "error",
+        "vitest/no-focused-tests": "error",
+        "vitest/no-identical-title": "error",
+        "vitest/no-conditional-tests": "error"
       }
     },
     // The EDN reader is a hand-written parser: its accessors are the boundary, so

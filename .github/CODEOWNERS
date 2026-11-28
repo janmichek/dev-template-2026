@@ -1,0 +1,8 @@
+# Gate and agent policy. A green check is not a review of these paths.
+config/ @janmichek
+.github/ @janmichek
+.githooks/ @janmichek
+.claude/ @janmichek
+.cursor/ @janmichek
+.agents/ @janmichek
+tools/ @janmichek

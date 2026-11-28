@@ -15,3 +15,5 @@ Do not run these without an explicit, in-message request from the human:
 - Reading `.env` or any file that may hold secrets
 
 If a task seems to need one of these, stop and ask the human to run it. Do not work around the rule with a script, a workflow edit, or an editor command.
+
+`.cursor/hooks.json` and the hooks in `.claude/settings.json` block `git push`, `git reset --hard`, `git clean`, `git branch -D`, `git commit --no-verify`, `git commit --no-gpg-sign`, and writes to `shared/openapi.json` or `src/shared/api/schema.d.ts`. Do not remove those hooks to get a command through.

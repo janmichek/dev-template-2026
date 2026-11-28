@@ -236,8 +236,7 @@
    :name "Client",
    :file "src/shared/api/client.ts",
    :ops
-   [{:name "fetchCars", :text "fetchCars"}
-    {:name "fetchMakes", :text "fetchMakes"}],
+   [{:name "fetchCars", :text "fetchCars"} {:name "fetchMakes", :text "fetchMakes"}],
    :level 0,
    :lang :typescript,
    :id :shared.api.client}
@@ -245,8 +244,7 @@
    :name "Api",
    :file "src/shared/api/index.ts",
    :ops
-   [{:name "fetchCars", :text "fetchCars"}
-    {:name "fetchMakes", :text "fetchMakes"}],
+   [{:name "fetchCars", :text "fetchCars"} {:name "fetchMakes", :text "fetchMakes"}],
    :level 0,
    :lang :typescript,
    :id :shared.api}

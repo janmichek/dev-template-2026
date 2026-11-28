@@ -39,7 +39,7 @@ Before calling the task complete, run the repo gate:
 bun run validate
 ```
 
-It runs the static gate, `api:check`, build, and coverage. For UI changes also run `bun run test:e2e`. Never weaken a gate: do not lower `config/coverage-floors.json`, add lint-disable directives, or skip tests.
+It runs the static gate (including `bun run agent:context`), `api:check`, build, and coverage. For UI changes also run `bun run test:e2e`. Never weaken a gate: do not lower `config/coverage-floors.json`, add lint-disable directives, skip tests, or edit `.cursor/hooks.json` or `.claude/settings.json` to let a command through. `scripts/guardrail-diff.ts` fails a pull request that does.
 
 ## 5. Leave the trail
 

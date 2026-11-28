@@ -18,4 +18,6 @@ bun run test:e2e
 
 Use the Playwright MCP server to open the app, click the flow, and read console errors.
 
-A test that passes without asserting the behavior is not done. `bun run test:mutate` runs Stryker on `src/features/**/lib` and must stay at or above the break threshold.
+A test that passes without asserting the behavior is not done. `bun run test:mutate` runs Stryker on the globs in `config/stryker.config.json` and must stay at or above the break threshold.
+
+Browser tests import `test/browser.ts`. That fixture fails the test on a page error or a console error. Call `expectAccessible` from that module after the page settles.

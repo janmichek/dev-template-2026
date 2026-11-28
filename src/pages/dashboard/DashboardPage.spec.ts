@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, expectAccessible, test } from '../../../test/browser';
 
 test('dashboard shows the lot summary and the newest cars', async ({ page }) => {
   await page.goto('/');
@@ -9,4 +9,5 @@ test('dashboard shows the lot summary and the newest cars', async ({ page }) => 
   await expect(page.getByRole('combobox', { name: 'Make' })).toBeVisible();
   await expect(page.getByRole('button', { name: 'Show detail 12', exact: true })).toBeVisible();
   await expect(page.getByRole('button', { name: 'Show detail 1', exact: true })).toHaveCount(0);
+  await expectAccessible(page);
 });

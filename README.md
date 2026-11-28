@@ -91,23 +91,26 @@ Stories live in `stories/` so they stay out of the architecture diagram. Tests l
 
 ```sh
 bun run validate       # the agent finish line: static gate + api:check + build + coverage
-bun run check:static   # typecheck, lint, fmt:check, fsd, dead-code, duplicates
+bun run check:static   # typecheck, lint, fmt:check, fsd, dead-code, duplicates, agent context
 bun run typecheck     # tsc --noEmit
 bun run lint          # oxlint
 bun run fmt           # oxfmt
 bun run fsd           # steiger, strict recommended rules
 bun run dead-code     # fallow: unused files, exports, dependencies
 bun run duplicates    # fallow dupes, strict, fail on any clone
+bun run agent:context # agent docs still point at real files and fetchers
 bun run api:generate  # openapi.json + schema.d.ts from Zod
 bun run test:unit     # vitest
 bun run test:coverage # vitest with coverage floors
 bun run coverage:ratchet # raise coverage floors to the measured values
 bun run test:e2e      # playwright
-bun run test:mutate   # stryker on model/lib (stock, formatUsd examples)
+bun run test:mutate   # stryker on model, lib, the API client, the server, and the contract
 bun run storybook     # :6006
 ```
 
-Coverage floors live in `config/coverage-floors.json` and only move up. `bun run coverage:ratchet` raises them to the measured values, and CI runs `scripts/ratchet-coverage.ts origin/<base>` on pull requests so a branch cannot lower a floor to get green. The gate instruments `src`, `server`, `api`, and `shared`, so backend changes have to bring tests too. Commits follow Conventional Commits (commitlint); pre-commit runs gitleaks plus `bun run validate`.
+Coverage floors live in `config/coverage-floors.json` and only move up. `bun run coverage:ratchet` raises them to the measured values, and CI runs `scripts/ratchet-coverage.ts origin/<base>` on pull requests so a branch cannot lower a floor to get green. The same pull request runs `scripts/guardrail-diff.ts`, which fails if the diff adds a suppression or relaxes a gate, unless the PR has the `guardrail-change` label. `scripts/pr-blast-radius.ts` warns above 500 changed lines or three Feature-Sliced layers. It does not fail the job. The gate instruments `src`, `server`, `api`, and `shared`, so backend changes have to bring tests too. Commits follow Conventional Commits (commitlint); pre-commit runs gitleaks plus `bun run validate`.
+
+Pull requests mutation-test only the changed files from `config/stryker.config.json`. Pushes to `main` run the full set. Stryker 10 has no `--since` flag, so `scripts/mutate-since.ts` passes those paths to `--mutate`. Browser specs fail on a page error, a console error, or an axe violation through `test/browser.ts`. `.cursor/hooks.json` and the hooks in `.claude/settings.json` block generated-file edits and the irreversible git commands. See `docs/adr/0004-agent-guardrails.md`.
 
 Because two pull requests can each pass the floor check against an older base, a floor raised by one PR is only rechecked by the next if `main` requires branches to be up to date before merging (or a merge queue is enabled). Keep that branch protection on: otherwise a merge can restore a lower floor.
 

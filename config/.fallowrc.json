@@ -4,6 +4,7 @@
     "scripts/**/*.ts",
     "src/**/*.test.{ts,tsx}",
     "src/**/*.spec.ts",
+    "test/**/*.ts",
     "stories/**/*.stories.tsx",
     "src/pages/*/index.ts",
     "src/widgets/*/index.ts",

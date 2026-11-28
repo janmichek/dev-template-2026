@@ -42,7 +42,9 @@ export function Inventory({ make, limit, expandedId, onToggle }: InventoryProps)
                 {header}
               </th>
             ))}
-            <th scope="col" />
+            <th scope="col">
+              <span className="visually-hidden">Detail</span>
+            </th>
           </tr>
         </thead>
         <tbody>

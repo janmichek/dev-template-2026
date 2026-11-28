@@ -11,7 +11,7 @@
     "build": "vite build --config config/vite.config.ts",
     "vercel:build": "bun run build && bun scripts/build-vercel.ts",
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "check:static": "bun run typecheck && bun run lint && bun run fmt:check && bun run fsd && bun run dead-code && bun run duplicates",
+    "check:static": "bun run typecheck && bun run lint && bun run fmt:check && bun run fsd && bun run dead-code && bun run duplicates && bun run agent:context",
     "validate": "bun run check:static && bun run api:check && bun run build && bun run test:coverage",
     "audit": "bun audit --production",
     "lint": "oxlint -c config/oxlintrc.json --ignore-pattern .agents --ignore-pattern .claude --ignore-pattern .cursor --ignore-pattern agent --ignore-pattern examples --ignore-pattern scripts/diagram/page.js --ignore-pattern tools/oxlint/anti-slop --ignore-pattern src/shared/api/schema.d.ts",
@@ -20,6 +20,7 @@
     "fsd": "steiger src --fail-on-warnings",
     "dead-code": "fallow dead-code -c config/.fallowrc.json",
     "duplicates": "fallow dupes -c config/.fallowrc.json --fail-on-issues",
+    "agent:context": "bun scripts/agent-context-check.ts",
     "api:generate": "bun scripts/link-typescript5.ts && bun scripts/generate-openapi.ts",
     "diagram:page": "bun scripts/diagram-page.ts",
     "api:check": "bun run api:generate && git diff --exit-code -- shared/openapi.json src/shared/api/schema.d.ts",
@@ -43,6 +44,7 @@
     "zod": "^4.6.7"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.14.1",
     "@commitlint/cli": "^21.2.4",
     "@commitlint/config-conventional": "^21.2.4",
     "@feature-sliced/steiger-plugin": "^0.8.2",

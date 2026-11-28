@@ -4,7 +4,17 @@
   "commandRunner": {
     "command": "bun run test:unit"
   },
-  "mutate": ["src/**/model/**/*.ts", "src/**/lib/**/*.ts", "!src/**/*.test.ts"],
+  "mutate": [
+    "src/**/model/**/*.ts",
+    "src/**/lib/**/*.ts",
+    "src/shared/api/**/*.ts",
+    "!src/shared/api/schema.d.ts",
+    "server/**/*.ts",
+    "!server/index.ts",
+    "!server/data.ts",
+    "shared/**/*.ts",
+    "!**/*.test.ts"
+  ],
   "ignorePatterns": [".agents", ".claude", ".cursor", ".github", "docs", "examples", "agent"],
   "concurrency": 4,
   "timeoutMS": 10000,

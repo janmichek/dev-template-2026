@@ -20,7 +20,31 @@ jobs:
           # Update the remote-tracking ref the checker reads, not just FETCH_HEAD.
           git fetch --depth=1 origin "refs/heads/$BASE_REF:refs/remotes/origin/$BASE_REF"
           bun scripts/ratchet-coverage.ts "origin/$BASE_REF"
+      - name: Gates were not weakened
+        if: github.event_name == 'pull_request'
+        env:
+          BASE_REF: ${{ github.base_ref }}
+          GUARDRAIL_CHANGE: ${{ contains(github.event.pull_request.labels.*.name, 'guardrail-change') }}
+        run: |
+          git fetch --depth=1 origin "refs/heads/$BASE_REF:refs/remotes/origin/$BASE_REF"
+          bun scripts/guardrail-diff.ts "origin/$BASE_REF"
+      - name: Pull request blast radius
+        if: github.event_name == 'pull_request'
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        run: |
+          git fetch --depth=1 origin "refs/heads/$BASE_REF:refs/remotes/origin/$BASE_REF"
+          bun scripts/pr-blast-radius.ts "origin/$BASE_REF"
       - run: bun run audit
-      - run: bun run test:mutate
+      - name: Mutation tests
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            git fetch --depth=1 origin "refs/heads/$BASE_REF:refs/remotes/origin/$BASE_REF"
+            bun scripts/mutate-since.ts "origin/$BASE_REF"
+          else
+            bun run test:mutate
+          fi
       - run: bunx playwright install --with-deps chromium
       - run: bun run test:e2e

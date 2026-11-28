@@ -43,5 +43,38 @@
       "Bash(cp .env*)",
       "Bash(printenv*)"
     ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bun scripts/agent-guard.ts claude-shell"
+          }
+        ]
+      },
+      {
+        "matcher": "Edit|Write|MultiEdit|StrReplace",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bun scripts/agent-guard.ts claude-write"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit|StrReplace",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bun scripts/agent-guard.ts claude-format"
+          }
+        ]
+      }
+    ]
   }
 }
